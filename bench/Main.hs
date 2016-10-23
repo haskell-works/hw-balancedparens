@@ -10,7 +10,6 @@ import           HaskellWorks.Data.BalancedParens.RangeMinMax
 import           HaskellWorks.Data.Bits.Broadword
 import           HaskellWorks.Data.Bits.FromBitTextByteString
 import           HaskellWorks.Data.Naive
-import           HaskellWorks.Data.RankSelect.Base
 
 setupEnvVector :: Int -> IO (DVS.Vector Word64)
 setupEnvVector n = return $ DVS.fromList (take n (cycle [maxBound, 0]))
@@ -64,11 +63,6 @@ benchRankSelect =
     ]
   , env (setupEnvVector 1000000) $ \bv -> bgroup "RangeMinMax"
     [ bench "findClose"   (nf   (map (findClose bv)) [0, 1000..10000000])
-    ]
-  , env (setupEnvVector 1000000) $ \bv -> bgroup "Rank"
-    [ bench "Rank - Once"   (whnf (rank1    bv) 1)
-    , bench "Select - Once" (whnf (select1  bv) 1)
-    , bench "Rank - Many"   (nf   (map (rank1 bv)) [0, 1000..10000000])
     ]
   ]
 
