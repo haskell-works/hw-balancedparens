@@ -47,16 +47,19 @@ spec = describe "HaskellWorks.Data.BalancedParens.RangeMinMaxSpec" $ do
       let len = bitLength v
       [findClose rmm i | i <- [1..len]] `shouldBe `[findClose v i | i <- [1..len]]
   it "findClose should return the same result over all counts" $ do
-    forAll (vectorSizedBetween 1 factor) $ \(ShowVector v) -> do
-      forAll (choose (1, bitLength v)) $ \p -> do
-        let !rmm = mkRangeMinMax v
-        findClose rmm p `shouldBe` findClose v p
+    quickCheckWith stdArgs { maxSuccess = 10 } $ do
+      forAll (vectorSizedBetween 1 factor) $ \(ShowVector v) -> do
+        forAll (choose (1, bitLength v)) $ \p -> do
+          let !rmm = mkRangeMinMax v
+          findClose rmm p `shouldBe` findClose v p
   it "nextSibling should return the same result" $ do
-    forAll (vectorSizedBetween 1 factor) $ \(ShowVector v) -> do
-      let !rmm = mkRangeMinMax v
-      nextSibling rmm 0 `shouldBe` nextSibling v 0
-  it "nextSibling should return the same result over all counts" $ do
-    forAll (vectorSizedBetween 1 factor) $ \(ShowVector v) -> do
-      forAll (choose (1, bitLength v)) $ \p -> do
+    quickCheckWith stdArgs { maxSuccess = 10 } $ do
+      forAll (vectorSizedBetween 1 factor) $ \(ShowVector v) -> do
         let !rmm = mkRangeMinMax v
-        nextSibling rmm p `shouldBe` nextSibling v p
+        nextSibling rmm 0 `shouldBe` nextSibling v 0
+  it "nextSibling should return the same result over all counts" $ do
+    quickCheckWith stdArgs { maxSuccess = 10 } $ do
+      forAll (vectorSizedBetween 1 factor) $ \(ShowVector v) -> do
+        forAll (choose (1, bitLength v)) $ \p -> do
+          let !rmm = mkRangeMinMax v
+          nextSibling rmm p `shouldBe` nextSibling v p

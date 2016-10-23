@@ -1,9 +1,9 @@
 name:                   hw-balancedparens
 version:                0.0.0.2
-synopsis:               Conduits for tokenizing streams.
+synopsis:               Balanced parentheses
 description:            Please see README.md
 homepage:               http://github.com/haskell-works/hw-balancedparens#readme
-license:                MIT
+license:                BSD3
 license-file:           LICENSE
 author:                 John Ky
 maintainer:             newhoggy@gmail.com
