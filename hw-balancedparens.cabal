@@ -35,8 +35,6 @@ library
                       , hw-excess                     >= 0.0.0.1
                       , hw-prim                       >= 0.3.0.5
                       , hw-rankselect-base            >= 0.1.0.0
-                      , hw-string-parse               >= 0.0.0.2
-                      , safe
                       , vector
 
   default-language:     Haskell2010
@@ -52,9 +50,9 @@ test-suite hw-balancedparens-test
                       , HaskellWorks.Data.BalancedParens.SimpleSpec
   build-depends:        base                          >= 4          && < 5
                       , hspec
+                      , hw-balancedparens
                       , hw-bits                       >= 0.3.0.0
                       , hw-prim                       >= 0.3.0.5
-                      , hw-balancedparens
                       , hw-rankselect-base            >= 0.1.0.0
                       , QuickCheck
                       , vector
@@ -72,12 +70,8 @@ benchmark bench
     GHC-Options: -O2 -Wall -msse4.2
     Default-Language: Haskell2010
     Build-Depends:      base                          >= 4          && < 5
-                      , bytestring
-                      , conduit
                       , criterion
+                      , hw-balancedparens
                       , hw-bits                       >= 0.3.0.0
                       , hw-prim                       >= 0.3.0.5
-                      , hw-balancedparens
-                      , hw-rankselect-base            >= 0.1.0.0
-                      , mmap
                       , vector
