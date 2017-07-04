@@ -228,12 +228,12 @@ instance (BitLength a, CloseAt a, NewCloseAt a, FindCloseN a) => FindClose (Rang
   findClose v p = if v `closeAt` p then Just p else findCloseN v 1 (p + 1)
   {-# INLINE findClose #-}
 
-instance FindOpen (RangeMinMax a) where
-  findOpen = undefined
+instance (OpenAt a, FindOpenN a) => FindOpen (RangeMinMax a) where
+  findOpen v p = if v `openAt`  p then Just p else findOpenN  v 0 (p - 1)
   {-# INLINE findOpen #-}
 
-instance Enclose (RangeMinMax a) where
-  enclose = undefined
+instance FindOpenN a => Enclose (RangeMinMax a) where
+  enclose v = findOpenN v 1
   {-# INLINE enclose #-}
 
-instance (BitLength a, NewCloseAt a, CloseAt a, OpenAt a, FindCloseN a) => BalancedParens (RangeMinMax a)
+instance (BitLength a, NewCloseAt a, CloseAt a, OpenAt a, FindOpenN a, FindCloseN a) => BalancedParens (RangeMinMax a)
