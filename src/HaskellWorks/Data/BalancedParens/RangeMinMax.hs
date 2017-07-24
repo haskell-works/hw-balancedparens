@@ -1,36 +1,37 @@
-{-# LANGUAGE BangPatterns       #-}
-{-# LANGUAGE FlexibleContexts   #-}
-{-# LANGUAGE FlexibleInstances  #-}
-{-# LANGUAGE InstanceSigs       #-}
-{-# LANGUAGE TypeFamilies       #-}
+{-# LANGUAGE BangPatterns      #-}
+{-# LANGUAGE FlexibleContexts  #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE InstanceSigs      #-}
+{-# LANGUAGE TypeFamilies      #-}
 
 module HaskellWorks.Data.BalancedParens.RangeMinMax
   ( RangeMinMax(..)
   , mkRangeMinMax
   ) where
 
-import           Data.Int
-import qualified Data.Vector                                                    as DV
-import qualified Data.Vector.Storable                                           as DVS
-import           HaskellWorks.Data.AtIndex
-import           HaskellWorks.Data.BalancedParens.BalancedParens
-import           HaskellWorks.Data.BalancedParens.CloseAt
-import           HaskellWorks.Data.BalancedParens.Enclose
-import           HaskellWorks.Data.BalancedParens.FindClose
-import           HaskellWorks.Data.BalancedParens.FindCloseN
-import           HaskellWorks.Data.BalancedParens.FindOpen
-import           HaskellWorks.Data.BalancedParens.FindOpenN
-import           HaskellWorks.Data.BalancedParens.OpenAt
-import           HaskellWorks.Data.BalancedParens.NewCloseAt
-import           HaskellWorks.Data.Bits.AllExcess.AllExcess1
-import           HaskellWorks.Data.Bits.BitLength
-import           HaskellWorks.Data.Bits.BitWise
-import           HaskellWorks.Data.Excess.MinMaxExcess1
-import           HaskellWorks.Data.Positioning
-import           HaskellWorks.Data.RankSelect.Base.Rank0
-import           HaskellWorks.Data.RankSelect.Base.Rank1
-import           HaskellWorks.Data.Vector.AsVector64
-import           Prelude hiding (length)
+import Data.Int
+import Foreign.Storable.Tuple                          ()
+import HaskellWorks.Data.AtIndex
+import HaskellWorks.Data.BalancedParens.BalancedParens
+import HaskellWorks.Data.BalancedParens.CloseAt
+import HaskellWorks.Data.BalancedParens.Enclose
+import HaskellWorks.Data.BalancedParens.FindClose
+import HaskellWorks.Data.BalancedParens.FindCloseN
+import HaskellWorks.Data.BalancedParens.FindOpen
+import HaskellWorks.Data.BalancedParens.FindOpenN
+import HaskellWorks.Data.BalancedParens.NewCloseAt
+import HaskellWorks.Data.BalancedParens.OpenAt
+import HaskellWorks.Data.Bits.AllExcess.AllExcess1
+import HaskellWorks.Data.Bits.BitLength
+import HaskellWorks.Data.Bits.BitWise
+import HaskellWorks.Data.Excess.MinMaxExcess1
+import HaskellWorks.Data.Positioning
+import HaskellWorks.Data.RankSelect.Base.Rank0
+import HaskellWorks.Data.RankSelect.Base.Rank1
+import HaskellWorks.Data.Vector.AsVector64
+import Prelude                                         hiding (length)
+
+import qualified Data.Vector.Storable as DVS
 
 data RangeMinMax a = RangeMinMax
   { rangeMinMaxBP       :: !a
@@ -87,18 +88,18 @@ mkRangeMinMax bp = RangeMinMax
         lenL0         = lenBP
         lenL1         = (DVS.length rmmL0Min `div` pageSizeL1) + 1 :: Int
         lenL2         = (DVS.length rmmL0Min `div` pageSizeL2) + 1 :: Int
-        allMinMaxL0   = dvConstructNI  lenL0 (\i -> if i == lenBP then (-64, -64, 0) else minMaxExcess1 (bpv !!! fromIntegral i))
-        allMinMaxL1   = dvConstructNI  lenL1 (\i -> minMaxExcess1 (dropTake (i * pageSizeL1) pageSizeL1 bpv))
-        allMinMaxL2   = dvConstructNI  lenL2 (\i -> minMaxExcess1 (dropTake (i * pageSizeL2) pageSizeL2 bpv))
+        allMinMaxL0   = dvsConstructNI lenL0 (\i -> if i == lenBP then (-64, -64, 0) else minMaxExcess1 (bpv !!! fromIntegral i))
+        allMinMaxL1   = dvsConstructNI lenL1 (\i -> minMaxExcess1 (dropTake (i * pageSizeL1) pageSizeL1 bpv))
+        allMinMaxL2   = dvsConstructNI lenL2 (\i -> minMaxExcess1 (dropTake (i * pageSizeL2) pageSizeL2 bpv))
         rmmL0Excess   = dvsConstructNI lenL0 (\i -> fromIntegral (allExcess1 (pageFill i pageSizeL0 (-64) bpv))) :: DVS.Vector Int16
         rmmL1Excess   = dvsConstructNI lenL1 (\i -> fromIntegral (allExcess1 (pageFill i pageSizeL1 (-64) bpv))) :: DVS.Vector Int16
         rmmL2Excess   = dvsConstructNI lenL2 (\i -> fromIntegral (allExcess1 (pageFill i pageSizeL2 (-64) bpv))) :: DVS.Vector Int16
-        rmmL0Min      = dvsConstructNI lenL0 (\i -> let (minE, _, _) = allMinMaxL0 DV.! i in fromIntegral minE)
-        rmmL1Min      = dvsConstructNI lenL1 (\i -> let (minE, _, _) = allMinMaxL1 DV.! i in fromIntegral minE)
-        rmmL2Min      = dvsConstructNI lenL2 (\i -> let (minE, _, _) = allMinMaxL2 DV.! i in fromIntegral minE)
-        rmmL0Max      = dvsConstructNI lenL0 (\i -> let (_, _, maxE) = allMinMaxL0 DV.! i in fromIntegral maxE)
-        rmmL1Max      = dvsConstructNI lenL1 (\i -> let (_, _, maxE) = allMinMaxL1 DV.! i in fromIntegral maxE)
-        rmmL2Max      = dvsConstructNI lenL2 (\i -> let (_, _, maxE) = allMinMaxL2 DV.! i in fromIntegral maxE)
+        rmmL0Min      = dvsConstructNI lenL0 (\i -> let (minE, _, _) = allMinMaxL0 DVS.! i in fromIntegral minE)
+        rmmL1Min      = dvsConstructNI lenL1 (\i -> let (minE, _, _) = allMinMaxL1 DVS.! i in fromIntegral minE)
+        rmmL2Min      = dvsConstructNI lenL2 (\i -> let (minE, _, _) = allMinMaxL2 DVS.! i in fromIntegral minE)
+        rmmL0Max      = dvsConstructNI lenL0 (\i -> let (_, _, maxE) = allMinMaxL0 DVS.! i in fromIntegral maxE)
+        rmmL1Max      = dvsConstructNI lenL1 (\i -> let (_, _, maxE) = allMinMaxL1 DVS.! i in fromIntegral maxE)
+        rmmL2Max      = dvsConstructNI lenL2 (\i -> let (_, _, maxE) = allMinMaxL2 DVS.! i in fromIntegral maxE)
 
 dropTake :: DVS.Storable a => Int -> Int -> DVS.Vector a -> DVS.Vector a
 dropTake n o = DVS.take o . DVS.drop n
@@ -117,10 +118,6 @@ dropTakeFill n o a v =  let r = DVS.take o (DVS.drop n v) in
                         let len = DVS.length r in
                         if len == o then r else DVS.concat [r, DVS.fromList (replicate (o - len) a)]
 {-# INLINE dropTakeFill #-}
-
-dvConstructNI :: Int -> (Int -> a) -> DV.Vector a
-dvConstructNI n g = DV.constructN n (g . DV.length)
-{-# INLINE dvConstructNI #-}
 
 dvsConstructNI :: DVS.Storable a => Int -> (Int -> a) -> DVS.Vector a
 dvsConstructNI n g = DVS.constructN n (g . DVS.length)
