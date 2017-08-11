@@ -11,28 +11,30 @@ module HaskellWorks.Data.BalancedParens.RangeMinMax2
   , genMax
   ) where
 
-import           Data.Int
+import Data.Int
+import HaskellWorks.Data.AtIndex
+import HaskellWorks.Data.BalancedParens.BalancedParens
+import HaskellWorks.Data.BalancedParens.CloseAt
+import HaskellWorks.Data.BalancedParens.Enclose
+import HaskellWorks.Data.BalancedParens.FindClose
+import HaskellWorks.Data.BalancedParens.FindCloseN
+import HaskellWorks.Data.BalancedParens.FindOpen
+import HaskellWorks.Data.BalancedParens.FindOpenN
+import HaskellWorks.Data.BalancedParens.OpenAt
+import HaskellWorks.Data.BalancedParens.NewCloseAt
+import HaskellWorks.Data.Bits.AllExcess.AllExcess1
+import HaskellWorks.Data.Bits.BitLength
+import HaskellWorks.Data.Bits.BitWise
+import HaskellWorks.Data.Excess.MinMaxExcess1
+import HaskellWorks.Data.Excess.Triplet
+import HaskellWorks.Data.Positioning
+import HaskellWorks.Data.RankSelect.Base.Rank0
+import HaskellWorks.Data.RankSelect.Base.Rank1
+import HaskellWorks.Data.Vector.AsVector64
+import Prelude hiding (length)
+
 import qualified Data.Vector                                                    as DV
 import qualified Data.Vector.Storable                                           as DVS
-import           HaskellWorks.Data.AtIndex
-import           HaskellWorks.Data.BalancedParens.BalancedParens
-import           HaskellWorks.Data.BalancedParens.CloseAt
-import           HaskellWorks.Data.BalancedParens.Enclose
-import           HaskellWorks.Data.BalancedParens.FindClose
-import           HaskellWorks.Data.BalancedParens.FindCloseN
-import           HaskellWorks.Data.BalancedParens.FindOpen
-import           HaskellWorks.Data.BalancedParens.FindOpenN
-import           HaskellWorks.Data.BalancedParens.OpenAt
-import           HaskellWorks.Data.BalancedParens.NewCloseAt
-import           HaskellWorks.Data.Bits.AllExcess.AllExcess1
-import           HaskellWorks.Data.Bits.BitLength
-import           HaskellWorks.Data.Bits.BitWise
-import           HaskellWorks.Data.Excess.MinMaxExcess1
-import           HaskellWorks.Data.Positioning
-import           HaskellWorks.Data.RankSelect.Base.Rank0
-import           HaskellWorks.Data.RankSelect.Base.Rank1
-import           HaskellWorks.Data.Vector.AsVector64
-import           Prelude hiding (length)
 
 data RangeMinMax2 a = RangeMinMax2
   { rangeMinMax2BP       :: !a
@@ -119,18 +121,18 @@ mkRangeMinMax2 bp = RangeMinMax2
         lenL2         = (DVS.length rmmL0Min `div` pageSizeL2) + 1 :: Int
         lenL3         = (DVS.length rmmL0Min `div` pageSizeL3) + 1 :: Int
         lenL4         = (DVS.length rmmL0Min `div` pageSizeL4) + 1 :: Int
-        allMinMaxL0   = dvConstructNI  lenL0 (\i -> if i == lenBP then (-64, -64, 0) else minMaxExcess1 (bpv !!! fromIntegral i))
+        allMinMaxL0   = dvConstructNI  lenL0 (\i -> if i == lenBP then Triplet (-64) (-64) 0 else minMaxExcess1 (bpv !!! fromIntegral i))
         rmmL0Excess   = dvsConstructNI lenL0 (\i -> fromIntegral (allExcess1 (pageFill i pageSizeL0 (-64) bpv))) :: DVS.Vector Int16
         rmmL1Excess   = dvsConstructNI lenL1 (\i -> fromIntegral (allExcess1 (pageFill i pageSizeL1 (-64) bpv))) :: DVS.Vector Int16
         rmmL2Excess   = dvsConstructNI lenL2 (\i -> fromIntegral (allExcess1 (pageFill i pageSizeL2 (-64) bpv))) :: DVS.Vector Int16
         rmmL3Excess   = dvsConstructNI lenL3 (\i -> fromIntegral (allExcess1 (pageFill i pageSizeL3 (-64) bpv))) :: DVS.Vector Int16
         rmmL4Excess   = dvsConstructNI lenL4 (\i -> fromIntegral (allExcess1 (pageFill i pageSizeL4 (-64) bpv))) :: DVS.Vector Int16
-        rmmL0Min      = dvsConstructNI lenL0 (\i -> let (minE, _, _) = allMinMaxL0 DV.! i in fromIntegral minE) :: DVS.Vector Int16
+        rmmL0Min      = dvsConstructNI lenL0 (\i -> let Triplet minE _ _ = allMinMaxL0 DV.! i in fromIntegral minE) :: DVS.Vector Int16
         rmmL1Min      = dvsConstructNI lenL1 (\i -> genMin 0 (pageFill i factorL1 0 rmmL0Min) (pageFill i factorL1 0 rmmL0Excess))
         rmmL2Min      = dvsConstructNI lenL2 (\i -> genMin 0 (pageFill i factorL2 0 rmmL1Min) (pageFill i factorL2 0 rmmL1Excess))
         rmmL3Min      = dvsConstructNI lenL3 (\i -> genMin 0 (pageFill i factorL3 0 rmmL2Min) (pageFill i factorL3 0 rmmL2Excess))
         rmmL4Min      = dvsConstructNI lenL4 (\i -> genMin 0 (pageFill i factorL4 0 rmmL3Min) (pageFill i factorL4 0 rmmL3Excess))
-        rmmL0Max      = dvsConstructNI lenL0 (\i -> let (_, _, maxE) = allMinMaxL0 DV.! i in fromIntegral maxE) :: DVS.Vector Int16
+        rmmL0Max      = dvsConstructNI lenL0 (\i -> let Triplet _ _ maxE = allMinMaxL0 DV.! i in fromIntegral maxE) :: DVS.Vector Int16
         rmmL1Max      = dvsConstructNI lenL1 (\i -> genMax 0 (pageFill i factorL1 0 rmmL0Max) (pageFill i factorL1 0 rmmL0Excess))
         rmmL2Max      = dvsConstructNI lenL2 (\i -> genMax 0 (pageFill i factorL2 0 rmmL1Max) (pageFill i factorL2 0 rmmL1Excess))
         rmmL3Max      = dvsConstructNI lenL3 (\i -> genMax 0 (pageFill i factorL3 0 rmmL2Max) (pageFill i factorL3 0 rmmL2Excess))
