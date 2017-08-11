@@ -1,5 +1,5 @@
 name:                   hw-balancedparens
-version:                0.1.0.2
+version:                0.2.0.0
 synopsis:               Balanced parentheses
 description:            Please see README.md
 homepage:               http://github.com/haskell-works/hw-balancedparens#readme
