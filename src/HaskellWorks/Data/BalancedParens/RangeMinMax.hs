@@ -25,6 +25,7 @@ import HaskellWorks.Data.Bits.AllExcess.AllExcess1
 import HaskellWorks.Data.Bits.BitLength
 import HaskellWorks.Data.Bits.BitWise
 import HaskellWorks.Data.Excess.MinMaxExcess1
+import HaskellWorks.Data.Excess.Triplet
 import HaskellWorks.Data.Positioning
 import HaskellWorks.Data.RankSelect.Base.Rank0
 import HaskellWorks.Data.RankSelect.Base.Rank1
@@ -88,18 +89,18 @@ mkRangeMinMax bp = RangeMinMax
         lenL0         = lenBP
         lenL1         = (DVS.length rmmL0Min `div` pageSizeL1) + 1 :: Int
         lenL2         = (DVS.length rmmL0Min `div` pageSizeL2) + 1 :: Int
-        allMinMaxL0   = dvsConstructNI lenL0 (\i -> if i == lenBP then (-64, -64, 0) else minMaxExcess1 (bpv !!! fromIntegral i))
+        allMinMaxL0   = dvsConstructNI lenL0 (\i -> if i == lenBP then Triplet (-64) (-64) 0 else minMaxExcess1 (bpv !!! fromIntegral i))
         allMinMaxL1   = dvsConstructNI lenL1 (\i -> minMaxExcess1 (dropTake (i * pageSizeL1) pageSizeL1 bpv))
         allMinMaxL2   = dvsConstructNI lenL2 (\i -> minMaxExcess1 (dropTake (i * pageSizeL2) pageSizeL2 bpv))
         rmmL0Excess   = dvsConstructNI lenL0 (\i -> fromIntegral (allExcess1 (pageFill i pageSizeL0 (-64) bpv))) :: DVS.Vector Int16
         rmmL1Excess   = dvsConstructNI lenL1 (\i -> fromIntegral (allExcess1 (pageFill i pageSizeL1 (-64) bpv))) :: DVS.Vector Int16
         rmmL2Excess   = dvsConstructNI lenL2 (\i -> fromIntegral (allExcess1 (pageFill i pageSizeL2 (-64) bpv))) :: DVS.Vector Int16
-        rmmL0Min      = dvsConstructNI lenL0 (\i -> let (minE, _, _) = allMinMaxL0 DVS.! i in fromIntegral minE)
-        rmmL1Min      = dvsConstructNI lenL1 (\i -> let (minE, _, _) = allMinMaxL1 DVS.! i in fromIntegral minE)
-        rmmL2Min      = dvsConstructNI lenL2 (\i -> let (minE, _, _) = allMinMaxL2 DVS.! i in fromIntegral minE)
-        rmmL0Max      = dvsConstructNI lenL0 (\i -> let (_, _, maxE) = allMinMaxL0 DVS.! i in fromIntegral maxE)
-        rmmL1Max      = dvsConstructNI lenL1 (\i -> let (_, _, maxE) = allMinMaxL1 DVS.! i in fromIntegral maxE)
-        rmmL2Max      = dvsConstructNI lenL2 (\i -> let (_, _, maxE) = allMinMaxL2 DVS.! i in fromIntegral maxE)
+        rmmL0Min      = dvsConstructNI lenL0 (\i -> let Triplet minE _ _ = allMinMaxL0 DVS.! i in fromIntegral minE)
+        rmmL1Min      = dvsConstructNI lenL1 (\i -> let Triplet minE _ _ = allMinMaxL1 DVS.! i in fromIntegral minE)
+        rmmL2Min      = dvsConstructNI lenL2 (\i -> let Triplet minE _ _ = allMinMaxL2 DVS.! i in fromIntegral minE)
+        rmmL0Max      = dvsConstructNI lenL0 (\i -> let Triplet _ _ maxE = allMinMaxL0 DVS.! i in fromIntegral maxE)
+        rmmL1Max      = dvsConstructNI lenL1 (\i -> let Triplet _ _ maxE = allMinMaxL1 DVS.! i in fromIntegral maxE)
+        rmmL2Max      = dvsConstructNI lenL2 (\i -> let Triplet _ _ maxE = allMinMaxL2 DVS.! i in fromIntegral maxE)
 
 dropTake :: DVS.Storable a => Int -> Int -> DVS.Vector a -> DVS.Vector a
 dropTake n o = DVS.take o . DVS.drop n
