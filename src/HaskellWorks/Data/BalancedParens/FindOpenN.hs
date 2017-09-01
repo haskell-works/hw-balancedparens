@@ -4,14 +4,15 @@ module HaskellWorks.Data.BalancedParens.FindOpenN
   ( FindOpenN(..)
   ) where
 
-import qualified Data.Vector.Storable                                       as DVS
-import           Data.Word
-import           HaskellWorks.Data.BalancedParens.OpenAt
-import           HaskellWorks.Data.Bits.BitLength
-import           HaskellWorks.Data.Bits.BitShown
-import           HaskellWorks.Data.Bits.BitWise
-import           HaskellWorks.Data.Naive
-import           HaskellWorks.Data.Positioning
+import Data.Word
+import HaskellWorks.Data.BalancedParens.OpenAt
+import HaskellWorks.Data.Bits.BitLength
+import HaskellWorks.Data.Bits.BitShown
+import HaskellWorks.Data.Bits.BitWise
+import HaskellWorks.Data.Naive
+import HaskellWorks.Data.Positioning
+
+import qualified Data.Vector.Storable as DVS
 
 class FindOpenN v where
   findOpenN :: v -> Count -> Count -> Maybe Count

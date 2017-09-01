@@ -33,8 +33,8 @@ import HaskellWorks.Data.RankSelect.Base.Rank1
 import HaskellWorks.Data.Vector.AsVector64
 import Prelude hiding (length)
 
-import qualified Data.Vector                                                    as DV
-import qualified Data.Vector.Storable                                           as DVS
+import qualified Data.Vector          as DV
+import qualified Data.Vector.Storable as DVS
 
 data RangeMinMax2 a = RangeMinMax2
   { rangeMinMax2BP       :: !a

@@ -6,18 +6,19 @@ module HaskellWorks.Data.BalancedParens.BalancedParens
   , subtreeSize
   ) where
 
-import           Control.Monad
-import qualified Data.Vector.Storable                                       as DVS
-import           Data.Word
-import           HaskellWorks.Data.BalancedParens.CloseAt
-import           HaskellWorks.Data.BalancedParens.Enclose
-import           HaskellWorks.Data.BalancedParens.FindClose
-import           HaskellWorks.Data.BalancedParens.FindOpen
-import           HaskellWorks.Data.BalancedParens.OpenAt
-import           HaskellWorks.Data.Naive
-import           HaskellWorks.Data.Positioning
-import           HaskellWorks.Data.RankSelect.Base.Rank0
-import           HaskellWorks.Data.RankSelect.Base.Rank1
+import Control.Monad
+import Data.Word
+import HaskellWorks.Data.BalancedParens.CloseAt
+import HaskellWorks.Data.BalancedParens.Enclose
+import HaskellWorks.Data.BalancedParens.FindClose
+import HaskellWorks.Data.BalancedParens.FindOpen
+import HaskellWorks.Data.BalancedParens.OpenAt
+import HaskellWorks.Data.Naive
+import HaskellWorks.Data.Positioning
+import HaskellWorks.Data.RankSelect.Base.Rank0
+import HaskellWorks.Data.RankSelect.Base.Rank1
+
+import qualified Data.Vector.Storable as DVS
 
 class (OpenAt v, CloseAt v, FindOpen v, FindClose v, Enclose v) => BalancedParens v where
   -- TODO Second argument should be Int

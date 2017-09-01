@@ -4,16 +4,17 @@ module HaskellWorks.Data.BalancedParens.FindClose
   ( FindClose(..)
   ) where
 
-import qualified Data.Vector.Storable                                       as DVS
-import           Data.Word
-import           HaskellWorks.Data.BalancedParens.Broadword
-import           HaskellWorks.Data.BalancedParens.CloseAt
-import           HaskellWorks.Data.BalancedParens.FindCloseN
-import           HaskellWorks.Data.Bits.BitShown
-import           HaskellWorks.Data.Bits.BitWise
-import           HaskellWorks.Data.Bits.Broadword
-import           HaskellWorks.Data.Naive
-import           HaskellWorks.Data.Positioning
+import Data.Word
+import HaskellWorks.Data.BalancedParens.Broadword
+import HaskellWorks.Data.BalancedParens.CloseAt
+import HaskellWorks.Data.BalancedParens.FindCloseN
+import HaskellWorks.Data.Bits.BitShown
+import HaskellWorks.Data.Bits.BitWise
+import HaskellWorks.Data.Bits.Broadword
+import HaskellWorks.Data.Naive
+import HaskellWorks.Data.Positioning
+
+import qualified Data.Vector.Storable as DVS
 
 class FindClose v where
   findClose   :: v -> Count -> Maybe Count

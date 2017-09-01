@@ -14,13 +14,14 @@ module HaskellWorks.Data.BalancedParens.Broadword
   , kkBitDiffSimple
   ) where
 
-import qualified Data.Bits                        as DB
-import           Data.Int
-import           Data.Word
-import           Debug.Trace
-import           HaskellWorks.Data.Bits.BitShown
-import           HaskellWorks.Data.Bits.BitWise
-import           HaskellWorks.Data.Bits.Broadword
+import Data.Int
+import Data.Word
+import Debug.Trace
+import HaskellWorks.Data.Bits.BitShown
+import HaskellWorks.Data.Bits.BitWise
+import HaskellWorks.Data.Bits.Broadword
+
+import qualified Data.Bits as DB
 
 traceW :: String -> Word64 -> Word64
 traceW s w = trace (s ++ ": " ++ show (BitShown w) ++ " : " ++ show w ++ ", " ++ show (fromIntegral w :: Int64)) w

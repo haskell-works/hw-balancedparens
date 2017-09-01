@@ -4,14 +4,15 @@ module HaskellWorks.Data.BalancedParens.OpenAt
   ( OpenAt(..)
   ) where
 
-import qualified Data.Vector.Storable                                       as DVS
-import           Data.Word
-import           HaskellWorks.Data.Bits.BitLength
-import           HaskellWorks.Data.Bits.BitShown
-import           HaskellWorks.Data.Bits.BitWise
-import           HaskellWorks.Data.Bits.Broadword
-import           HaskellWorks.Data.Naive
-import           HaskellWorks.Data.Positioning
+import Data.Word
+import HaskellWorks.Data.Bits.BitLength
+import HaskellWorks.Data.Bits.BitShown
+import HaskellWorks.Data.Bits.BitWise
+import HaskellWorks.Data.Bits.Broadword
+import HaskellWorks.Data.Naive
+import HaskellWorks.Data.Positioning
+
+import qualified Data.Vector.Storable as DVS
 
 class OpenAt v where
   openAt      :: v -> Count -> Bool

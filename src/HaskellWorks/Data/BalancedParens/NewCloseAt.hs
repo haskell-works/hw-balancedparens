@@ -5,12 +5,13 @@ module HaskellWorks.Data.BalancedParens.NewCloseAt
   , newCloseAt'
   ) where
 
-import qualified Data.Vector.Storable             as DVS
-import           Data.Word
-import           HaskellWorks.Data.Bits.BitLength
-import           HaskellWorks.Data.Bits.BitShown
-import           HaskellWorks.Data.Bits.BitWise
-import           HaskellWorks.Data.Positioning
+import Data.Word
+import HaskellWorks.Data.Bits.BitLength
+import HaskellWorks.Data.Bits.BitShown
+import HaskellWorks.Data.Bits.BitWise
+import HaskellWorks.Data.Positioning
+
+import qualified Data.Vector.Storable as DVS
 
 class NewCloseAt v where
   newCloseAt     :: v -> Count -> Bool
