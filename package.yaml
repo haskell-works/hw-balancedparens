@@ -1,7 +1,7 @@
 name: hw-balancedparens
 version: '0.2.0.1'
 synopsis: Balanced parentheses
-description: Please see README.md
+description: Balanced parentheses.
 category: Data
 author: John Ky
 maintainer: newhoggy@gmail.com
