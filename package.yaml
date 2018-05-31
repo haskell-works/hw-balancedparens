@@ -14,9 +14,9 @@ extra-source-files:
 ghc-options: -Wall
 dependencies:
 - base >=4 && <5
-- hw-bits >=0.4.0.0
-- hw-prim >=0.4.0.0
-- vector
+- hw-bits >=0.4.0.0 && < 0.8
+- hw-prim >=0.4.0.0 && < 0.7
+- vector >= 0.12 && < 0.13
 library:
   source-dirs: src
   ghc-options:
@@ -39,9 +39,9 @@ library:
   - HaskellWorks.Data.BalancedParens.RangeMinMax2
   - HaskellWorks.Data.BalancedParens.Simple
   dependencies:
-  - hw-excess >=0.2.0.0
-  - hw-rankselect-base >=0.2.0.0
-  - storable-tuple
+  - hw-excess >=0.2.0.0 && < 0.3
+  - hw-rankselect-base >=0.2.0.0 && < 0.4
+  - storable-tuple >= 0.0.3 && < 0.1
 tests:
   hw-balancedparens-test:
     main: Spec.hs
@@ -51,10 +51,12 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - hspec
+    - hspec >= 2.2 && < 2.6
     - hw-balancedparens
-    - hw-rankselect-base >=0.2.0.0
-    - QuickCheck
+    - hw-rankselect-base >=0.2.0.0 && < 0.4
+    - QuickCheck >= 2.10 && < 2.12
+    verbatim:
+      build-tool-depends: hspec-discover:hspec-discover
 benchmarks:
   bench:
     main: Main.hs
@@ -63,5 +65,5 @@ benchmarks:
     - -O2
     - -msse4.2
     dependencies:
-    - criterion
+    - criterion >= 1.2 && < 1.5
     - hw-balancedparens
