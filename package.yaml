@@ -1,7 +1,7 @@
 name: hw-balancedparens
 version: '0.2.0.1'
 synopsis: Balanced parentheses
-description: Please see README.md
+description: Balanced parentheses.
 category: Data
 author: John Ky
 maintainer: newhoggy@gmail.com
@@ -9,14 +9,15 @@ copyright: 2016 John Ky
 license: BSD3
 github: haskell-works/hw-balancedparens
 homepage: http://github.com/haskell-works/hw-balancedparens#readme
+tested-with: GHC == 8.4.2, GHC == 8.2.2, GHC == 8.0.2, GHC == 7.10.3
 extra-source-files:
 - README.md
 ghc-options: -Wall
 dependencies:
 - base >=4 && <5
-- hw-bits >=0.4.0.0
-- hw-prim >=0.4.0.0
-- vector
+- hw-bits >=0.4.0.0 && < 0.8
+- hw-prim >=0.4.0.0 && < 0.7
+- vector >= 0.12 && < 0.13
 library:
   source-dirs: src
   ghc-options:
@@ -39,9 +40,9 @@ library:
   - HaskellWorks.Data.BalancedParens.RangeMinMax2
   - HaskellWorks.Data.BalancedParens.Simple
   dependencies:
-  - hw-excess >=0.2.0.0
-  - hw-rankselect-base >=0.2.0.0
-  - storable-tuple
+  - hw-excess >=0.2.0.0 && < 0.3
+  - hw-rankselect-base >=0.2.0.0 && < 0.4
+  - storable-tuple >= 0.0.3 && < 0.1
 tests:
   hw-balancedparens-test:
     main: Spec.hs
@@ -51,10 +52,12 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - hspec
+    - hspec >= 2.2 && < 2.6
     - hw-balancedparens
-    - hw-rankselect-base >=0.2.0.0
-    - QuickCheck
+    - hw-rankselect-base >=0.2.0.0 && < 0.4
+    - QuickCheck >= 2.10 && < 2.12
+    verbatim:
+      build-tool-depends: hspec-discover:hspec-discover
 benchmarks:
   bench:
     main: Main.hs
@@ -63,5 +66,5 @@ benchmarks:
     - -O2
     - -msse4.2
     dependencies:
-    - criterion
+    - criterion >= 1.2 && < 1.5
     - hw-balancedparens
