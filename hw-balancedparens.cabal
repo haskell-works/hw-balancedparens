@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 9235ab57963d1ec8ae9271524abfe9df9e348a5e063f0eb1f5d75d5ac16888cb
+-- hash: 32ca08b198eeb7f2d2fb82eacf7a16f2ec08e2f8d0a080eb04da4702e9e1fbd4
 
 name:           hw-balancedparens
 version:        0.2.0.1
@@ -55,7 +55,6 @@ library
     , hw-excess >=0.2.0.0 && <0.3
     , hw-prim >=0.4.0.0 && <0.7
     , hw-rankselect-base >=0.2.0.0 && <0.4
-    , storable-tuple >=0.0.3 && <0.1
     , vector >=0.12 && <0.13
   default-language: Haskell2010
 
