@@ -10,7 +10,6 @@ module HaskellWorks.Data.BalancedParens.RangeMinMax
   ) where
 
 import Data.Int
-import Foreign.Storable.Tuple                          ()
 import HaskellWorks.Data.AtIndex
 import HaskellWorks.Data.BalancedParens.BalancedParens
 import HaskellWorks.Data.BalancedParens.CloseAt
