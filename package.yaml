@@ -2,7 +2,7 @@ name: hw-balancedparens
 version: '0.2.0.1'
 synopsis: Balanced parentheses
 description: Balanced parentheses.
-category: Data, Bits
+category: Data, Bit
 author: John Ky
 maintainer: newhoggy@gmail.com
 copyright: 2016 John Ky
