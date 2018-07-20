@@ -2,7 +2,7 @@ name: hw-balancedparens
 version: '0.2.0.1'
 synopsis: Balanced parentheses
 description: Balanced parentheses.
-category: Data, Bit
+category: Data, Bit, Succinct Data Structures, Data Structures
 author: John Ky
 maintainer: newhoggy@gmail.com
 copyright: 2016 John Ky
@@ -13,11 +13,13 @@ tested-with: GHC == 8.4.2, GHC == 8.2.2, GHC == 8.0.2, GHC == 7.10.3
 extra-source-files:
 - README.md
 ghc-options: -Wall
+
 dependencies:
 - base >=4 && <5
 - hw-bits >=0.4.0.0 && < 0.8
 - hw-prim >=0.4.0.0 && < 0.7
 - vector >= 0.12 && < 0.13
+
 library:
   source-dirs: src
   ghc-options:
@@ -42,6 +44,7 @@ library:
   dependencies:
   - hw-excess >=0.2.0.0 && < 0.3
   - hw-rankselect-base >=0.2.0.0 && < 0.4
+
 tests:
   hw-balancedparens-test:
     main: Spec.hs
@@ -57,6 +60,7 @@ tests:
     - QuickCheck >= 2.10 && < 2.12
     verbatim:
       build-tool-depends: hspec-discover:hspec-discover
+
 benchmarks:
   bench:
     main: Main.hs
