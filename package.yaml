@@ -1,5 +1,5 @@
 name: hw-balancedparens
-version: '0.2.0.1'
+version: '0.2.0.2'
 synopsis: Balanced parentheses
 description: Balanced parentheses.
 category: Data, Bit, Succinct Data Structures, Data Structures
