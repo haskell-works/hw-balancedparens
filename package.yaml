@@ -15,10 +15,10 @@ extra-source-files:
 ghc-options: -Wall
 
 dependencies:
-- base >=4 && <5
-- hw-bits >=0.4.0.0 && < 0.8
-- hw-prim >=0.4.0.0 && < 0.7
-- vector >= 0.12 && < 0.13
+- base        >= 4          && < 5
+- hw-bits     >= 0.4.0.0    && < 0.8
+- hw-prim     >= 0.4.0.0    && < 0.7
+- vector      >= 0.12       && < 0.13
 
 library:
   source-dirs: src
@@ -54,10 +54,10 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - hspec >= 2.2 && < 2.6
+    - hspec               >= 2.2        && < 2.6
     - hw-balancedparens
-    - hw-rankselect-base >=0.2.0.0 && < 0.4
-    - QuickCheck >= 2.10 && < 2.12
+    - hw-rankselect-base  >= 0.2.0.0    && < 0.4
+    - QuickCheck          >= 2.10       && < 2.12
     verbatim:
       build-tool-depends: hspec-discover:hspec-discover
 
@@ -69,5 +69,5 @@ benchmarks:
     - -O2
     - -msse4.2
     dependencies:
-    - criterion >= 1.2 && < 1.5
+    - criterion           >= 1.2        && < 1.5
     - hw-balancedparens
