@@ -1,0 +1,93 @@
+name:           hw-balancedparens
+version:        0.2.0.2
+synopsis:       Balanced parentheses
+description:    Balanced parentheses.
+category:       Data, Bit, Succinct Data Structures, Data Structures
+homepage:       http://github.com/haskell-works/hw-balancedparens#readme
+bug-reports:    https://github.com/haskell-works/hw-balancedparens/issues
+author:         John Ky
+maintainer:     newhoggy@gmail.com
+copyright:      2016 John Ky
+license:        BSD3
+license-file:   LICENSE
+tested-with:    GHC == 8.4.2, GHC == 8.2.2, GHC == 8.0.2, GHC == 7.10.3
+build-type:     Simple
+cabal-version:  >= 1.10
+extra-source-files:
+    README.md
+
+source-repository head
+  type: git
+  location: https://github.com/haskell-works/hw-balancedparens
+
+library
+  exposed-modules:
+      HaskellWorks.Data.BalancedParens
+      HaskellWorks.Data.BalancedParens.BalancedParens
+      HaskellWorks.Data.BalancedParens.Broadword
+      HaskellWorks.Data.BalancedParens.CloseAt
+      HaskellWorks.Data.BalancedParens.Enclose
+      HaskellWorks.Data.BalancedParens.FindClose
+      HaskellWorks.Data.BalancedParens.FindCloseN
+      HaskellWorks.Data.BalancedParens.FindOpen
+      HaskellWorks.Data.BalancedParens.FindOpenN
+      HaskellWorks.Data.BalancedParens.NewCloseAt
+      HaskellWorks.Data.BalancedParens.NewOpenAt
+      HaskellWorks.Data.BalancedParens.OpenAt
+      HaskellWorks.Data.BalancedParens.RangeMinMax
+      HaskellWorks.Data.BalancedParens.RangeMinMax2
+      HaskellWorks.Data.BalancedParens.Simple
+  other-modules:
+      Paths_hw_balancedparens
+  hs-source-dirs:
+      src
+  ghc-options: -Wall -O2 -msse4.2
+  build-depends:
+      base >=4 && <5
+    , hw-bits >=0.4.0.0 && <0.8
+    , hw-excess >=0.2.0.0 && <0.3
+    , hw-prim >=0.4.0.0 && <0.7
+    , hw-rankselect-base >=0.2.0.0 && <0.4
+    , vector >=0.12 && <0.13
+  default-language: Haskell2010
+
+test-suite hw-balancedparens-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      HaskellWorks.Data.BalancedParens.Internal.BroadwordSpec
+      HaskellWorks.Data.BalancedParens.RangeMinMax2Spec
+      HaskellWorks.Data.BalancedParens.RangeMinMaxSpec
+      HaskellWorks.Data.BalancedParens.SimpleSpec
+      Paths_hw_balancedparens
+  hs-source-dirs:
+      test
+  ghc-options: -Wall -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      QuickCheck >=2.10 && <2.12
+    , base >=4 && <5
+    , hspec >=2.2 && <2.6
+    , hw-balancedparens
+    , hw-bits >=0.4.0.0 && <0.8
+    , hw-prim >=0.4.0.0 && <0.7
+    , hw-rankselect-base >=0.2.0.0 && <0.4
+    , vector >=0.12 && <0.13
+  default-language: Haskell2010
+  build-tool-depends: hspec-discover:hspec-discover
+
+benchmark bench
+  type: exitcode-stdio-1.0
+  main-is: Main.hs
+  other-modules:
+      Paths_hw_balancedparens
+  hs-source-dirs:
+      bench
+  ghc-options: -Wall -O2 -msse4.2
+  build-depends:
+      base >=4 && <5
+    , criterion >=1.2 && <1.6
+    , hw-balancedparens
+    , hw-bits >=0.4.0.0 && <0.8
+    , hw-prim >=0.4.0.0 && <0.7
+    , vector >=0.12 && <0.13
+  default-language: Haskell2010
