@@ -25,6 +25,7 @@ common base               { build-depends: base                 >= 4        && <
 
 common QuickCheck         { build-depends: QuickCheck           >= 2.10     && < 2.12   }
 common criterion          { build-depends: criterion            >= 1.2      && < 1.6    }
+common deepseq            { build-depends: deepseq              >= 1.4.2.0  && < 1.5    }
 common hspec              { build-depends: hspec                >= 2.2      && < 2.6    }
 common hw-bits            { build-depends: hw-bits              >= 0.4.0.0  && < 0.8    }
 common hw-excess          { build-depends: hw-excess            >= 0.2.0.0  && < 0.3    }
@@ -38,6 +39,7 @@ common config
 
 library
   import:   base, config
+          , deepseq
           , hw-bits
           , hw-excess
           , hw-prim
