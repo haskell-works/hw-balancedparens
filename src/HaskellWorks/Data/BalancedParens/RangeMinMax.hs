@@ -1,4 +1,6 @@
 {-# LANGUAGE BangPatterns      #-}
+{-# LANGUAGE DeriveAnyClass    #-}
+{-# LANGUAGE DeriveGeneric     #-}
 {-# LANGUAGE FlexibleContexts  #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE InstanceSigs      #-}
@@ -9,7 +11,9 @@ module HaskellWorks.Data.BalancedParens.RangeMinMax
   , mkRangeMinMax
   ) where
 
+import Control.DeepSeq
 import Data.Int
+import GHC.Generics
 import HaskellWorks.Data.AtIndex
 import HaskellWorks.Data.BalancedParens.BalancedParens
 import HaskellWorks.Data.BalancedParens.CloseAt
@@ -44,7 +48,7 @@ data RangeMinMax a = RangeMinMax
   , rangeMinMaxL2Min    :: !(DVS.Vector Int16)
   , rangeMinMaxL2Max    :: !(DVS.Vector Int16)
   , rangeMinMaxL2Excess :: !(DVS.Vector Int16)
-  }
+  } deriving (NFData, Generic)
 
 factorL0 :: Integral a => a
 factorL0 = 1

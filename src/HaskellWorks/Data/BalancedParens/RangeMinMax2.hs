@@ -1,8 +1,10 @@
-{-# LANGUAGE BangPatterns       #-}
-{-# LANGUAGE FlexibleContexts   #-}
-{-# LANGUAGE FlexibleInstances  #-}
-{-# LANGUAGE InstanceSigs       #-}
-{-# LANGUAGE TypeFamilies       #-}
+{-# LANGUAGE BangPatterns      #-}
+{-# LANGUAGE DeriveAnyClass    #-}
+{-# LANGUAGE DeriveGeneric     #-}
+{-# LANGUAGE FlexibleContexts  #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE InstanceSigs      #-}
+{-# LANGUAGE TypeFamilies      #-}
 
 module HaskellWorks.Data.BalancedParens.RangeMinMax2
   ( RangeMinMax2(..)
@@ -11,7 +13,9 @@ module HaskellWorks.Data.BalancedParens.RangeMinMax2
   , genMax
   ) where
 
+import Control.DeepSeq
 import Data.Int
+import GHC.Generics
 import HaskellWorks.Data.AtIndex
 import HaskellWorks.Data.BalancedParens.BalancedParens
 import HaskellWorks.Data.BalancedParens.CloseAt
@@ -20,8 +24,8 @@ import HaskellWorks.Data.BalancedParens.FindClose
 import HaskellWorks.Data.BalancedParens.FindCloseN
 import HaskellWorks.Data.BalancedParens.FindOpen
 import HaskellWorks.Data.BalancedParens.FindOpenN
-import HaskellWorks.Data.BalancedParens.OpenAt
 import HaskellWorks.Data.BalancedParens.NewCloseAt
+import HaskellWorks.Data.BalancedParens.OpenAt
 import HaskellWorks.Data.Bits.AllExcess.AllExcess1
 import HaskellWorks.Data.Bits.BitLength
 import HaskellWorks.Data.Bits.BitWise
@@ -31,7 +35,7 @@ import HaskellWorks.Data.Positioning
 import HaskellWorks.Data.RankSelect.Base.Rank0
 import HaskellWorks.Data.RankSelect.Base.Rank1
 import HaskellWorks.Data.Vector.AsVector64
-import Prelude hiding (length)
+import Prelude                                         hiding (length)
 
 import qualified Data.Vector          as DV
 import qualified Data.Vector.Storable as DVS
@@ -53,7 +57,7 @@ data RangeMinMax2 a = RangeMinMax2
   , rangeMinMax2L4Min    :: !(DVS.Vector Int16)
   , rangeMinMax2L4Max    :: !(DVS.Vector Int16)
   , rangeMinMax2L4Excess :: !(DVS.Vector Int16)
-  }
+  } deriving (NFData, Generic)
 
 factorL0 :: Integral a => a
 factorL0 = 1
