@@ -1,6 +1,7 @@
 module HaskellWorks.Data.BalancedParens.Internal.List
   ( chunkBy
   , toBools
+  , toBalancedParensString
   ) where
 
 import Data.Word
@@ -16,3 +17,8 @@ toBoolsDiff = foldr ((.) . W.toBoolsDiff) id
 
 toBools :: [Word64] -> [Bool]
 toBools ws = toBoolsDiff ws []
+
+toBalancedParensString :: [Bool] -> String
+toBalancedParensString (True:bs)  = '(':toBalancedParensString bs
+toBalancedParensString (False:bs) = ')':toBalancedParensString bs
+toBalancedParensString []         = ""

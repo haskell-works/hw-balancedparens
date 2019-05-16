@@ -63,12 +63,18 @@ spec = describe "HaskellWorks.Data.BalancedParens.Internal.MonoidalSpec" $ do
     bs <- forAll $ pure $ RT.toBools rt
 
     RMM.toBools (RMM.fromBools bs) === bs
-  it "rose tree should be generatable" $ requireProperty $ do
-    rt        <- forAll $ G.roseTree (R.linear 1 2000)
-    bs        <- forAll $ pure $ RT.toBools rt
+  it "firstChild should select first child" $ requireProperty $ do
+    bs        <- forAll $ G.balancedParens (R.linear 1 1000)
+    _         <- forAll $ pure (G.showBps bs)
     nodeCount <- forAll $ pure (fromIntegral (length bs `div` 2))
     ranked    <- forAll $ G.count (R.linear 1 nodeCount)
     pos       <- forAll $ pure $ select1 bs ranked
     rmm       <- forAll $ pure $ RMM.fromBools bs
 
-    BP.firstChild bs pos === RMM.firstChild rmm pos
+    RMM.firstChild rmm pos === BP.firstChild bs pos
+  it "firstChild should select first child" $ requireTest $ do
+    let bps = "((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((()))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))"
+    let bs  = fmap (\c -> if c == '(' then True else False) bps
+    let rmm = RMM.fromBools bs
+
+    RMM.firstChild rmm 64 === Just 65
