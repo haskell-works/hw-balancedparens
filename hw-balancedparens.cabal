@@ -29,6 +29,7 @@ common deepseq            { build-depends: deepseq              >= 1.4.2.0  && <
 common hspec              { build-depends: hspec                >= 2.2      && < 2.6    }
 common hw-bits            { build-depends: hw-bits              >= 0.4.0.0  && < 0.8    }
 common hw-excess          { build-depends: hw-excess            >= 0.2.1.0  && < 0.3    }
+common hw-fingertree      { build-depends: hw-fingertree        >= 0.1.0.2  && < 0.2    }
 common hw-prim            { build-depends: hw-prim              >= 0.4.0.0  && < 0.7    }
 common hw-rankselect-base { build-depends: hw-rankselect-base   >= 0.2.0.0  && < 0.4    }
 common vector             { build-depends: vector               >= 0.12     && < 0.13   }
@@ -37,11 +38,25 @@ common config
   default-language:   Haskell2010
   ghc-options:        -Wall -O2 -msse4.2
 
+library hw-balancedparens-naive
+  import:   base, config
+          , deepseq
+          , hw-bits
+          , hw-excess
+          , hw-fingertree
+          , hw-prim
+          , hw-rankselect-base
+          , vector
+  exposed-modules:
+    HaskellWorks.Data.BalancedParens.RangeMinMax.Monoidal.Naive
+  hs-source-dirs:     naive
+
 library
   import:   base, config
           , deepseq
           , hw-bits
           , hw-excess
+          , hw-fingertree
           , hw-prim
           , hw-rankselect-base
           , vector
@@ -55,6 +70,8 @@ library
     HaskellWorks.Data.BalancedParens.FindCloseN
     HaskellWorks.Data.BalancedParens.FindOpen
     HaskellWorks.Data.BalancedParens.FindOpenN
+    HaskellWorks.Data.BalancedParens.Internal.List
+    HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal
     HaskellWorks.Data.BalancedParens.NewCloseAt
     HaskellWorks.Data.BalancedParens.NewOpenAt
     HaskellWorks.Data.BalancedParens.OpenAt
@@ -76,14 +93,15 @@ test-suite hw-balancedparens-test
   type:               exitcode-stdio-1.0
   main-is:            Spec.hs
   other-modules:
-      HaskellWorks.Data.BalancedParens.Internal.BroadwordSpec
-      HaskellWorks.Data.BalancedParens.RangeMinMax2Spec
-      HaskellWorks.Data.BalancedParens.RangeMinMaxSpec
-      HaskellWorks.Data.BalancedParens.SimpleSpec
-      Paths_hw_balancedparens
+    HaskellWorks.Data.BalancedParens.Internal.BroadwordSpec
+    HaskellWorks.Data.BalancedParens.RangeMinMax2Spec
+    HaskellWorks.Data.BalancedParens.RangeMinMaxSpec
+    HaskellWorks.Data.BalancedParens.SimpleSpec
+    Paths_hw_balancedparens
+  build-depends:  hw-balancedparens
+                , hw-balancedparens-naive
   hs-source-dirs:     test
   ghc-options:        -threaded -rtsopts -with-rtsopts=-N
-  build-depends:      hw-balancedparens
   autogen-modules:    Paths_hw_balancedparens
   build-tool-depends: hspec-discover:hspec-discover
 
