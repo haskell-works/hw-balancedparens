@@ -43,3 +43,9 @@ spec = describe "HaskellWorks.Data.BalancedParens.Internal.MonoidalSpec" $ do
     ws <- forAll $ G.list (R.linear 0 10) (G.word64 R.constantBounded)
 
     RMM.toPartialWord64s (RMM.fromBools (L.toBools ws)) === zip ws (repeat 64)
+  it "drop should drop the right amount of data" $ requireProperty $ do
+    ws <- forAll $ G.list (R.linear 0 10) (G.word64 R.constantBounded)
+    let rmm = RMM.fromWord64s ws
+    n  <- forAll $ G.count (R.linear 0 (RMM.size rmm))
+
+    RMM.size (RMM.drop n rmm) === RMM.size rmm - n

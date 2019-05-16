@@ -10,16 +10,17 @@ module HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal
   , fromPartialWord64s
   , toPartialWord64s
   , fromBools
+  , drop
   ) where
 
 import Data.Coerce
 import Data.Monoid
 import Data.Word
-import HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal.Types (Elem (Elem), RmmEx (RmmEx))
+import HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal.Types (Elem (Elem), Measure, RmmEx (RmmEx))
 import HaskellWorks.Data.Bits.BitWise
-import HaskellWorks.Data.FingerTree                                         (ViewL (..), ViewR (..), (|>))
+import HaskellWorks.Data.FingerTree                                         (ViewL (..), ViewR (..), (<|), (|>))
 import HaskellWorks.Data.Positioning
-import Prelude                                                              hiding (max, min)
+import Prelude                                                              hiding (drop, max, min)
 
 import qualified Data.List                                                            as L
 import qualified HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal.Types as T
@@ -64,3 +65,14 @@ fromBools = go empty
             in go (RmmEx newPs) bs
           where b' = if b then 1 else 0 :: Word64
         go rmm [] = rmm
+
+drop :: Count -> RmmEx -> RmmEx
+drop n (RmmEx parens) = case FT.split predicate parens of
+  (lt, rt) -> let n' = n - T.size (FT.measure lt :: T.Measure) in
+    case FT.viewl rt of
+      T.Elem w nw :< rrt -> if n' >= nw
+        then RmmEx rrt
+        else RmmEx ((T.Elem (w .>. n') (nw - n')) <| rrt)
+      FT.EmptyL          -> empty
+  where predicate :: Measure -> Bool
+        predicate m = n < T.size (m :: Measure)
