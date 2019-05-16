@@ -34,6 +34,7 @@ common hw-excess          { build-depends: hw-excess            >= 0.2.1.0  && <
 common hw-fingertree      { build-depends: hw-fingertree        >= 0.1.0.2  && < 0.2    }
 common hw-prim            { build-depends: hw-prim              >= 0.4.0.0  && < 0.7    }
 common hw-rankselect-base { build-depends: hw-rankselect-base   >= 0.2.0.0  && < 0.4    }
+common transformers       { build-depends: transformers         >= 0.5.6.2  && < 0.6    }
 common vector             { build-depends: vector               >= 0.12     && < 0.13   }
 
 common config
@@ -96,6 +97,7 @@ test-suite hw-balancedparens-test
           , hw-hspec-hedgehog
           , hw-prim
           , hw-rankselect-base
+          , transformers
           , vector
   type:               exitcode-stdio-1.0
   main-is:            Spec.hs

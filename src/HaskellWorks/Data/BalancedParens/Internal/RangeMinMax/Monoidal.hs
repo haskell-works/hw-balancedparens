@@ -12,6 +12,7 @@ module HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal
   , fromBools
   , toBools
   , drop
+  , firstChild
   ) where
 
 import Data.Coerce
@@ -87,3 +88,13 @@ drop n (RmmEx parens) = case FT.split predicate parens of
       FT.EmptyL          -> empty
   where predicate :: Measure -> Bool
         predicate m = n < T.size (m :: Measure)
+
+firstChild  :: RmmEx -> Count -> Maybe Count
+firstChild rmm n = case FT.viewl ft of
+  T.Elem w nw :< rrt -> if nw >= 2
+    then case w .&. 3 of
+      3 -> Just (n + 1)
+      _ -> Nothing
+    else Nothing
+  FT.EmptyL -> Nothing
+  where RmmEx ft = drop (n - 1) rmm
