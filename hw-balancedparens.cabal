@@ -98,6 +98,7 @@ test-suite hw-balancedparens-test
   type:               exitcode-stdio-1.0
   main-is:            Spec.hs
   other-modules:
+    HaskellWorks.Data.BalancedParens.Gen
     HaskellWorks.Data.BalancedParens.Internal.BroadwordSpec
     HaskellWorks.Data.BalancedParens.Internal.MonoidalSpec
     HaskellWorks.Data.BalancedParens.RangeMinMax2Spec
