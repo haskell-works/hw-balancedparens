@@ -13,6 +13,7 @@ module HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal
   , toBools
   , drop
   , firstChild
+  , nextSibling
   ) where
 
 import Data.Coerce
@@ -108,3 +109,18 @@ firstChild rmm n = case FT.viewl ft of
       else Nothing
   FT.EmptyL -> Nothing
   where RmmEx ft = drop (n - 1) rmm
+
+nextSibling  :: RmmEx -> Count -> Maybe Count
+nextSibling rmm n = case FT.split predicate ft of
+  (lt, rt) -> let n' = n - T.size (FT.measure lt :: T.Measure) in
+    case FT.viewl rt of
+      T.Elem w nw :< rrt -> if n >= nw
+        -- TODO The argumen to pick is wrong because lt doesn't have all the bits.
+        then pick (T.min (FT.measure lt :: T.Measure)) rrt
+        else pick (T.min (FT.measure lt :: T.Measure)) (T.Elem (w .>. n') (n - n') <| rt)
+      FT.EmptyL -> pick (T.min (FT.measure lt :: T.Measure)) FT.empty
+  where predicate :: Measure -> Bool
+        predicate m = T.min (m :: Measure) < 0
+        RmmEx ft = drop n rmm
+        pick :: Int -> FT.FingerTree Measure Elem -> Maybe Count
+        pick mn _ = Nothing
