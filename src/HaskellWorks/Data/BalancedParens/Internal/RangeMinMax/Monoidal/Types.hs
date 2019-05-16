@@ -31,11 +31,11 @@ data Measure = Measure
   , min    :: {-# UNPACK #-} !Int
   , excess :: {-# UNPACK #-} !Int
   , max    :: {-# UNPACK #-} !Int
-  } deriving (Eq, Ord)
+  } deriving (Eq, Ord, Show)
 
 newtype RmmEx = RmmEx
   { parens :: FT.FingerTree Measure Elem
-  }
+  } deriving Show
 
 instance Semigroup Measure where
   Measure aSize aMin aMax aExcess <> Measure bSize bMin bMax bExcess = Measure
