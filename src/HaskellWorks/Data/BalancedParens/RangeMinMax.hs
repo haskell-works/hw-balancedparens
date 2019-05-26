@@ -95,9 +95,10 @@ mkRangeMinMax bp = RangeMinMax
         allMinMaxL0   = dvsConstructNI lenL0 (\i -> if i == lenBP then Triplet (-64) (-64) 0 else minMaxExcess1 (bpv !!! fromIntegral i))
         allMinMaxL1   = dvsConstructNI lenL1 (\i -> minMaxExcess1 (dropTake (i * pageSizeL1) pageSizeL1 bpv))
         allMinMaxL2   = dvsConstructNI lenL2 (\i -> minMaxExcess1 (dropTake (i * pageSizeL2) pageSizeL2 bpv))
-        rmmL0Excess   = dvsConstructNI lenL0 (\i -> fromIntegral (allExcess1 (pageFill i pageSizeL0 (-64) bpv))) :: DVS.Vector Int16
-        rmmL1Excess   = dvsConstructNI lenL1 (\i -> fromIntegral (allExcess1 (pageFill i pageSizeL1 (-64) bpv))) :: DVS.Vector Int16
-        rmmL2Excess   = dvsConstructNI lenL2 (\i -> fromIntegral (allExcess1 (pageFill i pageSizeL2 (-64) bpv))) :: DVS.Vector Int16
+        -- Note: (0xffffffffffffffc0 :: Int64) = -64
+        rmmL0Excess   = dvsConstructNI lenL0 (\i -> fromIntegral (allExcess1 (pageFill i pageSizeL0 0xffffffffffffffc0 bpv))) :: DVS.Vector Int16
+        rmmL1Excess   = dvsConstructNI lenL1 (\i -> fromIntegral (allExcess1 (pageFill i pageSizeL1 0xffffffffffffffc0 bpv))) :: DVS.Vector Int16
+        rmmL2Excess   = dvsConstructNI lenL2 (\i -> fromIntegral (allExcess1 (pageFill i pageSizeL2 0xffffffffffffffc0 bpv))) :: DVS.Vector Int16
         rmmL0Min      = dvsConstructNI lenL0 (\i -> let Triplet minE _ _ = allMinMaxL0 DVS.! i in fromIntegral minE)
         rmmL1Min      = dvsConstructNI lenL1 (\i -> let Triplet minE _ _ = allMinMaxL1 DVS.! i in fromIntegral minE)
         rmmL2Min      = dvsConstructNI lenL2 (\i -> let Triplet minE _ _ = allMinMaxL2 DVS.! i in fromIntegral minE)
