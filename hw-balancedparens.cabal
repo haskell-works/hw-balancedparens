@@ -72,6 +72,7 @@ library
     HaskellWorks.Data.BalancedParens.FindOpenN
     HaskellWorks.Data.BalancedParens.Internal.List
     HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal
+    HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal.Types
     HaskellWorks.Data.BalancedParens.NewCloseAt
     HaskellWorks.Data.BalancedParens.NewOpenAt
     HaskellWorks.Data.BalancedParens.OpenAt

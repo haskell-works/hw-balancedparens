@@ -12,40 +12,13 @@ module HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal
 
 import Data.Int
 import Data.Monoid
-import Data.Semigroup                 (Semigroup ((<>)))
 import Data.Word
+import HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal.Types (Elem (Elem), Measure)
 import HaskellWorks.Data.Bits.BitWise
-import HaskellWorks.Data.FingerTree   (FingerTree, ViewR (..), (<|), (|>))
-import Prelude                        hiding (max, min)
+import HaskellWorks.Data.FingerTree                                         (FingerTree, ViewR (..), (|>))
+import Prelude                                                              hiding (max, min)
 
 import qualified HaskellWorks.Data.FingerTree as FT
-import qualified Prelude                      as P
-
-data Elem = Elem
-  { bps  :: {-# UNPACK #-} !Word64
-  , size :: {-# UNPACK #-} !Int
-  } deriving (Eq, Show)
-
-data Measure = Measure
-  { size   :: Int
-  , min    :: Int
-  , max    :: Int
-  , excess :: Int
-  } deriving (Eq, Ord)
-
-instance Semigroup Measure where
-  Measure aSize aMin aMax aExcess <> Measure bSize bMin bMax bExcess = Measure
-    { size    = aSize + bSize
-    , min     = P.min aMin (bMin + aExcess)
-    , max     = P.max aMax (bMax + aExcess)
-    , excess  = aExcess + bExcess
-    }
-
-instance Monoid Measure where
-  mempty = Measure 0 0 0 0
-
-instance FT.Measured Measure Elem where
-  measure e = Measure (size (e :: Elem)) undefined undefined undefined
 
 -- TODO Needs optimisation
 fromWord64s :: Traversable f => f Word64 -> RmmEx
@@ -62,15 +35,15 @@ fromWord64s' = foldl go empty
 fromBools :: [Bool] -> RmmEx
 fromBools = go empty
   where go :: RmmEx -> [Bool] -> RmmEx
-        go (RmmEx parens) (b:bs) = case FT.viewr parens of
+        go (RmmEx ps) (b:bs) = case FT.viewr ps of
           FT.EmptyR      -> RmmEx (FT.singleton (Elem b' 1))
-          lt :> Elem w n -> if n >= 64
-            then RmmEx (parens |> Elem w 1)
-            else RmmEx (lt |> Elem (w .|. (1 .<. fromIntegral n)) (n + 1))
+          lt :> Elem w n ->
+            let newPs = if n >= 64
+                then ps |> Elem w 1
+                else lt |> Elem (w .|. (1 .<. fromIntegral n)) (n + 1)
+            in go (RmmEx newPs) bs
           where b' = if b then 1 else 0 :: Word64
--- fromBools cs = RmmEx (foldl go FT.empty cs)
---   where go :: FingerTree Measure Elem -> Bool -> FingerTree Measure Elem
---         go _ _ = error "implement fromBools"
+        go rmm [] = rmm
 
 newtype RmmEx = RmmEx
   { parens :: FingerTree Measure Elem
