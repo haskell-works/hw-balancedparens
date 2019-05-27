@@ -4,18 +4,16 @@
 
 module HaskellWorks.Data.BalancedParens.Internal.BroadwordSpec where
 
--- import           Data.Maybe
-import qualified Data.Vector.Storable                       as DVS
-import           Data.Word
-import           HaskellWorks.Data.BalancedParens.FindClose
--- import           HaskellWorks.Data.Bits.BitLength
--- import           HaskellWorks.Data.Bits.BitRead
-import           HaskellWorks.Data.Bits.BitShow
-import           HaskellWorks.Data.Bits.Broadword
-import           HaskellWorks.Data.Bits.FromBitTextByteString
-import           HaskellWorks.Data.Positioning
-import           Test.Hspec
-import           Test.QuickCheck
+import Data.Word
+import HaskellWorks.Data.BalancedParens.FindClose
+import HaskellWorks.Data.Bits.BitShow
+import HaskellWorks.Data.Bits.Broadword
+import HaskellWorks.Data.Bits.FromBitTextByteString
+import HaskellWorks.Data.Positioning
+import Test.Hspec
+import Test.QuickCheck
+
+import qualified Data.Vector.Storable as DVS
 
 {-# ANN module ("HLint: Ignore Redundant do"        :: String) #-}
 {-# ANN module ("HLint: Ignore Reduce duplication"  :: String) #-}
