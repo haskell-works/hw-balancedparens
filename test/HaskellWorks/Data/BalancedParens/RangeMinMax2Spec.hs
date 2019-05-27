@@ -5,16 +5,15 @@
 
 module HaskellWorks.Data.BalancedParens.RangeMinMax2Spec where
 
-import qualified Data.Vector.Storable                                     as DVS
-import           Data.Word
-import           HaskellWorks.Data.BalancedParens
-import           HaskellWorks.Data.BalancedParens.RangeMinMax
--- import           HaskellWorks.Data.BalancedParens.RangeMinMax2
--- import           HaskellWorks.Data.Bits.BitLength
-import           HaskellWorks.Data.Bits.BitShow
-import           HaskellWorks.Data.Bits.FromBitTextByteString
-import           Test.Hspec
-import           Test.QuickCheck
+import Data.Word
+import HaskellWorks.Data.BalancedParens
+import HaskellWorks.Data.BalancedParens.RangeMinMax
+import HaskellWorks.Data.Bits.BitShow
+import HaskellWorks.Data.Bits.FromBitTextByteString
+import Test.Hspec
+import Test.QuickCheck
+
+import qualified Data.Vector.Storable as DVS
 
 {-# ANN module ("HLint: Ignore Redundant do"        :: String) #-}
 {-# ANN module ("HLint: Ignore Reduce duplication"  :: String) #-}

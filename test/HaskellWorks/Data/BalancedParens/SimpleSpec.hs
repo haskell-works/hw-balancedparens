@@ -1,17 +1,18 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
-{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE ScopedTypeVariables        #-}
 
 module HaskellWorks.Data.BalancedParens.SimpleSpec where
 
-import           Data.Maybe
-import qualified Data.Vector.Storable                       as DVS
-import           Data.Word
-import           HaskellWorks.Data.BalancedParens
-import           HaskellWorks.Data.Bits.BitLength
-import           HaskellWorks.Data.Bits.BitRead
-import           HaskellWorks.Data.Bits.BitShow
-import           Test.Hspec
-import           Test.QuickCheck
+import Data.Maybe
+import Data.Word
+import HaskellWorks.Data.BalancedParens
+import HaskellWorks.Data.Bits.BitLength
+import HaskellWorks.Data.Bits.BitRead
+import HaskellWorks.Data.Bits.BitShow
+import Test.Hspec
+import Test.QuickCheck
+
+import qualified Data.Vector.Storable as DVS
 
 {-# ANN module ("HLint: Ignore Redundant do"        :: String) #-}
 {-# ANN module ("HLint: Ignore Reduce duplication"  :: String) #-}
