@@ -9,6 +9,7 @@ module HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal
   , fromWord64s
   , fromWord64s'
   , firstChild
+  , nextSibling
   ) where
 
 import Data.Monoid
@@ -59,9 +60,34 @@ dropRmmEx n (RmmEx parens) = case FT.split predicate parens of
         predicate m = n < T.size (m :: Measure)
 
 firstChild  :: RmmEx -> Count -> Maybe Count
-firstChild rmm n = let x = dropRmmEx n rmm in undefined
+firstChild rmm n = case FT.viewl ft of
+          T.Elem w nw :< rrt -> if nw >= 2
+            then if w .|. 3 == 3
+              then Just (n + 1)
+              else if nw == 1
+                then case FT.viewl rrt of
+                  T.Elem w' nw' :< _ -> if nw' >= 1 && w' .|. 1 == 1
+                    then Just (n + 1)
+                    else error "Empty Elem"
+                  FT.EmptyL -> Nothing
+                else error "Empty Elem"
+            else error "Empty Elem"
+          FT.EmptyL -> Nothing
+  where RmmEx ft = dropRmmEx n rmm
 
--- nextSibling :: RmmEx -> Count -> Maybe Count
+nextSibling  :: RmmEx -> Count -> Maybe Count
+nextSibling rmm n = case FT.split predicate ft of
+  (lt, rt) -> let n' = n - T.size (FT.measure lt :: T.Measure) in
+    case FT.viewl rt of
+      T.Elem w nw :< rrt -> if n >= nw
+        then pick rrt
+        else pick ((T.Elem (w .>. n') (n - n')) <| rt)
+      FT.EmptyL -> pick FT.empty
+  where predicate :: Measure -> Bool
+        predicate m = T.min (m :: Measure) < 0
+        RmmEx ft = dropRmmEx n rmm
+        pick :: FT.FingerTree Measure Elem -> Maybe Count
+        pick _ = Nothing
 
 -- parent      :: RmmEx -> Count -> Maybe Count
 
