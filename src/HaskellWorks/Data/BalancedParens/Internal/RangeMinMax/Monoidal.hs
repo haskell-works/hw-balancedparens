@@ -80,14 +80,15 @@ nextSibling rmm n = case FT.split predicate ft of
   (lt, rt) -> let n' = n - T.size (FT.measure lt :: T.Measure) in
     case FT.viewl rt of
       T.Elem w nw :< rrt -> if n >= nw
-        then pick rrt
-        else pick ((T.Elem (w .>. n') (n - n')) <| rt)
-      FT.EmptyL -> pick FT.empty
+        -- TODO The argumen to pick is wrong because lt doesn't have all the bits.
+        then pick (T.min (FT.measure lt :: T.Measure)) rrt
+        else pick (T.min (FT.measure lt :: T.Measure)) (T.Elem (w .>. n') (n - n') <| rt)
+      FT.EmptyL -> pick (T.min (FT.measure lt :: T.Measure)) FT.empty
   where predicate :: Measure -> Bool
         predicate m = T.min (m :: Measure) < 0
         RmmEx ft = dropRmmEx n rmm
-        pick :: FT.FingerTree Measure Elem -> Maybe Count
-        pick _ = Nothing
+        pick :: Int -> FT.FingerTree Measure Elem -> Maybe Count
+        pick mn _ = Nothing
 
 -- parent      :: RmmEx -> Count -> Maybe Count
 
