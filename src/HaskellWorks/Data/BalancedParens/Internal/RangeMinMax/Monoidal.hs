@@ -8,29 +8,31 @@ module HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal
   , mempty
   , fromWord64s
   , fromWord64s'
+  , firstChild
   ) where
 
-import Data.Int
 import Data.Monoid
 import Data.Word
-import HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal.Types (Elem (Elem), Measure)
+import HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal.Types (Elem (Elem), Measure, RmmEx (RmmEx))
 import HaskellWorks.Data.Bits.BitWise
-import HaskellWorks.Data.FingerTree                                         (FingerTree, ViewR (..), (|>))
+import HaskellWorks.Data.FingerTree                                         (ViewL (..), ViewR (..), (<|), (|>))
+import HaskellWorks.Data.Positioning
 import Prelude                                                              hiding (max, min)
 
-import qualified HaskellWorks.Data.FingerTree as FT
+import qualified HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal.Types as T
+import qualified HaskellWorks.Data.FingerTree                                         as FT
 
 -- TODO Needs optimisation
 fromWord64s :: Traversable f => f Word64 -> RmmEx
 fromWord64s = foldl go empty
   where go :: RmmEx -> Word64 -> RmmEx
-        go rmm w = RmmEx (parens rmm |> Elem w 64)
+        go rmm w = RmmEx (T.parens rmm |> Elem w 64)
 
 -- TODO Needs optimisation
-fromWord64s' :: Traversable f => f (Word64, Int) -> RmmEx
+fromWord64s' :: Traversable f => f (Word64, Count) -> RmmEx
 fromWord64s' = foldl go empty
-  where go :: RmmEx -> (Word64, Int) -> RmmEx
-        go rmm (w, n) = RmmEx (parens rmm |> Elem w n)
+  where go :: RmmEx -> (Word64, Count) -> RmmEx
+        go rmm (w, n) = RmmEx (T.parens rmm |> Elem w n)
 
 fromBools :: [Bool] -> RmmEx
 fromBools = go empty
@@ -45,9 +47,23 @@ fromBools = go empty
           where b' = if b then 1 else 0 :: Word64
         go rmm [] = rmm
 
-newtype RmmEx = RmmEx
-  { parens :: FingerTree Measure Elem
-  }
+dropRmmEx :: Count -> RmmEx -> RmmEx
+dropRmmEx n (RmmEx parens) = case FT.split predicate parens of
+  (lt, rt) -> let n' = n - T.size (FT.measure lt :: T.Measure) in
+    case FT.viewl rt of
+      T.Elem w nw :< rrt -> if n >= nw
+        then RmmEx rrt
+        else RmmEx ((T.Elem (w .>. n') (n - n')) <| rt)
+      FT.EmptyL          -> empty
+  where predicate :: Measure -> Bool
+        predicate m = n < T.size (m :: Measure)
+
+firstChild  :: RmmEx -> Count -> Maybe Count
+firstChild rmm n = let x = dropRmmEx n rmm in undefined
+
+-- nextSibling :: RmmEx -> Count -> Maybe Count
+
+-- parent      :: RmmEx -> Count -> Maybe Count
 
 empty :: RmmEx
 empty = RmmEx FT.empty
