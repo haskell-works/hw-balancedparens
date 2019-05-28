@@ -26,7 +26,9 @@ common base               { build-depends: base                 >= 4        && <
 common QuickCheck         { build-depends: QuickCheck           >= 2.10     && < 2.12   }
 common criterion          { build-depends: criterion            >= 1.2      && < 1.6    }
 common deepseq            { build-depends: deepseq              >= 1.4.2.0  && < 1.5    }
+common hedgehog           { build-depends: hedgehog             >= 1.0      && < 1.1    }
 common hspec              { build-depends: hspec                >= 2.2      && < 2.6    }
+common hw-hspec-hedgehog  { build-depends: hw-hspec-hedgehog    >= 0.1      && < 0.2    }
 common hw-bits            { build-depends: hw-bits              >= 0.4.0.0  && < 0.8    }
 common hw-excess          { build-depends: hw-excess            >= 0.2.1.0  && < 0.3    }
 common hw-fingertree      { build-depends: hw-fingertree        >= 0.1.0.2  && < 0.2    }
@@ -71,6 +73,7 @@ library
     HaskellWorks.Data.BalancedParens.FindOpen
     HaskellWorks.Data.BalancedParens.FindOpenN
     HaskellWorks.Data.BalancedParens.Internal.List
+    HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal
     HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal.Types
     HaskellWorks.Data.BalancedParens.NewCloseAt
     HaskellWorks.Data.BalancedParens.NewOpenAt
@@ -85,8 +88,10 @@ library
 test-suite hw-balancedparens-test
   import:   base, config
           , QuickCheck
+          , hedgehog
           , hspec
           , hw-bits
+          , hw-hspec-hedgehog
           , hw-prim
           , hw-rankselect-base
           , vector
