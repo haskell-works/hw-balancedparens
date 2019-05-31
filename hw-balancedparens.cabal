@@ -75,6 +75,7 @@ library
     HaskellWorks.Data.BalancedParens.Internal.List
     HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal
     HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal.Types
+    HaskellWorks.Data.BalancedParens.Internal.RoseTree
     HaskellWorks.Data.BalancedParens.Internal.Word
     HaskellWorks.Data.BalancedParens.NewCloseAt
     HaskellWorks.Data.BalancedParens.NewOpenAt
