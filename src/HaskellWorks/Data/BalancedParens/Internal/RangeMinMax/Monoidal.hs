@@ -9,13 +9,15 @@ module HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal
   , fromWord64s
   , fromPartialWord64s
   , toPartialWord64s
+  , fromBools
   ) where
 
 import Data.Coerce
 import Data.Monoid
 import Data.Word
 import HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal.Types (Elem (Elem), RmmEx (RmmEx))
-import HaskellWorks.Data.FingerTree                                         (ViewL (..), (|>))
+import HaskellWorks.Data.Bits.BitWise
+import HaskellWorks.Data.FingerTree                                         (ViewL (..), ViewR (..), (|>))
 import HaskellWorks.Data.Positioning
 import Prelude                                                              hiding (max, min)
 
@@ -49,3 +51,16 @@ toPartialWord64s = L.unfoldr go . coerce
         go ft = case FT.viewl ft of
           T.Elem w n :< rt -> Just ((w, coerce n), rt)
           FT.EmptyL        -> Nothing
+
+fromBools :: [Bool] -> RmmEx
+fromBools = go empty
+  where go :: RmmEx -> [Bool] -> RmmEx
+        go (RmmEx ps) (b:bs) = case FT.viewr ps of
+          FT.EmptyR      -> go (RmmEx (FT.singleton (Elem b' 1))) bs
+          lt :> Elem w n ->
+            let newPs = if n >= 64
+                then ps |> Elem b' 1
+                else lt |> Elem (w .|. (b' .<. fromIntegral n)) (n + 1)
+            in go (RmmEx newPs) bs
+          where b' = if b then 1 else 0 :: Word64
+        go rmm [] = rmm
