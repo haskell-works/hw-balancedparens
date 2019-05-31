@@ -1,10 +1,14 @@
 module HaskellWorks.Data.BalancedParens.Internal.Word
-  ( toBoolsDiff
+  ( toBools
+  , toBoolsDiff
   ) where
 
 import Data.Word
 import HaskellWorks.Data.Bits.BitWise
 import HaskellWorks.Data.Positioning
+
+toBools :: Word64 -> [Bool]
+toBools w = toBoolsDiff w []
 
 toBoolsDiff :: Word64 -> [Bool] -> [Bool]
 toBoolsDiff w =
