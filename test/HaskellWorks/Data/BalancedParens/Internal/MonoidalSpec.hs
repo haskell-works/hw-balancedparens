@@ -57,8 +57,7 @@ spec = describe "HaskellWorks.Data.BalancedParens.Internal.MonoidalSpec" $ do
 
     RMM.size (RMM.drop n rmm) === RMM.size rmm - n
   it "rose tree should be generatable" $ requireProperty $ do
-    rt <- forAll $ G.roseTree (R.linear 0 5) ( R.linear 0 5)
+    rt <- forAll $ G.roseTree (R.linear 1 100)
     bs <- forAll $ pure $ RT.toBools rt
-    rmm <- forAll $ pure $ RMM.fromBools bs
 
     RMM.toBools (RMM.fromBools bs) === bs
