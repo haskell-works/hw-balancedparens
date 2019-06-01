@@ -10,10 +10,12 @@ module HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal
   , fromPartialWord64s
   , toPartialWord64s
   , fromBools
+  , toBools
   , drop
   ) where
 
 import Data.Coerce
+import Data.Foldable
 import Data.Monoid
 import Data.Word
 import HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal.Types (Elem (Elem), Measure, RmmEx (RmmEx))
@@ -24,6 +26,7 @@ import Prelude                                                              hidi
 
 import qualified Data.List                                                            as L
 import qualified HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal.Types as T
+import qualified HaskellWorks.Data.BalancedParens.Internal.Word                       as W
 import qualified HaskellWorks.Data.FingerTree                                         as FT
 
 type RmmFt = FT.FingerTree T.Measure T.Elem
@@ -65,6 +68,14 @@ fromBools = go empty
             in go (RmmEx newPs) bs
           where b' = if b then 1 else 0 :: Word64
         go rmm [] = rmm
+
+toBools :: RmmEx -> [Bool]
+toBools rmm = toBoolsDiff rmm []
+
+toBoolsDiff :: RmmEx -> [Bool] -> [Bool]
+toBoolsDiff rmm = mconcat (fmap go (toPartialWord64s rmm))
+  where go :: (Word64, Count) -> [Bool] -> [Bool]
+        go (w, n) = W.partialToBoolsDiff (fromIntegral n) w
 
 drop :: Count -> RmmEx -> RmmEx
 drop n (RmmEx parens) = case FT.split predicate parens of
