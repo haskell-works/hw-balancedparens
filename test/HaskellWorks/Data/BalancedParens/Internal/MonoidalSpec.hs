@@ -13,7 +13,6 @@ import qualified HaskellWorks.Data.BalancedParens.BalancedParens                
 import qualified HaskellWorks.Data.BalancedParens.Gen                           as G
 import qualified HaskellWorks.Data.BalancedParens.Internal.List                 as L
 import qualified HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal as RMM
-import qualified HaskellWorks.Data.BalancedParens.Internal.RoseTree             as RT
 import qualified Hedgehog.Gen                                                   as G
 import qualified Hedgehog.Range                                                 as R
 
@@ -59,8 +58,7 @@ spec = describe "HaskellWorks.Data.BalancedParens.Internal.MonoidalSpec" $ do
 
     RMM.size (RMM.drop n rmm) === RMM.size rmm - n
   it "rose tree should be generatable" $ requireProperty $ do
-    rt <- forAll $ G.roseTree (R.linear 1 100)
-    bs <- forAll $ pure $ RT.toBools rt
+    bs <- forAll $ G.balancedParens (R.linear 1 1000)
 
     RMM.toBools (RMM.fromBools bs) === bs
   it "firstChild should select first child" $ requireProperty $ do

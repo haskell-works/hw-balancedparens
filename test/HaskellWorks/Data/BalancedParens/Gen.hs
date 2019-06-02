@@ -3,7 +3,6 @@
 module HaskellWorks.Data.BalancedParens.Gen
   ( BP(..)
   , count
-  , roseTree
   , balancedParens
   , showBps
   ) where
@@ -55,21 +54,3 @@ balancedParens ::  MonadGen m => Range Int -> m [Bool]
 balancedParens r = do
   n <- G.int r
   balancedParens' (n * 2) (0, [], [], 0)
-
-roseTreeChildren :: MonadGen m => Int -> Int -> m [RT.RoseTree]
-roseTreeChildren 0 _ = error "too deep"
-roseTreeChildren _ 0 = pure []
-roseTreeChildren maxDepth n = case n of
-  0 -> pure []
-  1 -> pure [RT.RoseTree []]
-  _ -> do
-    c  <- (n -) <$> G.int (R.linear 0 (n - 1))
-    as <- G.list (R.singleton (c - 1)) (G.int (R.linear 0 (n - c)))
-    let ns = sort (0:n - c:as)
-    let ds = zipWith (-) (drop 1 ns) ns
-    forM ds (fmap RT.RoseTree . roseTreeChildren (maxDepth - 1))
-
-roseTree :: MonadGen m => Range Int ->  m RT.RoseTree
-roseTree r = do
-  n <- G.int r
-  fmap RT.RoseTree (roseTreeChildren n (n - 1))
