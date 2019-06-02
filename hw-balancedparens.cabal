@@ -52,6 +52,7 @@ library hw-balancedparens-naive
           , vector
   exposed-modules:
     HaskellWorks.Data.BalancedParens.RangeMinMax.Monoidal.Naive
+    HaskellWorks.Data.BalancedParens.RangeMinMax.Monoidal.Naive.Type
   hs-source-dirs:     naive
 
 library

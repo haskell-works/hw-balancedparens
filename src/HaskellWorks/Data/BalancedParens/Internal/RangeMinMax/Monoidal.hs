@@ -91,7 +91,7 @@ drop n (RmmEx parens) = case FT.split predicate parens of
 
 firstChild  :: RmmEx -> Count -> Maybe Count
 firstChild rmm n = case FT.viewl ft of
-  T.Elem w nw :< rrt -> if nw >= 2
+  T.Elem w nw :< _ -> if nw >= 2
     then case w .&. 3 of
       3 -> Just (n + 1)
       _ -> Nothing

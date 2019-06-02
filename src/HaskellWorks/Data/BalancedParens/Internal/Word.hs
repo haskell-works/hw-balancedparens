@@ -13,7 +13,7 @@ toBools w = toBoolsDiff w []
 
 partialToBoolsDiff :: Count -> Word64 -> [Bool] -> [Bool]
 partialToBoolsDiff n w | n > 0 = partialToBoolsDiff (n - 1) w . ((w .?. fromIntegral (n - 1)):)
-partialToBoolsDiff 0 w = id
+partialToBoolsDiff 0 _ = id
 partialToBoolsDiff _ _ = error "Invalid size"
 
 toBoolsDiff :: Word64 -> [Bool] -> [Bool]
