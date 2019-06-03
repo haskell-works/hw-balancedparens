@@ -7,16 +7,12 @@ module HaskellWorks.Data.BalancedParens.Gen
   , showBps
   ) where
 
-import Control.Monad
 import Data.Coerce
-import Data.List                     (sort)
 import Data.Semigroup                ((<>))
 import HaskellWorks.Data.Positioning
 import Hedgehog
 
-import qualified HaskellWorks.Data.BalancedParens.Internal.RoseTree as RT
-import qualified Hedgehog.Gen                                       as G
-import qualified Hedgehog.Range                                     as R
+import qualified Hedgehog.Gen as G
 
 count :: MonadGen m => Range Count -> m Count
 count r = coerce <$> G.word64 (coerce <$> r)

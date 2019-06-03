@@ -51,6 +51,12 @@ spec = describe "HaskellWorks.Data.BalancedParens.Internal.MonoidalSpec" $ do
     n  <- forAll $ G.count (R.linear 0 (RMM.size rmm))
 
     RMM.size (RMM.drop n rmm) === RMM.size rmm - n
+  it "drop2 should drop2 the right amount of data" $ requireProperty $ do
+    ws <- forAll $ G.list (R.linear 0 10) (G.word64 R.constantBounded)
+    let rmm = RMM.fromWord64s ws
+    n  <- forAll $ G.count (R.linear 0 (RMM.size rmm))
+
+    RMM.size (RMM.drop2 n rmm) === RMM.size rmm - n
   it "firstChild should choose the first child" $ requireProperty $ do
     ws <- forAll $ G.list (R.linear 0 10) (G.word64 R.constantBounded)
     let rmm = RMM.fromWord64s ws

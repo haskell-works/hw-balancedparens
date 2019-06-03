@@ -12,6 +12,7 @@ module HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal
   , fromBools
   , toBools
   , drop
+  , drop2
   , firstChild
   ) where
 
@@ -79,15 +80,39 @@ toBoolsDiff rmm = mconcat (fmap go (toPartialWord64s rmm))
         go (w, n) = W.partialToBoolsDiff (fromIntegral n) w
 
 drop :: Count -> RmmEx -> RmmEx
-drop n (RmmEx parens) = case FT.split predicate parens of
+drop n (RmmEx parens) = case FT.split (atSizeBelowZero n) parens of
   (lt, rt) -> let n' = n - T.size (FT.measure lt :: T.Measure) in
     case FT.viewl rt of
       T.Elem w nw :< rrt -> if n' >= nw
         then RmmEx rrt
         else RmmEx ((T.Elem (w .>. n') (nw - n')) <| rrt)
       FT.EmptyL          -> empty
-  where predicate :: Measure -> Bool
-        predicate m = n < T.size (m :: Measure)
+
+drop2 :: Count -> RmmEx -> RmmEx
+drop2 n (RmmEx parens) = case ftSplit (atSizeBelowZero n) parens of
+  (_, rt) -> RmmEx rt
+
+(||>) :: RmmFt -> T.Elem -> RmmFt
+(||>) ft e@(T.Elem _ wn) = if wn > 0 then ft |> e else ft
+
+(<||) :: T.Elem ->RmmFt -> RmmFt
+(<||) e@(T.Elem _ wn) ft = if wn > 0 then e <| ft else ft
+
+ftSplit :: (Measure -> Bool) -> RmmFt -> (RmmFt, RmmFt)
+ftSplit p ft = case FT.viewl rt of
+  T.Elem w nw :< rrt -> let c = go w nw nw in (lt ||> T.Elem w c, T.Elem (w .>. c) (nw - c) <|| rrt)
+  FT.EmptyL          -> (ft, FT.empty)
+  where (lt, rt) = FT.split p ft
+        ltm = FT.measure lt
+        go :: Word64 -> Count -> Count -> Count
+        go w c nw = if c >= 0
+          then if p (ltm <> FT.measure (T.Elem (w .<. (64 - c) .>. (64 - c)) c))
+            then go w (c - 1) nw
+            else c
+          else 0
+
+atSizeBelowZero :: Count -> Measure -> Bool
+atSizeBelowZero n m = n < T.size (m :: Measure)
 
 firstChild  :: RmmEx -> Count -> Maybe Count
 firstChild rmm n = case FT.viewl ft of
