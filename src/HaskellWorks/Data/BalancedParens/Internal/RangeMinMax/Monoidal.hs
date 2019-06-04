@@ -105,7 +105,7 @@ ftSplit p ft = case FT.viewl rt of
   where (lt, rt) = FT.split p ft
         ltm = FT.measure lt
         go :: Word64 -> Count -> Count -> Count
-        go w c nw = if c >= 0
+        go w c nw = if c > 0
           then if p (ltm <> FT.measure (T.Elem (w .<. (64 - c) .>. (64 - c)) c))
             then go w (c - 1) nw
             else c
