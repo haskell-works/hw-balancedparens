@@ -8,7 +8,7 @@ module HaskellWorks.Data.BalancedParens.RangeMinMax.Monoidal.Naive.Type
   ) where
 
 import Data.Semigroup               (Semigroup ((<>)))
-import HaskellWorks.Data.FingerTree (FingerTree, (|>))
+import HaskellWorks.Data.FingerTree (FingerTree)
 
 import qualified HaskellWorks.Data.FingerTree as FT
 
