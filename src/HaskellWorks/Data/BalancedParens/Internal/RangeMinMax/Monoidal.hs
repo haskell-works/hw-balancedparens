@@ -14,6 +14,7 @@ module HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal
   , drop
   , drop2
   , firstChild
+  , nextSibling
   ) where
 
 import Data.Coerce
@@ -133,3 +134,27 @@ firstChild rmm n = case FT.viewl ft of
       else Nothing
   FT.EmptyL -> Nothing
   where RmmEx ft = drop (n - 1) rmm
+
+atMinZero :: Measure -> Bool
+atMinZero m = T.min (m :: Measure) <= 0
+
+nextSibling  :: RmmEx -> Count -> Maybe Count
+nextSibling (RmmEx rmm) n = do
+  let (lt0, rt0) = ftSplit (atSizeBelowZero (n - 1)) rmm
+  _ <- case FT.viewl rt0 of
+    T.Elem w nw :< _ -> if nw >= 1 && w .&. 1 == 1 then Just () else Nothing
+    FT.EmptyL        -> Nothing
+  let (lt1, rt1) = ftSplit (atSizeBelowZero 1) rt0
+  let (lt2, rt2) = ftSplit atMinZero  rt1
+  case FT.viewl rt2 of
+    T.Elem w nw :< _ -> if nw >= 1 && w .&. 1 == 0 then Just () else Nothing
+    FT.EmptyL        -> Nothing
+  let (lt3, rt3) = ftSplit (atSizeBelowZero 1) rt2
+  case FT.viewl rt3 of
+    T.Elem w nw :< _ -> if nw >= 1 && w .&. 1 == 1 then Just () else Nothing
+    FT.EmptyL        -> Nothing
+  return $ 1
+    + T.size (FT.measure lt0 :: T.Measure)
+    + T.size (FT.measure lt1 :: T.Measure)
+    + T.size (FT.measure lt2 :: T.Measure)
+    + T.size (FT.measure lt3 :: T.Measure)

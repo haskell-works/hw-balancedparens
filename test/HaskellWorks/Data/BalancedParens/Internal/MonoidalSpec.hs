@@ -82,3 +82,17 @@ spec = describe "HaskellWorks.Data.BalancedParens.Internal.MonoidalSpec" $ do
     let rmm = RMM.fromBools bs
 
     RMM.firstChild rmm 64 === Just 65
+  it "nextSibling should select next sibling" $ requireTest $ do
+    bs        <- forAll $ G.balancedParens (R.linear 1 1000)
+    nodeCount <- forAll $ pure (fromIntegral (length bs `div` 2))
+    ranked    <- forAll $ G.count (R.linear 1 nodeCount)
+    pos       <- forAll $ pure $ select1 bs ranked
+    rmm       <- forAll $ pure $ RMM.fromBools bs
+
+    RMM.nextSibling rmm pos === BP.nextSibling bs pos
+  it "nextSibling on ()()" $ requireTest $ do
+    bs        <- forAll $ pure [True , False , True , False]
+    pos       <- forAll $ pure 1
+    rmm       <- forAll $ pure $ RMM.fromBools bs
+
+    RMM.nextSibling rmm pos === BP.nextSibling bs pos
