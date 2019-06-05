@@ -2,25 +2,25 @@
 {-# LANGUAGE OverloadedStrings          #-}
 {-# LANGUAGE ScopedTypeVariables        #-}
 
-module HaskellWorks.Data.BalancedParens.Internal.MonoidalSpec where
+module HaskellWorks.Data.BalancedParens.Internal.ParensSeqSpec where
 
 import HaskellWorks.Data.RankSelect.Base.Select1
 import HaskellWorks.Hspec.Hedgehog
 import Hedgehog
 import Test.Hspec
 
-import qualified HaskellWorks.Data.BalancedParens.BalancedParens                as BP
-import qualified HaskellWorks.Data.BalancedParens.Gen                           as G
-import qualified HaskellWorks.Data.BalancedParens.Internal.List                 as L
-import qualified HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal as RMM
-import qualified Hedgehog.Gen                                                   as G
-import qualified Hedgehog.Range                                                 as R
+import qualified HaskellWorks.Data.BalancedParens.BalancedParens     as BP
+import qualified HaskellWorks.Data.BalancedParens.Gen                as G
+import qualified HaskellWorks.Data.BalancedParens.Internal.List      as L
+import qualified HaskellWorks.Data.BalancedParens.Internal.ParensSeq as RMM
+import qualified Hedgehog.Gen                                        as G
+import qualified Hedgehog.Range                                      as R
 
 {-# ANN module ("HLint: Ignore Redundant do"        :: String) #-}
 {-# ANN module ("HLint: Ignore Reduce duplication"  :: String) #-}
 
 spec :: Spec
-spec = describe "HaskellWorks.Data.BalancedParens.Internal.MonoidalSpec" $ do
+spec = describe "HaskellWorks.Data.BalancedParens.Internal.ParensSeqSpec" $ do
   it "fromWord64s should produce Rmm of the right size" $ requireProperty $ do
     ws <- forAll $ G.list (R.linear 0 10) (G.word64 R.constantBounded)
 

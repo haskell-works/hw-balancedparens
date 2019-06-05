@@ -3,10 +3,10 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE NamedFieldPuns        #-}
 
-module HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal.Types
+module HaskellWorks.Data.BalancedParens.Internal.ParensSeq.Types
   ( Elem(..)
   , Measure(..)
-  , RmmEx(..)
+  , ParensSeq(..)
   ) where
 
 import Data.Int
@@ -33,7 +33,7 @@ data Measure = Measure
   , max    :: {-# UNPACK #-} !Int
   } deriving (Eq, Ord, Show)
 
-newtype RmmEx = RmmEx
+newtype ParensSeq = ParensSeq
   { parens :: FT.FingerTree Measure Elem
   } deriving Show
 

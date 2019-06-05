@@ -75,8 +75,8 @@ library
     HaskellWorks.Data.BalancedParens.FindOpen
     HaskellWorks.Data.BalancedParens.FindOpenN
     HaskellWorks.Data.BalancedParens.Internal.List
-    HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal
-    HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal.Types
+    HaskellWorks.Data.BalancedParens.Internal.ParensSeq
+    HaskellWorks.Data.BalancedParens.Internal.ParensSeq.Types
     HaskellWorks.Data.BalancedParens.Internal.RoseTree
     HaskellWorks.Data.BalancedParens.Internal.Word
     HaskellWorks.Data.BalancedParens.NewCloseAt
@@ -105,7 +105,7 @@ test-suite hw-balancedparens-test
   other-modules:
     HaskellWorks.Data.BalancedParens.Gen
     HaskellWorks.Data.BalancedParens.Internal.BroadwordSpec
-    HaskellWorks.Data.BalancedParens.Internal.MonoidalSpec
+    HaskellWorks.Data.BalancedParens.Internal.ParensSeqSpec
     HaskellWorks.Data.BalancedParens.RangeMinMax2Spec
     HaskellWorks.Data.BalancedParens.RangeMinMaxSpec
     HaskellWorks.Data.BalancedParens.SimpleSpec
