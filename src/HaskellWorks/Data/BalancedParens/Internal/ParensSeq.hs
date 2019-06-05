@@ -2,8 +2,8 @@
 {-# LANGUAGE FlexibleInstances     #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 
-module HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal
-  ( RmmEx(..)
+module HaskellWorks.Data.BalancedParens.Internal.ParensSeq
+  ( ParensSeq(..)
   , mempty
   , size
   , fromWord64s
@@ -21,77 +21,77 @@ import Data.Coerce
 import Data.Foldable
 import Data.Monoid
 import Data.Word
-import HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal.Types (Elem (Elem), Measure, RmmEx (RmmEx))
+import HaskellWorks.Data.BalancedParens.Internal.ParensSeq.Types (Elem (Elem), Measure, ParensSeq (ParensSeq))
 import HaskellWorks.Data.Bits.BitWise
-import HaskellWorks.Data.FingerTree                                         (ViewL (..), ViewR (..), (<|), (|>))
+import HaskellWorks.Data.FingerTree                              (ViewL (..), ViewR (..), (<|), (|>))
 import HaskellWorks.Data.Positioning
-import Prelude                                                              hiding (drop, max, min)
+import Prelude                                                   hiding (drop, max, min)
 
-import qualified Data.List                                                            as L
-import qualified HaskellWorks.Data.BalancedParens.Internal.RangeMinMax.Monoidal.Types as T
-import qualified HaskellWorks.Data.BalancedParens.Internal.Word                       as W
-import qualified HaskellWorks.Data.FingerTree                                         as FT
+import qualified Data.List                                                 as L
+import qualified HaskellWorks.Data.BalancedParens.Internal.ParensSeq.Types as T
+import qualified HaskellWorks.Data.BalancedParens.Internal.Word            as W
+import qualified HaskellWorks.Data.FingerTree                              as FT
 
 type RmmFt = FT.FingerTree T.Measure T.Elem
 
-empty :: RmmEx
-empty = RmmEx FT.empty
+empty :: ParensSeq
+empty = ParensSeq FT.empty
 
-size :: RmmEx -> Count
-size (RmmEx parens) = T.size ((FT.measure parens) :: T.Measure)
+size :: ParensSeq -> Count
+size (ParensSeq parens) = T.size ((FT.measure parens) :: T.Measure)
 
 -- TODO Needs optimisation
-fromWord64s :: Traversable f => f Word64 -> RmmEx
+fromWord64s :: Traversable f => f Word64 -> ParensSeq
 fromWord64s = foldl go empty
-  where go :: RmmEx -> Word64 -> RmmEx
-        go rmm w = RmmEx (T.parens rmm |> Elem w 64)
+  where go :: ParensSeq -> Word64 -> ParensSeq
+        go rmm w = ParensSeq (T.parens rmm |> Elem w 64)
 
 -- TODO Needs optimisation
-fromPartialWord64s :: Traversable f => f (Word64, Count) -> RmmEx
+fromPartialWord64s :: Traversable f => f (Word64, Count) -> ParensSeq
 fromPartialWord64s = foldl go empty
-  where go :: RmmEx -> (Word64, Count) -> RmmEx
-        go rmm (w, n) = RmmEx (T.parens rmm |> Elem w n)
+  where go :: ParensSeq -> (Word64, Count) -> ParensSeq
+        go rmm (w, n) = ParensSeq (T.parens rmm |> Elem w n)
 
-toPartialWord64s :: RmmEx -> [(Word64, Count)]
+toPartialWord64s :: ParensSeq -> [(Word64, Count)]
 toPartialWord64s = L.unfoldr go . coerce
   where go :: RmmFt -> Maybe ((Word64, Count), RmmFt)
         go ft = case FT.viewl ft of
           T.Elem w n :< rt -> Just ((w, coerce n), rt)
           FT.EmptyL        -> Nothing
 
-fromBools :: [Bool] -> RmmEx
+fromBools :: [Bool] -> ParensSeq
 fromBools = go empty
-  where go :: RmmEx -> [Bool] -> RmmEx
-        go (RmmEx ps) (b:bs) = case FT.viewr ps of
-          FT.EmptyR      -> go (RmmEx (FT.singleton (Elem b' 1))) bs
+  where go :: ParensSeq -> [Bool] -> ParensSeq
+        go (ParensSeq ps) (b:bs) = case FT.viewr ps of
+          FT.EmptyR      -> go (ParensSeq (FT.singleton (Elem b' 1))) bs
           lt :> Elem w n ->
             let newPs = if n >= 64
                 then ps |> Elem b' 1
                 else lt |> Elem (w .|. (b' .<. fromIntegral n)) (n + 1)
-            in go (RmmEx newPs) bs
+            in go (ParensSeq newPs) bs
           where b' = if b then 1 else 0 :: Word64
         go rmm [] = rmm
 
-toBools :: RmmEx -> [Bool]
+toBools :: ParensSeq -> [Bool]
 toBools rmm = toBoolsDiff rmm []
 
-toBoolsDiff :: RmmEx -> [Bool] -> [Bool]
+toBoolsDiff :: ParensSeq -> [Bool] -> [Bool]
 toBoolsDiff rmm = mconcat (fmap go (toPartialWord64s rmm))
   where go :: (Word64, Count) -> [Bool] -> [Bool]
         go (w, n) = W.partialToBoolsDiff (fromIntegral n) w
 
-drop :: Count -> RmmEx -> RmmEx
-drop n (RmmEx parens) = case FT.split (atSizeBelowZero n) parens of
+drop :: Count -> ParensSeq -> ParensSeq
+drop n (ParensSeq parens) = case FT.split (atSizeBelowZero n) parens of
   (lt, rt) -> let n' = n - T.size (FT.measure lt :: T.Measure) in
     case FT.viewl rt of
       T.Elem w nw :< rrt -> if n' >= nw
-        then RmmEx rrt
-        else RmmEx ((T.Elem (w .>. n') (nw - n')) <| rrt)
+        then ParensSeq rrt
+        else ParensSeq ((T.Elem (w .>. n') (nw - n')) <| rrt)
       FT.EmptyL          -> empty
 
-drop2 :: Count -> RmmEx -> RmmEx
-drop2 n (RmmEx parens) = case ftSplit (atSizeBelowZero n) parens of
-  (_, rt) -> RmmEx rt
+drop2 :: Count -> ParensSeq -> ParensSeq
+drop2 n (ParensSeq parens) = case ftSplit (atSizeBelowZero n) parens of
+  (_, rt) -> ParensSeq rt
 
 (||>) :: RmmFt -> T.Elem -> RmmFt
 (||>) ft e@(T.Elem _ wn) = if wn > 0 then ft |> e else ft
@@ -115,7 +115,7 @@ ftSplit p ft = case FT.viewl rt of
 atSizeBelowZero :: Count -> Measure -> Bool
 atSizeBelowZero n m = n < T.size (m :: Measure)
 
-firstChild  :: RmmEx -> Count -> Maybe Count
+firstChild  :: ParensSeq -> Count -> Maybe Count
 firstChild rmm n = case FT.viewl ft of
   T.Elem w nw :< rt -> if nw >= 2
     then case w .&. 3 of
@@ -133,13 +133,13 @@ firstChild rmm n = case FT.viewl ft of
         _ -> Nothing
       else Nothing
   FT.EmptyL -> Nothing
-  where RmmEx ft = drop (n - 1) rmm
+  where ParensSeq ft = drop (n - 1) rmm
 
 atMinZero :: Measure -> Bool
 atMinZero m = T.min (m :: Measure) <= 0
 
-nextSibling  :: RmmEx -> Count -> Maybe Count
-nextSibling (RmmEx rmm) n = do
+nextSibling  :: ParensSeq -> Count -> Maybe Count
+nextSibling (ParensSeq rmm) n = do
   let (lt0, rt0) = ftSplit (atSizeBelowZero (n - 1)) rmm
   _ <- case FT.viewl rt0 of
     T.Elem w nw :< _ -> if nw >= 1 && w .&. 1 == 1 then Just () else Nothing
