@@ -15,6 +15,7 @@ module HaskellWorks.Data.BalancedParens.Internal.ParensSeq
   , drop2
   , firstChild
   , nextSibling
+  , (<|), (><), (|>)
   ) where
 
 import Data.Coerce
@@ -23,7 +24,7 @@ import Data.Monoid
 import Data.Word
 import HaskellWorks.Data.BalancedParens.Internal.ParensSeq.Internal (Elem (Elem), ParensSeq (ParensSeq), ParensSeqFt)
 import HaskellWorks.Data.Bits.BitWise
-import HaskellWorks.Data.FingerTree                                 (ViewL (..), ViewR (..), (<|), (|>))
+import HaskellWorks.Data.FingerTree                                 (ViewL (..), ViewR (..), (<|), (><), (|>))
 import HaskellWorks.Data.Positioning
 import Prelude                                                      hiding (drop, max, min)
 
