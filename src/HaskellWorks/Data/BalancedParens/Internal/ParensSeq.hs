@@ -84,7 +84,7 @@ drop n (ParensSeq parens) = case FT.split (T.atSizeBelowZero n) parens of
     case FT.viewl rt of
       T.Elem w nw :< rrt -> if n' >= nw
         then ParensSeq rrt
-        else ParensSeq ((T.Elem (w .>. n') (nw - n')) <| rrt)
+        else ParensSeq (T.Elem (w .>. n') (nw - n') <| rrt)
       FT.EmptyL          -> empty
 
 drop2 :: Count -> ParensSeq -> ParensSeq
