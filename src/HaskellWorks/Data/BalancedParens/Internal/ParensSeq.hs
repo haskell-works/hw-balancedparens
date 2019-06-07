@@ -21,7 +21,7 @@ import Data.Coerce
 import Data.Foldable
 import Data.Monoid
 import Data.Word
-import HaskellWorks.Data.BalancedParens.Internal.ParensSeq.Internal (Elem (Elem), Measure, ParensSeq (ParensSeq), ParensSeqFt)
+import HaskellWorks.Data.BalancedParens.Internal.ParensSeq.Internal (Elem (Elem), ParensSeq (ParensSeq), ParensSeqFt)
 import HaskellWorks.Data.Bits.BitWise
 import HaskellWorks.Data.FingerTree                                 (ViewL (..), ViewR (..), (<|), (|>))
 import HaskellWorks.Data.Positioning
@@ -79,7 +79,7 @@ toBoolsDiff rmm = mconcat (fmap go (toPartialWord64s rmm))
         go (w, n) = W.partialToBoolsDiff (fromIntegral n) w
 
 drop :: Count -> ParensSeq -> ParensSeq
-drop n (ParensSeq parens) = case FT.split (atSizeBelowZero n) parens of
+drop n (ParensSeq parens) = case FT.split (T.atSizeBelowZero n) parens of
   (lt, rt) -> let n' = n - T.size (FT.measure lt :: T.Measure) in
     case FT.viewl rt of
       T.Elem w nw :< rrt -> if n' >= nw
@@ -88,30 +88,8 @@ drop n (ParensSeq parens) = case FT.split (atSizeBelowZero n) parens of
       FT.EmptyL          -> empty
 
 drop2 :: Count -> ParensSeq -> ParensSeq
-drop2 n (ParensSeq parens) = case ftSplit (atSizeBelowZero n) parens of
+drop2 n (ParensSeq parens) = case T.ftSplit (T.atSizeBelowZero n) parens of
   (_, rt) -> ParensSeq rt
-
-(|>#) :: ParensSeqFt -> T.Elem -> ParensSeqFt
-(|>#) ft e@(T.Elem _ wn) = if wn > 0 then ft |> e else ft
-
-(#<|) :: T.Elem ->ParensSeqFt -> ParensSeqFt
-(#<|) e@(T.Elem _ wn) ft = if wn > 0 then e <| ft else ft
-
-ftSplit :: (Measure -> Bool) -> ParensSeqFt -> (ParensSeqFt, ParensSeqFt)
-ftSplit p ft = case FT.viewl rt of
-  T.Elem w nw :< rrt -> let c = go w nw nw in (lt |># T.Elem w c, T.Elem (w .>. c) (nw - c) #<| rrt)
-  FT.EmptyL          -> (ft, FT.empty)
-  where (lt, rt) = FT.split p ft
-        ltm = FT.measure lt
-        go :: Word64 -> Count -> Count -> Count
-        go w c nw = if c > 0
-          then if p (ltm <> FT.measure (T.Elem (w .<. (64 - c) .>. (64 - c)) c))
-            then go w (c - 1) nw
-            else c
-          else 0
-
-atSizeBelowZero :: Count -> Measure -> Bool
-atSizeBelowZero n m = n < T.size (m :: Measure)
 
 firstChild  :: ParensSeq -> Count -> Maybe Count
 firstChild rmm n = case FT.viewl ft of
@@ -133,21 +111,18 @@ firstChild rmm n = case FT.viewl ft of
   FT.EmptyL -> Nothing
   where ParensSeq ft = drop (n - 1) rmm
 
-atMinZero :: Measure -> Bool
-atMinZero m = T.min (m :: Measure) <= 0
-
 nextSibling  :: ParensSeq -> Count -> Maybe Count
 nextSibling (ParensSeq rmm) n = do
-  let (lt0, rt0) = ftSplit (atSizeBelowZero (n - 1)) rmm
+  let (lt0, rt0) = T.ftSplit (T.atSizeBelowZero (n - 1)) rmm
   _ <- case FT.viewl rt0 of
     T.Elem w nw :< _ -> if nw >= 1 && w .&. 1 == 1 then Just () else Nothing
     FT.EmptyL        -> Nothing
-  let (lt1, rt1) = ftSplit (atSizeBelowZero 1) rt0
-  let (lt2, rt2) = ftSplit atMinZero  rt1
+  let (lt1, rt1) = T.ftSplit (T.atSizeBelowZero 1) rt0
+  let (lt2, rt2) = T.ftSplit T.atMinZero  rt1
   case FT.viewl rt2 of
     T.Elem w nw :< _ -> if nw >= 1 && w .&. 1 == 0 then Just () else Nothing
     FT.EmptyL        -> Nothing
-  let (lt3, rt3) = ftSplit (atSizeBelowZero 1) rt2
+  let (lt3, rt3) = T.ftSplit (T.atSizeBelowZero 1) rt2
   case FT.viewl rt3 of
     T.Elem w nw :< _ -> if nw >= 1 && w .&. 1 == 1 then Just () else Nothing
     FT.EmptyL        -> Nothing

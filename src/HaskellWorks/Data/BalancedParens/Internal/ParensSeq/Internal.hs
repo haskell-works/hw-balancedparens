@@ -9,6 +9,11 @@ module HaskellWorks.Data.BalancedParens.Internal.ParensSeq.Internal
   , Measure(..)
   , ParensSeq(..)
   , ParensSeqFt
+  , (|>#)
+  , (#<|)
+  , ftSplit
+  , atSizeBelowZero
+  , atMinZero
   ) where
 
 import Data.Int
@@ -88,3 +93,28 @@ instance Semigroup ParensSeq where
         else tl >< tr
       FT.EmptyL -> tr
     FT.EmptyR -> FT.empty
+
+(|>#) :: ParensSeqFt -> Elem -> ParensSeqFt
+(|>#) ft e@(Elem _ wn) = if wn > 0 then ft |> e else ft
+
+(#<|) :: Elem ->ParensSeqFt -> ParensSeqFt
+(#<|) e@(Elem _ wn) ft = if wn > 0 then e <| ft else ft
+
+ftSplit :: (Measure -> Bool) -> ParensSeqFt -> (ParensSeqFt, ParensSeqFt)
+ftSplit p ft = case FT.viewl rt of
+  Elem w nw :< rrt -> let c = go w nw nw in (lt |># Elem w c, Elem (w .>. c) (nw - c) #<| rrt)
+  FT.EmptyL        -> (ft, FT.empty)
+  where (lt, rt) = FT.split p ft
+        ltm = FT.measure lt
+        go :: Word64 -> Count -> Count -> Count
+        go w c nw = if c > 0
+          then if p (ltm <> FT.measure (Elem (w .<. (64 - c) .>. (64 - c)) c))
+            then go w (c - 1) nw
+            else c
+          else 0
+
+atSizeBelowZero :: Count -> Measure -> Bool
+atSizeBelowZero n m = n < size (m :: Measure)
+
+atMinZero :: Measure -> Bool
+atMinZero m = min (m :: Measure) <= 0
