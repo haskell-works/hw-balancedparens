@@ -13,6 +13,7 @@ module HaskellWorks.Data.BalancedParens.Internal.ParensSeq
   , toBools
   , drop
   , drop2
+  , splitAt
   , firstChild
   , nextSibling
   , (<|), (><), (|>)
@@ -26,7 +27,7 @@ import HaskellWorks.Data.BalancedParens.Internal.ParensSeq.Internal (Elem (Elem)
 import HaskellWorks.Data.Bits.BitWise
 import HaskellWorks.Data.FingerTree                                 (ViewL (..), ViewR (..), (<|), (><), (|>))
 import HaskellWorks.Data.Positioning
-import Prelude                                                      hiding (drop, max, min)
+import Prelude                                                      hiding (drop, max, min, splitAt)
 
 import qualified Data.List                                                    as L
 import qualified HaskellWorks.Data.BalancedParens.Internal.ParensSeq.Internal as T
@@ -87,6 +88,10 @@ drop n (ParensSeq parens) = case FT.split (T.atSizeBelowZero n) parens of
         then ParensSeq rrt
         else ParensSeq (T.Elem (w .>. n') (nw - n') <| rrt)
       FT.EmptyL          -> empty
+
+splitAt :: Count -> ParensSeq -> (ParensSeq, ParensSeq)
+splitAt n (ParensSeq parens) = case T.ftSplit (T.atSizeBelowZero n) parens of
+  (lt, rt) -> (ParensSeq lt, ParensSeq rt)
 
 drop2 :: Count -> ParensSeq -> ParensSeq
 drop2 n (ParensSeq parens) = case T.ftSplit (T.atSizeBelowZero n) parens of
