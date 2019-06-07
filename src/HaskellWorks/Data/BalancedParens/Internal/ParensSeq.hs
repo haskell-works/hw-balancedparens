@@ -17,30 +17,20 @@ module HaskellWorks.Data.BalancedParens.Internal.ParensSeq
   , nextSibling
   ) where
 
-import           Data.Coerce
-import           Data.Foldable
-import           Data.Monoid
-import           Data.Word
-import           HaskellWorks.Data.BalancedParens.Internal.ParensSeq.Types (Elem (Elem),
-                                                                            Measure,
-                                                                            ParensSeq (ParensSeq))
-import           HaskellWorks.Data.Bits.BitWise
-import           HaskellWorks.Data.FingerTree                              (ViewL (..),
-                                                                            ViewR (..),
-                                                                            (<|),
-                                                                            (|>))
-import           HaskellWorks.Data.Positioning
-import           Prelude                                                   hiding
-                                                                            (drop,
-                                                                            max,
-                                                                            min)
+import Data.Coerce
+import Data.Foldable
+import Data.Monoid
+import Data.Word
+import HaskellWorks.Data.BalancedParens.Internal.ParensSeq.Types (Elem (Elem), Measure, ParensSeq (ParensSeq), ParensSeqFt)
+import HaskellWorks.Data.Bits.BitWise
+import HaskellWorks.Data.FingerTree                              (ViewL (..), ViewR (..), (<|), (|>))
+import HaskellWorks.Data.Positioning
+import Prelude                                                   hiding (drop, max, min)
 
 import qualified Data.List                                                 as L
 import qualified HaskellWorks.Data.BalancedParens.Internal.ParensSeq.Types as T
 import qualified HaskellWorks.Data.BalancedParens.Internal.Word            as W
 import qualified HaskellWorks.Data.FingerTree                              as FT
-
-type RmmFt = FT.FingerTree T.Measure T.Elem
 
 empty :: ParensSeq
 empty = ParensSeq FT.empty
@@ -62,7 +52,7 @@ fromPartialWord64s = foldl go empty
 
 toPartialWord64s :: ParensSeq -> [(Word64, Count)]
 toPartialWord64s = L.unfoldr go . coerce
-  where go :: RmmFt -> Maybe ((Word64, Count), RmmFt)
+  where go :: ParensSeqFt -> Maybe ((Word64, Count), ParensSeqFt)
         go ft = case FT.viewl ft of
           T.Elem w n :< rt -> Just ((w, coerce n), rt)
           FT.EmptyL        -> Nothing
@@ -101,13 +91,13 @@ drop2 :: Count -> ParensSeq -> ParensSeq
 drop2 n (ParensSeq parens) = case ftSplit (atSizeBelowZero n) parens of
   (_, rt) -> ParensSeq rt
 
-(|>#) :: RmmFt -> T.Elem -> RmmFt
+(|>#) :: ParensSeqFt -> T.Elem -> ParensSeqFt
 (|>#) ft e@(T.Elem _ wn) = if wn > 0 then ft |> e else ft
 
-(#<|) :: T.Elem ->RmmFt -> RmmFt
+(#<|) :: T.Elem ->ParensSeqFt -> ParensSeqFt
 (#<|) e@(T.Elem _ wn) ft = if wn > 0 then e <| ft else ft
 
-ftSplit :: (Measure -> Bool) -> RmmFt -> (RmmFt, RmmFt)
+ftSplit :: (Measure -> Bool) -> ParensSeqFt -> (ParensSeqFt, ParensSeqFt)
 ftSplit p ft = case FT.viewl rt of
   T.Elem w nw :< rrt -> let c = go w nw nw in (lt |># T.Elem w c, T.Elem (w .>. c) (nw - c) #<| rrt)
   FT.EmptyL          -> (ft, FT.empty)

@@ -8,6 +8,7 @@ module HaskellWorks.Data.BalancedParens.Internal.ParensSeq.Types
   ( Elem(..)
   , Measure(..)
   , ParensSeq(..)
+  , ParensSeqFt
   ) where
 
 import Data.Int
@@ -39,8 +40,10 @@ data Measure = Measure
   , max    :: {-# UNPACK #-} !Int
   } deriving (Eq, Ord, Show)
 
+type ParensSeqFt = FT.FingerTree Measure Elem
+
 newtype ParensSeq = ParensSeq
-  { parens :: FT.FingerTree Measure Elem
+  { parens :: ParensSeqFt
   } deriving Show
 
 instance Semigroup Measure where
