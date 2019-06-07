@@ -4,6 +4,7 @@
 
 module HaskellWorks.Data.BalancedParens.Internal.ParensSeqSpec where
 
+import Data.Semigroup                                      ((<>))
 import HaskellWorks.Data.BalancedParens.Internal.ParensSeq ((<|), (><), (|>))
 import HaskellWorks.Data.RankSelect.Base.Select1
 import HaskellWorks.Hspec.Hedgehog

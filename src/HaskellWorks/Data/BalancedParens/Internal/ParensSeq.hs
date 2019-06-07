@@ -43,13 +43,13 @@ size (ParensSeq parens) = T.size ((FT.measure parens) :: T.Measure)
 fromWord64s :: Traversable f => f Word64 -> ParensSeq
 fromWord64s = foldl go empty
   where go :: ParensSeq -> Word64 -> ParensSeq
-        go rmm w = ParensSeq (T.parens rmm |> Elem w 64)
+        go ps w = ParensSeq (T.parens ps |> Elem w 64)
 
 -- TODO Needs optimisation
 fromPartialWord64s :: Traversable f => f (Word64, Count) -> ParensSeq
 fromPartialWord64s = foldl go empty
   where go :: ParensSeq -> (Word64, Count) -> ParensSeq
-        go rmm (w, n) = ParensSeq (T.parens rmm |> Elem w n)
+        go ps (w, n) = ParensSeq (T.parens ps |> Elem w n)
 
 toPartialWord64s :: ParensSeq -> [(Word64, Count)]
 toPartialWord64s = L.unfoldr go . coerce
@@ -69,13 +69,13 @@ fromBools = go empty
                 else lt |> Elem (w .|. (b' .<. fromIntegral n)) (n + 1)
             in go (ParensSeq newPs) bs
           where b' = if b then 1 else 0 :: Word64
-        go rmm [] = rmm
+        go ps [] = ps
 
 toBools :: ParensSeq -> [Bool]
-toBools rmm = toBoolsDiff rmm []
+toBools ps = toBoolsDiff ps []
 
 toBoolsDiff :: ParensSeq -> [Bool] -> [Bool]
-toBoolsDiff rmm = mconcat (fmap go (toPartialWord64s rmm))
+toBoolsDiff ps = mconcat (fmap go (toPartialWord64s ps))
   where go :: (Word64, Count) -> [Bool] -> [Bool]
         go (w, n) = W.partialToBoolsDiff (fromIntegral n) w
 
@@ -93,7 +93,7 @@ drop2 n (ParensSeq parens) = case T.ftSplit (T.atSizeBelowZero n) parens of
   (_, rt) -> ParensSeq rt
 
 firstChild  :: ParensSeq -> Count -> Maybe Count
-firstChild rmm n = case FT.viewl ft of
+firstChild ps n = case FT.viewl ft of
   T.Elem w nw :< rt -> if nw >= 2
     then case w .&. 3 of
       3 -> Just (n + 1)
@@ -110,11 +110,11 @@ firstChild rmm n = case FT.viewl ft of
         _ -> Nothing
       else Nothing
   FT.EmptyL -> Nothing
-  where ParensSeq ft = drop (n - 1) rmm
+  where ParensSeq ft = drop (n - 1) ps
 
 nextSibling  :: ParensSeq -> Count -> Maybe Count
-nextSibling (ParensSeq rmm) n = do
-  let (lt0, rt0) = T.ftSplit (T.atSizeBelowZero (n - 1)) rmm
+nextSibling (ParensSeq ps) n = do
+  let (lt0, rt0) = T.ftSplit (T.atSizeBelowZero (n - 1)) ps
   _ <- case FT.viewl rt0 of
     T.Elem w nw :< _ -> if nw >= 1 && w .&. 1 == 1 then Just () else Nothing
     FT.EmptyL        -> Nothing

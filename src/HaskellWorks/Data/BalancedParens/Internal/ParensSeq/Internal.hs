@@ -17,8 +17,8 @@ module HaskellWorks.Data.BalancedParens.Internal.ParensSeq.Internal
   ) where
 
 import Data.Int
-import Data.Monoid
-import Data.Semigroup                                (Semigroup ((<>)))
+import Data.Monoid                                   (Monoid)
+import Data.Semigroup                                (Semigroup (..))
 import Data.Word
 import HaskellWorks.Data.Bits.BitWise
 import HaskellWorks.Data.Excess.PartialMinMaxExcess1
