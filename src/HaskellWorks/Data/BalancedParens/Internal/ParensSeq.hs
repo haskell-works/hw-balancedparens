@@ -17,15 +17,23 @@ module HaskellWorks.Data.BalancedParens.Internal.ParensSeq
   , nextSibling
   ) where
 
-import Data.Coerce
-import Data.Foldable
-import Data.Monoid
-import Data.Word
-import HaskellWorks.Data.BalancedParens.Internal.ParensSeq.Types (Elem (Elem), Measure, ParensSeq (ParensSeq))
-import HaskellWorks.Data.Bits.BitWise
-import HaskellWorks.Data.FingerTree                              (ViewL (..), ViewR (..), (<|), (|>))
-import HaskellWorks.Data.Positioning
-import Prelude                                                   hiding (drop, max, min)
+import           Data.Coerce
+import           Data.Foldable
+import           Data.Monoid
+import           Data.Word
+import           HaskellWorks.Data.BalancedParens.Internal.ParensSeq.Types (Elem (Elem),
+                                                                            Measure,
+                                                                            ParensSeq (ParensSeq))
+import           HaskellWorks.Data.Bits.BitWise
+import           HaskellWorks.Data.FingerTree                              (ViewL (..),
+                                                                            ViewR (..),
+                                                                            (<|),
+                                                                            (|>))
+import           HaskellWorks.Data.Positioning
+import           Prelude                                                   hiding
+                                                                            (drop,
+                                                                            max,
+                                                                            min)
 
 import qualified Data.List                                                 as L
 import qualified HaskellWorks.Data.BalancedParens.Internal.ParensSeq.Types as T
@@ -93,15 +101,15 @@ drop2 :: Count -> ParensSeq -> ParensSeq
 drop2 n (ParensSeq parens) = case ftSplit (atSizeBelowZero n) parens of
   (_, rt) -> ParensSeq rt
 
-(||>) :: RmmFt -> T.Elem -> RmmFt
-(||>) ft e@(T.Elem _ wn) = if wn > 0 then ft |> e else ft
+(|>#) :: RmmFt -> T.Elem -> RmmFt
+(|>#) ft e@(T.Elem _ wn) = if wn > 0 then ft |> e else ft
 
-(<||) :: T.Elem ->RmmFt -> RmmFt
-(<||) e@(T.Elem _ wn) ft = if wn > 0 then e <| ft else ft
+(#<|) :: T.Elem ->RmmFt -> RmmFt
+(#<|) e@(T.Elem _ wn) ft = if wn > 0 then e <| ft else ft
 
 ftSplit :: (Measure -> Bool) -> RmmFt -> (RmmFt, RmmFt)
 ftSplit p ft = case FT.viewl rt of
-  T.Elem w nw :< rrt -> let c = go w nw nw in (lt ||> T.Elem w c, T.Elem (w .>. c) (nw - c) <|| rrt)
+  T.Elem w nw :< rrt -> let c = go w nw nw in (lt |># T.Elem w c, T.Elem (w .>. c) (nw - c) #<| rrt)
   FT.EmptyL          -> (ft, FT.empty)
   where (lt, rt) = FT.split p ft
         ltm = FT.measure lt
