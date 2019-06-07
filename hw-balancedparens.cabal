@@ -76,6 +76,7 @@ library
     HaskellWorks.Data.BalancedParens.FindOpenN
     HaskellWorks.Data.BalancedParens.Internal.List
     HaskellWorks.Data.BalancedParens.Internal.ParensSeq
+    HaskellWorks.Data.BalancedParens.Internal.ParensSeq.Internal
     HaskellWorks.Data.BalancedParens.Internal.ParensSeq.Types
     HaskellWorks.Data.BalancedParens.Internal.RoseTree
     HaskellWorks.Data.BalancedParens.Internal.Word
