@@ -75,6 +75,19 @@ library
   autogen-modules:    Paths_hw_balancedparens
   hs-source-dirs:     src
 
+library hw-balancedparens-gen
+  import:   base, config
+          , hedgehog
+          , hspec
+          , hw-prim
+          , vector
+  exposed-modules:
+    HaskellWorks.Data.BalancedParens.Gen
+    Paths_hw_balancedparens
+  build-depends:      hw-balancedparens
+  hs-source-dirs:     gen
+  autogen-modules:    Paths_hw_balancedparens
+
 test-suite hw-balancedparens-test
   import:   base, config
           , hedgehog
@@ -88,14 +101,14 @@ test-suite hw-balancedparens-test
   type:               exitcode-stdio-1.0
   main-is:            Spec.hs
   other-modules:
-    HaskellWorks.Data.BalancedParens.Gen
     HaskellWorks.Data.BalancedParens.Internal.BroadwordSpec
     HaskellWorks.Data.BalancedParens.Internal.ParensSeqSpec
     HaskellWorks.Data.BalancedParens.RangeMinMax2Spec
     HaskellWorks.Data.BalancedParens.RangeMinMaxSpec
     HaskellWorks.Data.BalancedParens.SimpleSpec
     Paths_hw_balancedparens
-  build-depends:  hw-balancedparens
+  build-depends:      hw-balancedparens
+                    , hw-balancedparens-gen
   hs-source-dirs:     test
   ghc-options:        -threaded -rtsopts -with-rtsopts=-N
   autogen-modules:    Paths_hw_balancedparens
@@ -113,3 +126,4 @@ benchmark bench
   autogen-modules:    Paths_hw_balancedparens
   hs-source-dirs:     bench
   build-depends:      hw-balancedparens
+                    , hw-balancedparens-gen
