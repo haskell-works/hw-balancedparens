@@ -23,7 +23,6 @@ source-repository head
 
 common base               { build-depends: base                 >= 4        && < 5      }
 
-common QuickCheck         { build-depends: QuickCheck           >= 2.10     && < 2.12   }
 common criterion          { build-depends: criterion            >= 1.2      && < 1.6    }
 common deepseq            { build-depends: deepseq              >= 1.4.2.0  && < 1.5    }
 common hedgehog           { build-depends: hedgehog             >= 1.0      && < 1.1    }
@@ -78,7 +77,6 @@ library
 
 test-suite hw-balancedparens-test
   import:   base, config
-          , QuickCheck
           , hedgehog
           , hspec
           , hw-bits

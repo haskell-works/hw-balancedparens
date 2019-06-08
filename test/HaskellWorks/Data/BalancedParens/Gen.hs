@@ -5,6 +5,8 @@ module HaskellWorks.Data.BalancedParens.Gen
   , count
   , balancedParens
   , showBps
+  , storableVector
+  , vector
   ) where
 
 import Data.Coerce
@@ -12,7 +14,9 @@ import Data.Semigroup                ((<>))
 import HaskellWorks.Data.Positioning
 import Hedgehog
 
-import qualified Hedgehog.Gen as G
+import qualified Data.Vector          as DV
+import qualified Data.Vector.Storable as DVS
+import qualified Hedgehog.Gen         as G
 
 count :: MonadGen m => Range Count -> m Count
 count r = coerce <$> G.word64 (coerce <$> r)
@@ -50,3 +54,9 @@ balancedParens ::  MonadGen m => Range Int -> m [Bool]
 balancedParens r = do
   n <- G.int r
   balancedParens' (n * 2) (0, [], [], 0)
+
+storableVector :: (MonadGen m, DVS.Storable a) => Range Int -> m a -> m (DVS.Vector a)
+storableVector r g = DVS.fromList <$> G.list r g
+
+vector :: MonadGen m => Range Int -> m a -> m (DV.Vector a)
+vector r g = DV.fromList <$> G.list r g
