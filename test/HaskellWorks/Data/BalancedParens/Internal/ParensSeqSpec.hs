@@ -66,11 +66,11 @@ spec = describe "HaskellWorks.Data.BalancedParens.Internal.ParensSeqSpec" $ do
 
     PS.size (PS.drop n rmm) === PS.size rmm - n
   it "rose tree should be generatable" $ requireProperty $ do
-    bs <- forAll $ G.balancedParens (R.linear 1 1000)
+    bs <- forAll $ G.bpBools (R.linear 1 1000)
 
     PS.toBools (PS.fromBools bs) === bs
   it "firstChild should select first child" $ requireProperty $ do
-    bs        <- forAll $ G.balancedParens (R.linear 1 1000)
+    bs        <- forAll $ G.bpBools (R.linear 1 1000)
     _         <- forAll $ pure (G.showBps bs)
     nodeCount <- forAll $ pure (fromIntegral (length bs `div` 2))
     ranked    <- forAll $ G.count (R.linear 1 nodeCount)
@@ -85,7 +85,7 @@ spec = describe "HaskellWorks.Data.BalancedParens.Internal.ParensSeqSpec" $ do
 
     PS.firstChild rmm 64 === Just 65
   it "nextSibling should select next sibling" $ requireTest $ do
-    bs        <- forAll $ G.balancedParens (R.linear 1 1000)
+    bs        <- forAll $ G.bpBools (R.linear 1 1000)
     nodeCount <- forAll $ pure (fromIntegral (length bs `div` 2))
     ranked    <- forAll $ G.count (R.linear 1 nodeCount)
     pos       <- forAll $ pure $ select1 bs ranked
@@ -99,21 +99,21 @@ spec = describe "HaskellWorks.Data.BalancedParens.Internal.ParensSeqSpec" $ do
 
     PS.nextSibling rmm pos === BP.nextSibling bs pos
   it "(><) should append" $ requireTest $ do
-    bs1       <- forAll $ G.balancedParens (R.linear 1 1000)
-    bs2       <- forAll $ G.balancedParens (R.linear 1 1000)
+    bs1       <- forAll $ G.bpBools (R.linear 1 1000)
+    bs2       <- forAll $ G.bpBools (R.linear 1 1000)
     ps1       <- forAll $ pure $ PS.fromBools bs1
     ps2       <- forAll $ pure $ PS.fromBools bs2
 
     PS.toBools (ps1 >< ps2) === PS.toBools ps1 >< PS.toBools ps2
   it "(<|) should cons" $ requireTest $ do
     b         <- forAll $ G.bool
-    bs        <- forAll $ G.balancedParens (R.linear 1 1000)
+    bs        <- forAll $ G.bpBools (R.linear 1 1000)
     ps        <- forAll $ pure $ PS.fromBools bs
 
     PS.toBools (b <| ps) === b:PS.toBools ps
   it "(|>) should snoc" $ requireTest $ do
     b         <- forAll $ G.bool
-    bs        <- forAll $ G.balancedParens (R.linear 1 1000)
+    bs        <- forAll $ G.bpBools (R.linear 1 1000)
     ps        <- forAll $ pure $ PS.fromBools bs
 
     PS.toBools (ps |> b) === PS.toBools ps <> [b]

@@ -1,8 +1,11 @@
-{-# LANGUAGE DuplicateRecordFields #-}
-{-# LANGUAGE FlexibleInstances     #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE NamedFieldPuns        #-}
-{-# LANGUAGE TypeFamilies          #-}
+{-# LANGUAGE DeriveGeneric              #-}
+{-# LANGUAGE DuplicateRecordFields      #-}
+{-# LANGUAGE FlexibleInstances          #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE MultiParamTypeClasses      #-}
+{-# LANGUAGE NamedFieldPuns             #-}
+{-# LANGUAGE StandaloneDeriving         #-}
+{-# LANGUAGE TypeFamilies               #-}
 
 module HaskellWorks.Data.BalancedParens.Internal.ParensSeq.Internal
   ( Elem(..)
@@ -16,10 +19,12 @@ module HaskellWorks.Data.BalancedParens.Internal.ParensSeq.Internal
   , atMinZero
   ) where
 
+import Control.DeepSeq
 import Data.Int
 import Data.Monoid                                   (Monoid)
 import Data.Semigroup                                (Semigroup (..))
 import Data.Word
+import GHC.Generics
 import HaskellWorks.Data.Bits.BitWise
 import HaskellWorks.Data.Excess.PartialMinMaxExcess1
 import HaskellWorks.Data.Excess.Triplet
@@ -36,20 +41,24 @@ import qualified Prelude                      as P
 data Elem = Elem
   { bps  :: {-# UNPACK #-} !Word64
   , size :: {-# UNPACK #-} !Count
-  } deriving (Eq, Show)
+  } deriving (Eq, Show, Generic)
+
+instance NFData Elem
 
 data Measure = Measure
   { size   :: {-# UNPACK #-} !Count
   , min    :: {-# UNPACK #-} !Int
   , excess :: {-# UNPACK #-} !Int
   , max    :: {-# UNPACK #-} !Int
-  } deriving (Eq, Ord, Show)
+  } deriving (Eq, Ord, Show, Generic)
+
+instance NFData Measure
 
 type ParensSeqFt = FT.FingerTree Measure Elem
 
 newtype ParensSeq = ParensSeq
   { parens :: ParensSeqFt
-  } deriving Show
+  } deriving (Show, NFData, Generic)
 
 instance Semigroup Measure where
   Measure aSize aMin aMax aExcess <> Measure bSize bMin bMax bExcess = Measure

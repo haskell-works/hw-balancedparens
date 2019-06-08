@@ -3,20 +3,23 @@
 module HaskellWorks.Data.BalancedParens.Gen
   ( BP(..)
   , count
-  , balancedParens
+  , bpBools
   , showBps
   , storableVector
   , vector
+  , bpParensSeq
   ) where
 
 import Data.Coerce
-import Data.Semigroup                ((<>))
+import Data.Semigroup                                      ((<>))
+import HaskellWorks.Data.BalancedParens.Internal.ParensSeq (ParensSeq)
 import HaskellWorks.Data.Positioning
 import Hedgehog
 
-import qualified Data.Vector          as DV
-import qualified Data.Vector.Storable as DVS
-import qualified Hedgehog.Gen         as G
+import qualified Data.Vector                                         as DV
+import qualified Data.Vector.Storable                                as DVS
+import qualified HaskellWorks.Data.BalancedParens.Internal.ParensSeq as PS
+import qualified Hedgehog.Gen                                        as G
 
 count :: MonadGen m => Range Count -> m Count
 count r = coerce <$> G.word64 (coerce <$> r)
@@ -30,8 +33,8 @@ showBps = fmap fromBool
   where fromBool True  = '('
         fromBool False = ')'
 
-balancedParens' :: MonadGen m => Int -> (Int, [Bool], [Bool], Int) -> m [Bool]
-balancedParens' n (ln, lt, rt, rn) = if n <= 0
+bpBools' :: MonadGen m => Int -> (Int, [Bool], [Bool], Int) -> m [Bool]
+bpBools' n (ln, lt, rt, rn) = if n <= 0
   then return (reverse lt <> rt)
   else if ln - rn >= n
     then return (reverse lt <> replicate n False <> rt)
@@ -45,15 +48,18 @@ balancedParens' n (ln, lt, rt, rn) = if n <= 0
           _      -> G.element [L '(' 1,                         R ')' 1]
 
         case decision of
-          L p d -> balancedParens' (n - 1) (ln + d, toBool p:lt,          rt, rn    )
-          R p d -> balancedParens' (n - 1) (ln    ,          lt, toBool p:rt, rn + d)
+          L p d -> bpBools' (n - 1) (ln + d, toBool p:lt,          rt, rn    )
+          R p d -> bpBools' (n - 1) (ln    ,          lt, toBool p:rt, rn + d)
   where toBool '(' = True
         toBool  _  = False
 
-balancedParens ::  MonadGen m => Range Int -> m [Bool]
-balancedParens r = do
+bpBools ::  MonadGen m => Range Int -> m [Bool]
+bpBools r = do
   n <- G.int r
-  balancedParens' (n * 2) (0, [], [], 0)
+  bpBools' (n * 2) (0, [], [], 0)
+
+bpParensSeq ::  MonadGen m => Range Int -> m ParensSeq
+bpParensSeq = fmap PS.fromBools . bpBools
 
 storableVector :: (MonadGen m, DVS.Storable a) => Range Int -> m a -> m (DVS.Vector a)
 storableVector r g = DVS.fromList <$> G.list r g
