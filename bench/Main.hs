@@ -9,9 +9,13 @@ import HaskellWorks.Data.Bits.Broadword
 import HaskellWorks.Data.Bits.FromBitTextByteString
 import HaskellWorks.Data.Naive
 
-import qualified Data.Vector.Storable                          as DVS
-import qualified HaskellWorks.Data.BalancedParens.RangeMinMax  as RMM
-import qualified HaskellWorks.Data.BalancedParens.RangeMinMax2 as RMM2
+import qualified Data.Vector.Storable                                as DVS
+import qualified HaskellWorks.Data.BalancedParens.Gen                as G
+import qualified HaskellWorks.Data.BalancedParens.Internal.ParensSeq as PS
+import qualified HaskellWorks.Data.BalancedParens.RangeMinMax        as RMM
+import qualified HaskellWorks.Data.BalancedParens.RangeMinMax2       as RMM2
+import qualified Hedgehog.Gen                                        as G
+import qualified Hedgehog.Range                                      as R
 
 setupEnvVector :: Int -> IO (DVS.Vector Word64)
 setupEnvVector n = return $ DVS.fromList (take n (cycle [maxBound, 0]))
@@ -74,6 +78,9 @@ benchRankSelect =
     ]
   , env (setupEnvRmm2Vector 1000000) $ \bv -> bgroup "RangeMinMax2"
     [ bench "findClose"   (nf   (map (findClose bv)) [0, 1000..10000000])
+    ]
+  , env (G.sample (G.bpParensSeq (R.singleton 100000))) $ \bv -> bgroup "ParensSeq"
+    [ bench "nextSibling"    (nf (map (PS.nextSibling bv)) [1..100000])
     ]
   ]
 
