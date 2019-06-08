@@ -11,7 +11,6 @@ import HaskellWorks.Data.BalancedParens.RangeMinMax
 import HaskellWorks.Data.Bits.BitShow
 import HaskellWorks.Data.Bits.FromBitTextByteString
 import Test.Hspec
-import Test.QuickCheck
 
 import qualified Data.Vector.Storable as DVS
 
@@ -22,12 +21,6 @@ newtype ShowVector a = ShowVector a deriving (Eq, BitShow)
 
 instance BitShow a => Show (ShowVector a) where
   show = bitShow
-
-vectorSizedBetween :: Int -> Int -> Gen (ShowVector (DVS.Vector Word64))
-vectorSizedBetween a b = do
-  n   <- choose (a, b)
-  xs  <- sequence [ arbitrary | _ <- [1 .. n] ]
-  return $ ShowVector (DVS.fromList xs)
 
 maxVectorSize :: Int
 maxVectorSize = 16384

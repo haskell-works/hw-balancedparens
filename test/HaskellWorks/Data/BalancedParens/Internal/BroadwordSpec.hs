@@ -9,11 +9,14 @@ import HaskellWorks.Data.BalancedParens.FindClose
 import HaskellWorks.Data.Bits.BitShow
 import HaskellWorks.Data.Bits.Broadword
 import HaskellWorks.Data.Bits.FromBitTextByteString
-import HaskellWorks.Data.Positioning
+import HaskellWorks.Hspec.Hedgehog
+import Hedgehog
 import Test.Hspec
-import Test.QuickCheck
 
-import qualified Data.Vector.Storable as DVS
+import qualified Data.Vector.Storable                 as DVS
+import qualified HaskellWorks.Data.BalancedParens.Gen as G
+import qualified Hedgehog.Gen                         as G
+import qualified Hedgehog.Range                       as R
 
 {-# ANN module ("HLint: Ignore Redundant do"        :: String) #-}
 {-# ANN module ("HLint: Ignore Reduce duplication"  :: String) #-}
@@ -129,7 +132,7 @@ spec = describe "HaskellWorks.Data.BalancedParens.BroadwordSpec" $ do
   --   it "when calling nextSibling from valid locations" $ do
   --     forAll (vectorSizedBetween 1 64) $ \(ShowVector v) -> do
   --       [nextSibling v p | p <- [1..bitLength v]] `shouldBe` [nextSibling v p | p <- [1..bitLength v]]
-  it "Broadword findClose should behave the same as Naive findClose" $ do
-    property $ \(w :: Word64) ->
-      forAll (choose (1, 64 :: Count)) $ \p ->
-        findClose w p == findClose (Broadword w) p
+  it "Broadword findClose should behave the same as Naive findClose" $ requireProperty $ do
+    w <- forAll $ G.word64 R.constantBounded
+    p <- forAll $ G.count (R.linear 1 64)
+    findClose w p === findClose (Broadword w) p
