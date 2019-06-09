@@ -49,7 +49,6 @@ data Measure = Measure
   { size   :: {-# UNPACK #-} !Count
   , min    :: {-# UNPACK #-} !Int
   , excess :: {-# UNPACK #-} !Int
-  , max    :: {-# UNPACK #-} !Int
   } deriving (Eq, Ord, Show, Generic)
 
 instance NFData Measure
@@ -61,19 +60,18 @@ newtype ParensSeq = ParensSeq
   } deriving (Show, NFData, Generic)
 
 instance Semigroup Measure where
-  Measure aSize aMin aMax aExcess <> Measure bSize bMin bMax bExcess = Measure
+  Measure aSize aMin aExcess <> Measure bSize bMin bExcess = Measure
     { size    = aSize + bSize
     , min     = P.min aMin (bMin + aExcess)
-    , max     = P.max aMax (bMax + aExcess)
     , excess  = aExcess + bExcess
     }
 
 instance Monoid Measure where
-  mempty = Measure 0 0 0 0
+  mempty = Measure 0 0 0
 
 instance FT.Measured Measure Elem where
-  measure (Elem w size) = Measure { min, excess, max, size }
-    where Triplet min excess max = partialMinMaxExcess1 (fromIntegral size) w
+  measure (Elem w size) = Measure { min, excess, size }
+    where Triplet min excess _ = partialMinMaxExcess1 (fromIntegral size) w
 
 instance HW.Container ParensSeq where
   type Elem ParensSeq = Bool
