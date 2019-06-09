@@ -3,6 +3,7 @@
 module Main where
 
 import Criterion.Main
+import Data.Semigroup                               ((<>))
 import Data.Word
 import HaskellWorks.Data.BalancedParens.FindClose
 import HaskellWorks.Data.Bits.Broadword
@@ -44,45 +45,58 @@ setupEnvBP32 = return $ DVS.head (fromBitTextByteString "11111000 11101000 11101
 setupEnvBP64 :: IO Word64
 setupEnvBP64 = return $ DVS.head (fromBitTextByteString "11111000 11101000 11101000 11101000 11101000 11101000 11101000 11100000")
 
-benchRankSelect :: [Benchmark]
-benchRankSelect =
-  [ env setupEnvBP2 $ \w -> bgroup "FindClose 2-bit"
-    [ bench "Broadword"     (whnf (findClose (Broadword w)) 1)
-    , bench "Naive"         (whnf (findClose (Naive     w)) 1)
+benchRmm :: [Benchmark]
+benchRmm =
+  [ bgroup "Rmm"
+    [ env setupEnvBP2 $ \w -> bgroup "FindClose 2-bit"
+      [ bench "Broadword"     (whnf (findClose (Broadword w)) 1)
+      , bench "Naive"         (whnf (findClose (Naive     w)) 1)
+      ]
+    , env setupEnvBP4 $ \w -> bgroup "FindClose 4-bit"
+      [ bench "Broadword"     (whnf (findClose (Broadword w)) 1)
+      , bench "Naive"         (whnf (findClose (Naive     w)) 1)
+      ]
+    , env setupEnvBP8 $ \w -> bgroup "FindClose 8-bit"
+      [ bench "Broadword"     (whnf (findClose (Broadword w)) 1)
+      , bench "Naive"         (whnf (findClose (Naive     w)) 1)
+      ]
+    , env setupEnvBP16 $ \w -> bgroup "FindClose 16-bit"
+      [ bench "Broadword"     (whnf (findClose (Broadword w)) 1)
+      , bench "Naive"         (whnf (findClose (Naive     w)) 1)
+      ]
+    , env setupEnvBP32 $ \w -> bgroup "FindClose 32-bit"
+      [ bench "Broadword"     (whnf (findClose (Broadword w)) 1)
+      , bench "Naive"         (whnf (findClose (Naive     w)) 1)
+      ]
+    , env setupEnvBP64 $ \w -> bgroup "FindClose 64-bit"
+      [ bench "Broadword"     (whnf (findClose (Broadword w)) 1)
+      , bench "Naive"         (whnf (findClose (Naive     w)) 1)
+      ]
+    , env (setupEnvVector 1000000) $ \bv -> bgroup "Vanilla"
+      [ bench "findClose"   (nf   (map (findClose bv)) [0, 1000..10000000])
+      ]
+    , env (setupEnvRmmVector 1000000) $ \bv -> bgroup "RangeMinMax"
+      [ bench "findClose"   (nf   (map (findClose bv)) [0, 1000..10000000])
+      ]
+    , env (setupEnvRmm2Vector 1000000) $ \bv -> bgroup "RangeMinMax2"
+      [ bench "findClose"   (nf   (map (findClose bv)) [0, 1000..10000000])
+      ]
     ]
-  , env setupEnvBP4 $ \w -> bgroup "FindClose 4-bit"
-    [ bench "Broadword"     (whnf (findClose (Broadword w)) 1)
-    , bench "Naive"         (whnf (findClose (Naive     w)) 1)
-    ]
-  , env setupEnvBP8 $ \w -> bgroup "FindClose 8-bit"
-    [ bench "Broadword"     (whnf (findClose (Broadword w)) 1)
-    , bench "Naive"         (whnf (findClose (Naive     w)) 1)
-    ]
-  , env setupEnvBP16 $ \w -> bgroup "FindClose 16-bit"
-    [ bench "Broadword"     (whnf (findClose (Broadword w)) 1)
-    , bench "Naive"         (whnf (findClose (Naive     w)) 1)
-    ]
-  , env setupEnvBP32 $ \w -> bgroup "FindClose 32-bit"
-    [ bench "Broadword"     (whnf (findClose (Broadword w)) 1)
-    , bench "Naive"         (whnf (findClose (Naive     w)) 1)
-    ]
-  , env setupEnvBP64 $ \w -> bgroup "FindClose 64-bit"
-    [ bench "Broadword"     (whnf (findClose (Broadword w)) 1)
-    , bench "Naive"         (whnf (findClose (Naive     w)) 1)
-    ]
-  , env (setupEnvVector 1000000) $ \bv -> bgroup "Vanilla"
-    [ bench "findClose"   (nf   (map (findClose bv)) [0, 1000..10000000])
-    ]
-  , env (setupEnvRmmVector 1000000) $ \bv -> bgroup "RangeMinMax"
-    [ bench "findClose"   (nf   (map (findClose bv)) [0, 1000..10000000])
-    ]
-  , env (setupEnvRmm2Vector 1000000) $ \bv -> bgroup "RangeMinMax2"
-    [ bench "findClose"   (nf   (map (findClose bv)) [0, 1000..10000000])
-    ]
-  , env (G.sample (G.bpParensSeq (R.singleton 100000))) $ \bv -> bgroup "ParensSeq"
-    [ bench "nextSibling"    (nf (map (PS.nextSibling bv)) [1..100000])
+  ]
+
+benchParensSeq :: [Benchmark]
+benchParensSeq =
+  [ bgroup "ParensSeq"
+    [ env (G.sample (G.bpParensSeq (R.singleton 100000))) $ \ps -> bgroup "ParensSeq"
+      [ bench "nextSibling"    (nf (map (PS.nextSibling ps)) [1,101..100000])
+      ]
+    , env (G.sample (G.list (R.singleton 100) (G.word64 (R.constantBounded)))) $ \ws -> bgroup "ParensSeq"
+      [ bench "fromWord64s"    (nf PS.fromWord64s ws)
+      ]
     ]
   ]
 
 main :: IO ()
-main = defaultMain benchRankSelect
+main = defaultMain $ mempty
+  <> benchRmm
+  <> benchParensSeq
