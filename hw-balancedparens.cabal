@@ -77,6 +77,7 @@ library
 
 library hw-balancedparens-gen
   import:   base, config
+          , deepseq
           , hedgehog
           , hspec
           , hw-prim

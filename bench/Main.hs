@@ -9,6 +9,7 @@ import HaskellWorks.Data.BalancedParens.FindClose
 import HaskellWorks.Data.Bits.Broadword
 import HaskellWorks.Data.Bits.FromBitTextByteString
 import HaskellWorks.Data.Naive
+import HaskellWorks.Data.Ops
 
 import qualified Data.Vector.Storable                                as DVS
 import qualified HaskellWorks.Data.BalancedParens.Gen                as G
@@ -88,10 +89,16 @@ benchParensSeq :: [Benchmark]
 benchParensSeq =
   [ bgroup "ParensSeq"
     [ env (G.sample (G.bpParensSeq (R.singleton 100000))) $ \ps -> bgroup "ParensSeq"
-      [ bench "nextSibling"    (nf (map (PS.nextSibling ps)) [1,101..100000])
+      [ bench "firstChild"    (nf (map (PS.firstChild  ps)) [1,101..100000])
+      , bench "nextSibling"   (nf (map (PS.nextSibling ps)) [1,101..100000])
+      , bench "(<|)"          (nf (<| ps) True)
+      , bench "(|>)"          (nf (ps |>) True)
+      ]
+    , env (G.sample (G.vec2 (G.bpParensSeq (R.singleton 100000)))) $ \ ~(ps1, ps2) -> bgroup "ParensSeq"
+      [ bench "(<>)"          (nf (ps1 <>) ps2)
       ]
     , env (G.sample (G.list (R.singleton 100) (G.word64 (R.constantBounded)))) $ \ws -> bgroup "ParensSeq"
-      [ bench "fromWord64s"    (nf PS.fromWord64s ws)
+      [ bench "fromWord64s"   (nf PS.fromWord64s ws)
       ]
     ]
   ]
