@@ -46,9 +46,9 @@ setupEnvBP32 = return $ DVS.head (fromBitTextByteString "11111000 11101000 11101
 setupEnvBP64 :: IO Word64
 setupEnvBP64 = return $ DVS.head (fromBitTextByteString "11111000 11101000 11101000 11101000 11101000 11101000 11101000 11100000")
 
-benchRmm :: [Benchmark]
-benchRmm =
-  [ bgroup "Rmm"
+benchVector :: [Benchmark]
+benchVector =
+  [ bgroup "Vector"
     [ env setupEnvBP2 $ \w -> bgroup "FindClose 2-bit"
       [ bench "Broadword"     (whnf (findClose (Broadword w)) 1)
       , bench "Naive"         (whnf (findClose (Naive     w)) 1)
@@ -76,11 +76,29 @@ benchRmm =
     , env (setupEnvVector 1000000) $ \bv -> bgroup "Vanilla"
       [ bench "findClose"   (nf   (map (findClose bv)) [0, 1000..10000000])
       ]
+    ]
+  ]
+
+benchRmm :: [Benchmark]
+benchRmm =
+  [ bgroup "Rmm"
+    [ env (G.sample (G.storableVector (R.singleton 1000) (G.word64 R.constantBounded))) $ \v -> bgroup "Vector64"
+      [ bench "mkRangeMinMax"     (nf   RMM.mkRangeMinMax v)
+      ]
     , env (setupEnvRmmVector 1000000) $ \bv -> bgroup "RangeMinMax"
-      [ bench "findClose"   (nf   (map (findClose bv)) [0, 1000..10000000])
+      [ bench "findClose"         (nf   (map (findClose bv)) [0, 1000..10000000])
+      ]
+    ]
+  ]
+
+benchRmm2 :: [Benchmark]
+benchRmm2 =
+  [ bgroup "Rmm2"
+    [ env (G.sample (G.storableVector (R.singleton 1000) (G.word64 R.constantBounded))) $ \v -> bgroup "Vector64"
+      [ bench "mkRangeMinMax2"    (nf   RMM2.mkRangeMinMax2 v)
       ]
     , env (setupEnvRmm2Vector 1000000) $ \bv -> bgroup "RangeMinMax2"
-      [ bench "findClose"   (nf   (map (findClose bv)) [0, 1000..10000000])
+      [ bench "findClose"         (nf   (map (findClose bv)) [0, 1000..10000000])
       ]
     ]
   ]
@@ -105,5 +123,7 @@ benchParensSeq =
 
 main :: IO ()
 main = defaultMain $ mempty
+  <> benchVector
   <> benchRmm
+  <> benchRmm2
   <> benchParensSeq
