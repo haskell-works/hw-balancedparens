@@ -9,10 +9,13 @@ module HaskellWorks.Data.BalancedParens.Gen
   , bpParensSeq
   , vector
   , vec2
+  , randomRmm
+  , randomRmm2
   ) where
 
 import Data.Coerce
 import Data.Semigroup                                      ((<>))
+import Data.Word
 import HaskellWorks.Data.BalancedParens.Internal.ParensSeq (ParensSeq)
 import HaskellWorks.Data.Positioning
 import Hedgehog
@@ -20,7 +23,10 @@ import Hedgehog
 import qualified Data.Vector                                         as DV
 import qualified Data.Vector.Storable                                as DVS
 import qualified HaskellWorks.Data.BalancedParens.Internal.ParensSeq as PS
+import qualified HaskellWorks.Data.BalancedParens.RangeMinMax        as RMM
+import qualified HaskellWorks.Data.BalancedParens.RangeMinMax2       as RMM2
 import qualified Hedgehog.Gen                                        as G
+import qualified Hedgehog.Range                                      as R
 
 count :: MonadGen m => Range Count -> m Count
 count r = coerce <$> G.word64 (coerce <$> r)
@@ -70,3 +76,13 @@ vector r g = DV.fromList <$> G.list r g
 
 vec2 :: MonadGen m => m a -> m (a, a)
 vec2 g = (,) <$> g <*> g
+
+randomRmm :: MonadGen m => Range Int -> m (RMM.RangeMinMax (DVS.Vector Word64))
+randomRmm r = do
+  v <- storableVector (fmap (64 *) r) (G.word64 R.constantBounded)
+  return (RMM.mkRangeMinMax v)
+
+randomRmm2 :: MonadGen m => Range Int -> m (RMM2.RangeMinMax2 (DVS.Vector Word64))
+randomRmm2 r = do
+  v <- storableVector (fmap (64 *) r) (G.word64 R.constantBounded)
+  return (RMM2.mkRangeMinMax2 v)
