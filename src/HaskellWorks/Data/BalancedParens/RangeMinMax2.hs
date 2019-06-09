@@ -9,8 +9,6 @@
 module HaskellWorks.Data.BalancedParens.RangeMinMax2
   ( RangeMinMax2(..)
   , mkRangeMinMax2
-  , genMin
-  , genMax
   ) where
 
 import Control.DeepSeq
@@ -43,19 +41,14 @@ import qualified Data.Vector.Storable as DVS
 data RangeMinMax2 a = RangeMinMax2
   { rangeMinMax2BP       :: !a
   , rangeMinMax2L0Min    :: !(DVS.Vector Int8)
-  , rangeMinMax2L0Max    :: !(DVS.Vector Int8)
   , rangeMinMax2L0Excess :: !(DVS.Vector Int8)
   , rangeMinMax2L1Min    :: !(DVS.Vector Int16)
-  , rangeMinMax2L1Max    :: !(DVS.Vector Int16)
   , rangeMinMax2L1Excess :: !(DVS.Vector Int16)
   , rangeMinMax2L2Min    :: !(DVS.Vector Int16)
-  , rangeMinMax2L2Max    :: !(DVS.Vector Int16)
   , rangeMinMax2L2Excess :: !(DVS.Vector Int16)
   , rangeMinMax2L3Min    :: !(DVS.Vector Int16)
-  , rangeMinMax2L3Max    :: !(DVS.Vector Int16)
   , rangeMinMax2L3Excess :: !(DVS.Vector Int16)
   , rangeMinMax2L4Min    :: !(DVS.Vector Int16)
-  , rangeMinMax2L4Max    :: !(DVS.Vector Int16)
   , rangeMinMax2L4Excess :: !(DVS.Vector Int16)
   } deriving (NFData, Generic)
 
@@ -103,19 +96,14 @@ mkRangeMinMax2 :: AsVector64 a => a -> RangeMinMax2 a
 mkRangeMinMax2 bp = RangeMinMax2
   { rangeMinMax2BP       = bp
   , rangeMinMax2L0Min    = dvsReword rmmL0Min
-  , rangeMinMax2L0Max    = dvsReword rmmL0Max
   , rangeMinMax2L0Excess = dvsReword rmmL0Excess
   , rangeMinMax2L1Min    = rmmL1Min
-  , rangeMinMax2L1Max    = rmmL1Max
   , rangeMinMax2L1Excess = rmmL1Excess
   , rangeMinMax2L2Min    = rmmL2Min
-  , rangeMinMax2L2Max    = rmmL2Max
   , rangeMinMax2L2Excess = rmmL2Excess
   , rangeMinMax2L3Min    = rmmL3Min
-  , rangeMinMax2L3Max    = rmmL3Max
   , rangeMinMax2L3Excess = rmmL3Excess
   , rangeMinMax2L4Min    = rmmL4Min
-  , rangeMinMax2L4Max    = rmmL4Max
   , rangeMinMax2L4Excess = rmmL4Excess
   }
   where bpv           = asVector64 bp
@@ -137,20 +125,10 @@ mkRangeMinMax2 bp = RangeMinMax2
         rmmL2Min      = dvsConstructNI lenL2 (\i -> genMin 0 (pageFill i factorL2 0 rmmL1Min) (pageFill i factorL2 0 rmmL1Excess))
         rmmL3Min      = dvsConstructNI lenL3 (\i -> genMin 0 (pageFill i factorL3 0 rmmL2Min) (pageFill i factorL3 0 rmmL2Excess))
         rmmL4Min      = dvsConstructNI lenL4 (\i -> genMin 0 (pageFill i factorL4 0 rmmL3Min) (pageFill i factorL4 0 rmmL3Excess))
-        rmmL0Max      = dvsConstructNI lenL0 (\i -> let Triplet _ _ maxE = allMinMaxL0 DV.! i in fromIntegral maxE) :: DVS.Vector Int16
-        rmmL1Max      = dvsConstructNI lenL1 (\i -> genMax 0 (pageFill i factorL1 0 rmmL0Max) (pageFill i factorL1 0 rmmL0Excess))
-        rmmL2Max      = dvsConstructNI lenL2 (\i -> genMax 0 (pageFill i factorL2 0 rmmL1Max) (pageFill i factorL2 0 rmmL1Excess))
-        rmmL3Max      = dvsConstructNI lenL3 (\i -> genMax 0 (pageFill i factorL3 0 rmmL2Max) (pageFill i factorL3 0 rmmL2Excess))
-        rmmL4Max      = dvsConstructNI lenL4 (\i -> genMax 0 (pageFill i factorL4 0 rmmL3Max) (pageFill i factorL4 0 rmmL3Excess))
 
 genMin :: (Integral a, DVS.Storable a) => a -> DVS.Vector a -> DVS.Vector a -> a
 genMin mL mins excesses = if not (DVS.null mins) || not (DVS.null excesses)
   then genMin (dvsLastOrZero mins `min` (mL + dvsLastOrZero excesses)) (DVS.init mins) (DVS.init excesses)
-  else mL
-
-genMax :: (Integral a, DVS.Storable a) => a -> DVS.Vector a -> DVS.Vector a -> a
-genMax mL maxs excesses = if not (DVS.null maxs) || not (DVS.null excesses)
-  then genMax (dvsLastOrZero maxs `max` (mL + dvsLastOrZero excesses)) (DVS.init maxs) (DVS.init excesses)
   else mL
 
 pageFill :: DVS.Storable a => Int -> Int -> a -> DVS.Vector a -> DVS.Vector a

@@ -41,13 +41,10 @@ import qualified Data.Vector.Storable as DVS
 data RangeMinMax a = RangeMinMax
   { rangeMinMaxBP       :: !a
   , rangeMinMaxL0Min    :: !(DVS.Vector Int8)
-  , rangeMinMaxL0Max    :: !(DVS.Vector Int8)
   , rangeMinMaxL0Excess :: !(DVS.Vector Int8)
   , rangeMinMaxL1Min    :: !(DVS.Vector Int16)
-  , rangeMinMaxL1Max    :: !(DVS.Vector Int16)
   , rangeMinMaxL1Excess :: !(DVS.Vector Int16)
   , rangeMinMaxL2Min    :: !(DVS.Vector Int16)
-  , rangeMinMaxL2Max    :: !(DVS.Vector Int16)
   , rangeMinMaxL2Excess :: !(DVS.Vector Int16)
   } deriving (NFData, Generic)
 
@@ -79,13 +76,10 @@ mkRangeMinMax :: AsVector64 a => a -> RangeMinMax a
 mkRangeMinMax bp = RangeMinMax
   { rangeMinMaxBP       = bp
   , rangeMinMaxL0Min    = rmmL0Min
-  , rangeMinMaxL0Max    = rmmL0Max
   , rangeMinMaxL0Excess = dvsReword rmmL0Excess
   , rangeMinMaxL1Min    = rmmL1Min
-  , rangeMinMaxL1Max    = rmmL1Max
   , rangeMinMaxL1Excess = dvsReword rmmL1Excess
   , rangeMinMaxL2Min    = rmmL2Min
-  , rangeMinMaxL2Max    = rmmL2Max
   , rangeMinMaxL2Excess = rmmL2Excess
   }
   where bpv           = asVector64 bp
@@ -103,9 +97,6 @@ mkRangeMinMax bp = RangeMinMax
         rmmL0Min      = dvsConstructNI lenL0 (\i -> let Triplet minE _ _ = allMinMaxL0 DVS.! i in fromIntegral minE)
         rmmL1Min      = dvsConstructNI lenL1 (\i -> let Triplet minE _ _ = allMinMaxL1 DVS.! i in fromIntegral minE)
         rmmL2Min      = dvsConstructNI lenL2 (\i -> let Triplet minE _ _ = allMinMaxL2 DVS.! i in fromIntegral minE)
-        rmmL0Max      = dvsConstructNI lenL0 (\i -> let Triplet _ _ maxE = allMinMaxL0 DVS.! i in fromIntegral maxE)
-        rmmL1Max      = dvsConstructNI lenL1 (\i -> let Triplet _ _ maxE = allMinMaxL1 DVS.! i in fromIntegral maxE)
-        rmmL2Max      = dvsConstructNI lenL2 (\i -> let Triplet _ _ maxE = allMinMaxL2 DVS.! i in fromIntegral maxE)
 
 dropTake :: DVS.Storable a => Int -> Int -> DVS.Vector a -> DVS.Vector a
 dropTake n o = DVS.take o . DVS.drop n
