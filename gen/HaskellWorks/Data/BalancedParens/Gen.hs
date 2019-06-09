@@ -6,8 +6,9 @@ module HaskellWorks.Data.BalancedParens.Gen
   , bpBools
   , showBps
   , storableVector
-  , vector
   , bpParensSeq
+  , vector
+  , vec2
   ) where
 
 import Data.Coerce
@@ -66,3 +67,6 @@ storableVector r g = DVS.fromList <$> G.list r g
 
 vector :: MonadGen m => Range Int -> m a -> m (DV.Vector a)
 vector r g = DV.fromList <$> G.list r g
+
+vec2 :: MonadGen m => m a -> m (a, a)
+vec2 g = (,) <$> g <*> g
