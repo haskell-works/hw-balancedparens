@@ -21,16 +21,16 @@ module HaskellWorks.Data.BalancedParens.Internal.ParensSeq.Internal
 
 import Control.DeepSeq
 import Data.Int
-import Data.Monoid                                   (Monoid)
-import Data.Semigroup                                (Semigroup (..))
+import Data.Monoid                                (Monoid)
+import Data.Semigroup                             (Semigroup (..))
 import Data.Word
 import GHC.Generics
 import HaskellWorks.Data.Bits.BitWise
-import HaskellWorks.Data.Excess.PartialMinMaxExcess1
-import HaskellWorks.Data.Excess.Triplet
-import HaskellWorks.Data.FingerTree                  (ViewL (..), ViewR (..), (<|), (><), (|>))
+import HaskellWorks.Data.Excess.MinExcess
+import HaskellWorks.Data.Excess.PartialMinExcess1
+import HaskellWorks.Data.FingerTree               (ViewL (..), ViewR (..), (<|), (><), (|>))
 import HaskellWorks.Data.Positioning
-import Prelude                                       hiding (max, min)
+import Prelude                                    hiding (max, min)
 
 import qualified HaskellWorks.Data.Cons       as HW
 import qualified HaskellWorks.Data.Container  as HW
@@ -71,7 +71,7 @@ instance Monoid Measure where
 
 instance FT.Measured Measure Elem where
   measure (Elem w size) = Measure { min, excess, size }
-    where Triplet min excess _ = partialMinMaxExcess1 (fromIntegral size) w
+    where MinExcess min excess = partialMinExcess1 (fromIntegral size) w
 
 instance HW.Container ParensSeq where
   type Elem ParensSeq = Bool
