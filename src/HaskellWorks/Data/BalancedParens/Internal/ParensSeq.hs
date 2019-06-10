@@ -11,8 +11,9 @@ module HaskellWorks.Data.BalancedParens.Internal.ParensSeq
   , toPartialWord64s
   , fromBools
   , toBools
-  , drop
   , splitAt
+  , take
+  , drop
   , firstChild
   , nextSibling
   , (<|), (><), (|>)
@@ -26,7 +27,7 @@ import HaskellWorks.Data.BalancedParens.Internal.ParensSeq.Internal (Elem (Elem)
 import HaskellWorks.Data.Bits.BitWise
 import HaskellWorks.Data.FingerTree                                 (ViewL (..), ViewR (..), (<|), (><), (|>))
 import HaskellWorks.Data.Positioning
-import Prelude                                                      hiding (drop, max, min, splitAt)
+import Prelude                                                      hiding (drop, max, min, splitAt, take)
 
 import qualified Data.List                                                    as L
 import qualified HaskellWorks.Data.BalancedParens.Internal.ParensSeq.Internal as T
@@ -80,17 +81,21 @@ toBoolsDiff ps = mconcat (fmap go (toPartialWord64s ps))
         go (w, n) = W.partialToBoolsDiff (fromIntegral n) w
 
 drop :: Count -> ParensSeq -> ParensSeq
-drop n (ParensSeq parens) = case FT.split (T.atSizeBelowZero n) parens of
-  (lt, rt) -> let n' = n - T.size (FT.measure lt :: T.Measure) in
-    case FT.viewl rt of
-      T.Elem w nw :< rrt -> if n' >= nw
-        then ParensSeq rrt
-        else ParensSeq (T.Elem (w .>. n') (nw - n') <| rrt)
-      FT.EmptyL          -> empty
+drop n ps = snd (splitAt n ps)
+
+take :: Count -> ParensSeq -> ParensSeq
+take n ps = fst (splitAt n ps)
 
 splitAt :: Count -> ParensSeq -> (ParensSeq, ParensSeq)
-splitAt n (ParensSeq parens) = case T.ftSplit (T.atSizeBelowZero n) parens of
-  (lt, rt) -> (ParensSeq lt, ParensSeq rt)
+splitAt n (ParensSeq parens) = case FT.split (T.atSizeBelowZero n) parens of
+  (lt, rt) -> let
+    n' = n - T.size (FT.measure lt :: T.Measure)
+    u  = 64 - n'
+    in case FT.viewl rt of
+      T.Elem w nw :< rrt -> if n' >= nw
+        then (ParensSeq  lt                                , ParensSeq                                 rrt )
+        else (ParensSeq (lt |> T.Elem ((w .<. u) .>. u) n'), ParensSeq (T.Elem (w .>. n') (nw - n') <| rrt))
+      FT.EmptyL          -> (ParensSeq lt, ParensSeq FT.empty)
 
 firstChild  :: ParensSeq -> Count -> Maybe Count
 firstChild ps n = case FT.viewl ft of

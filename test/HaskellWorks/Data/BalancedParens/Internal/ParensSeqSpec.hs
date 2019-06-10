@@ -49,16 +49,31 @@ spec = describe "HaskellWorks.Data.BalancedParens.Internal.ParensSeqSpec" $ do
     PS.toPartialWord64s (PS.fromBools (L.toBools ws)) === zip ws (repeat 64)
   it "drop should drop the right amount of data" $ requireProperty $ do
     ws <- forAll $ G.list (R.linear 0 10) (G.word64 R.constantBounded)
-    let rmm = PS.fromWord64s ws
-    n  <- forAll $ G.count (R.linear 0 (PS.size rmm))
+    let ps = PS.fromWord64s ws
+    n  <- forAll $ G.count (R.linear 0 (PS.size ps))
 
-    PS.size (PS.drop n rmm) === PS.size rmm - n
+    PS.size (PS.drop n ps) === PS.size ps - n
+  it "take should take the right amount of data" $ requireProperty $ do
+    ws <- forAll $ G.list (R.linear 0 10) (G.word64 R.constantBounded)
+    let ps = PS.fromWord64s ws
+    n  <- forAll $ G.count (R.linear 0 (PS.size ps))
+
+    PS.size (PS.take n ps) === n
+  it "splitAt should split at the correct point" $ requireProperty $ do
+    ws <- forAll $ G.list (R.linear 0 10) (G.word64 R.constantBounded)
+    let ps = PS.fromWord64s ws
+    n  <- forAll $ G.count (R.linear 0 (PS.size ps))
+
+    let (lt, rt) = PS.splitAt n ps
+    PS.size lt === n
+    PS.size rt === PS.size ps - n
+    PS.toBools lt >< PS.toBools rt === PS.toBools ps
   it "firstChild should choose the first child" $ requireProperty $ do
     ws <- forAll $ G.list (R.linear 0 10) (G.word64 R.constantBounded)
-    let rmm = PS.fromWord64s ws
-    n  <- forAll $ G.count (R.linear 0 (PS.size rmm))
+    let ps = PS.fromWord64s ws
+    n  <- forAll $ G.count (R.linear 0 (PS.size ps))
 
-    PS.size (PS.drop n rmm) === PS.size rmm - n
+    PS.size (PS.drop n ps) === PS.size ps - n
   it "rose tree should be generatable" $ requireProperty $ do
     bs <- forAll $ G.bpBools (R.linear 1 1000)
 
@@ -69,15 +84,15 @@ spec = describe "HaskellWorks.Data.BalancedParens.Internal.ParensSeqSpec" $ do
     nodeCount <- forAll $ pure (fromIntegral (length bs `div` 2))
     ranked    <- forAll $ G.count (R.linear 1 nodeCount)
     pos       <- forAll $ pure $ select1 bs ranked
-    rmm       <- forAll $ pure $ PS.fromBools bs
+    ps        <- forAll $ pure $ PS.fromBools bs
 
-    PS.firstChild rmm pos === BP.firstChild bs pos
+    PS.firstChild ps pos === BP.firstChild bs pos
   it "firstChild should select first child" $ requireTest $ do
     let bps = "((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((()))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))"
     let bs  = fmap (\c -> if c == '(' then True else False) bps
-    let rmm = PS.fromBools bs
+    let ps = PS.fromBools bs
 
-    PS.firstChild rmm 64 === Just 65
+    PS.firstChild ps 64 === Just 65
   it "nextSibling should select next sibling" $ requireTest $ do
     bs        <- forAll $ G.bpBools (R.linear 1 1000)
     nodeCount <- forAll $ pure (fromIntegral (length bs `div` 2))
