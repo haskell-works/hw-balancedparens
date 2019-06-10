@@ -111,6 +111,8 @@ benchParensSeq =
       , bench "nextSibling"   (nf (map (PS.nextSibling ps)) [1,101..100000])
       , bench "(<|)"          (nf (<| ps) True)
       , bench "(|>)"          (nf (ps |>) True)
+      , bench "drop"          (nf (fmap (flip PS.drop  ps)) [1,101..100000])
+      , bench "drop2"         (nf (fmap (flip PS.drop2 ps)) [1,101..100000])
       ]
     , env (G.sample (G.vec2 (G.bpParensSeq (R.singleton 100000)))) $ \ ~(ps1, ps2) -> bgroup "ParensSeq"
       [ bench "(<>)"          (nf (ps1 <>) ps2)
