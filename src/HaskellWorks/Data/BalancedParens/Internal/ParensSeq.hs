@@ -38,7 +38,7 @@ empty :: ParensSeq
 empty = ParensSeq FT.empty
 
 size :: ParensSeq -> Count
-size (ParensSeq parens) = T.size ((FT.measure parens) :: T.Measure)
+size (ParensSeq parens) = T.size (FT.measure parens :: T.Measure)
 
 -- TODO Needs optimisation
 fromWord64s :: Traversable f => f Word64 -> ParensSeq
