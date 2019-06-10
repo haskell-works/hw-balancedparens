@@ -12,7 +12,6 @@ module HaskellWorks.Data.BalancedParens.Internal.ParensSeq
   , fromBools
   , toBools
   , drop
-  , drop2
   , splitAt
   , firstChild
   , nextSibling
@@ -92,10 +91,6 @@ drop n (ParensSeq parens) = case FT.split (T.atSizeBelowZero n) parens of
 splitAt :: Count -> ParensSeq -> (ParensSeq, ParensSeq)
 splitAt n (ParensSeq parens) = case T.ftSplit (T.atSizeBelowZero n) parens of
   (lt, rt) -> (ParensSeq lt, ParensSeq rt)
-
-drop2 :: Count -> ParensSeq -> ParensSeq
-drop2 n (ParensSeq parens) = case T.ftSplit (T.atSizeBelowZero n) parens of
-  (_, rt) -> ParensSeq rt
 
 firstChild  :: ParensSeq -> Count -> Maybe Count
 firstChild ps n = case FT.viewl ft of

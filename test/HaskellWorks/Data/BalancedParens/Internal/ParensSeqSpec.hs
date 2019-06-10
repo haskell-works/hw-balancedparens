@@ -53,12 +53,6 @@ spec = describe "HaskellWorks.Data.BalancedParens.Internal.ParensSeqSpec" $ do
     n  <- forAll $ G.count (R.linear 0 (PS.size rmm))
 
     PS.size (PS.drop n rmm) === PS.size rmm - n
-  it "drop2 should drop2 the right amount of data" $ requireProperty $ do
-    ws <- forAll $ G.list (R.linear 0 10) (G.word64 R.constantBounded)
-    let rmm = PS.fromWord64s ws
-    n  <- forAll $ G.count (R.linear 0 (PS.size rmm))
-
-    PS.size (PS.drop2 n rmm) === PS.size rmm - n
   it "firstChild should choose the first child" $ requireProperty $ do
     ws <- forAll $ G.list (R.linear 0 10) (G.word64 R.constantBounded)
     let rmm = PS.fromWord64s ws
