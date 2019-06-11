@@ -61,13 +61,13 @@ library
     HaskellWorks.Data.BalancedParens.FindOpenN
     HaskellWorks.Data.BalancedParens.Internal.List
     HaskellWorks.Data.BalancedParens.Internal.ParensSeq
-    HaskellWorks.Data.BalancedParens.Internal.ParensSeq.Internal
-    HaskellWorks.Data.BalancedParens.Internal.ParensSeq.Types
     HaskellWorks.Data.BalancedParens.Internal.RoseTree
     HaskellWorks.Data.BalancedParens.Internal.Word
     HaskellWorks.Data.BalancedParens.NewCloseAt
     HaskellWorks.Data.BalancedParens.NewOpenAt
     HaskellWorks.Data.BalancedParens.OpenAt
+    HaskellWorks.Data.BalancedParens.ParensSeq
+    HaskellWorks.Data.BalancedParens.ParensSeq.Types
     HaskellWorks.Data.BalancedParens.RangeMinMax
     HaskellWorks.Data.BalancedParens.RangeMinMax2
     HaskellWorks.Data.BalancedParens.Simple

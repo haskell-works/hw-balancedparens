@@ -11,13 +11,13 @@ import HaskellWorks.Data.Bits.FromBitTextByteString
 import HaskellWorks.Data.Naive
 import HaskellWorks.Data.Ops
 
-import qualified Data.Vector.Storable                                as DVS
-import qualified HaskellWorks.Data.BalancedParens.Gen                as G
-import qualified HaskellWorks.Data.BalancedParens.Internal.ParensSeq as PS
-import qualified HaskellWorks.Data.BalancedParens.RangeMinMax        as RMM
-import qualified HaskellWorks.Data.BalancedParens.RangeMinMax2       as RMM2
-import qualified Hedgehog.Gen                                        as G
-import qualified Hedgehog.Range                                      as R
+import qualified Data.Vector.Storable                          as DVS
+import qualified HaskellWorks.Data.BalancedParens.Gen          as G
+import qualified HaskellWorks.Data.BalancedParens.ParensSeq    as PS
+import qualified HaskellWorks.Data.BalancedParens.RangeMinMax  as RMM
+import qualified HaskellWorks.Data.BalancedParens.RangeMinMax2 as RMM2
+import qualified Hedgehog.Gen                                  as G
+import qualified Hedgehog.Range                                as R
 
 setupEnvVector :: Int -> IO (DVS.Vector Word64)
 setupEnvVector n = return $ DVS.fromList (take n (cycle [maxBound, 0]))

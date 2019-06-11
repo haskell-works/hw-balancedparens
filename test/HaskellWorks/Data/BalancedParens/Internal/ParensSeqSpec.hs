@@ -4,19 +4,19 @@
 
 module HaskellWorks.Data.BalancedParens.Internal.ParensSeqSpec where
 
-import Data.Semigroup                                      ((<>))
-import HaskellWorks.Data.BalancedParens.Internal.ParensSeq ((<|), (><), (|>))
+import Data.Semigroup                             ((<>))
+import HaskellWorks.Data.BalancedParens.ParensSeq ((<|), (><), (|>))
 import HaskellWorks.Data.RankSelect.Base.Select1
 import HaskellWorks.Hspec.Hedgehog
 import Hedgehog
 import Test.Hspec
 
-import qualified HaskellWorks.Data.BalancedParens.BalancedParens     as BP
-import qualified HaskellWorks.Data.BalancedParens.Gen                as G
-import qualified HaskellWorks.Data.BalancedParens.Internal.List      as L
-import qualified HaskellWorks.Data.BalancedParens.Internal.ParensSeq as PS
-import qualified Hedgehog.Gen                                        as G
-import qualified Hedgehog.Range                                      as R
+import qualified HaskellWorks.Data.BalancedParens.BalancedParens as BP
+import qualified HaskellWorks.Data.BalancedParens.Gen            as G
+import qualified HaskellWorks.Data.BalancedParens.Internal.List  as L
+import qualified HaskellWorks.Data.BalancedParens.ParensSeq      as PS
+import qualified Hedgehog.Gen                                    as G
+import qualified Hedgehog.Range                                  as R
 
 {-# ANN module ("HLint: Ignore Redundant do"        :: String) #-}
 {-# ANN module ("HLint: Ignore Reduce duplication"  :: String) #-}
