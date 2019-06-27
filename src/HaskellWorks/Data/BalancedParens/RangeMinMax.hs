@@ -46,7 +46,7 @@ data RangeMinMax a = RangeMinMax
   , rangeMinMaxL1Excess :: !(DVS.Vector Int16)
   , rangeMinMaxL2Min    :: !(DVS.Vector Int16)
   , rangeMinMaxL2Excess :: !(DVS.Vector Int16)
-  } deriving (Eq, NFData, Generic)
+  } deriving (Eq, Show, NFData, Generic)
 
 factorL0 :: Integral a => a
 factorL0 = 1
