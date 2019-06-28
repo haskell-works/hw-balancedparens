@@ -23,27 +23,27 @@ import qualified Hedgehog.Range                                  as R
 
 spec :: Spec
 spec = describe "HaskellWorks.Data.BalancedParens.Internal.ParensSeqSpec" $ do
-  it "fromWord64s should produce Rmm of the right size" $ requireProperty $ do
+  it "fromWord64s should produce Rm of the right size" $ requireProperty $ do
     ws <- forAll $ G.list (R.linear 0 10) (G.word64 R.constantBounded)
 
     PS.size (PS.fromWord64s ws) === fromIntegral (length ws * 64)
-  it "fromWord64s should produce Rmm with the right data" $ requireProperty $ do
+  it "fromWord64s should produce Rm with the right data" $ requireProperty $ do
     wns <- forAll $ G.list (R.linear 0 10) $ (,)
       <$> G.word64 R.constantBounded
       <*> G.count (R.linear 1 64)
 
     PS.size (PS.fromPartialWord64s wns) === sum (snd <$> wns)
-  it "fromWord64s should produce Rmm with the right data" $ requireProperty $ do
+  it "fromWord64s should produce Rm with the right data" $ requireProperty $ do
     ws <- forAll $ G.list (R.linear 0 10) (G.word64 R.constantBounded)
 
     PS.toPartialWord64s (PS.fromWord64s ws) === zip ws (repeat 64)
-  it "fromPartialWord64s should produce Rmm with the right data" $ requireProperty $ do
+  it "fromPartialWord64s should produce Rm with the right data" $ requireProperty $ do
     wns <- forAll $ G.list (R.linear 0 10) $ (,)
       <$> G.word64 R.constantBounded
       <*> G.count (R.linear 1 64)
 
     PS.toPartialWord64s (PS.fromPartialWord64s wns) === wns
-  it "fromBools should produce Rmm with the right data" $ requireProperty $ do
+  it "fromBools should produce Rm with the right data" $ requireProperty $ do
     ws <- forAll $ G.list (R.linear 0 10) (G.word64 R.constantBounded)
 
     PS.toPartialWord64s (PS.fromBools (L.toBools ws)) === zip ws (repeat 64)
@@ -98,15 +98,15 @@ spec = describe "HaskellWorks.Data.BalancedParens.Internal.ParensSeqSpec" $ do
     nodeCount <- forAll $ pure (fromIntegral (length bs `div` 2))
     ranked    <- forAll $ G.count (R.linear 1 nodeCount)
     pos       <- forAll $ pure $ select1 bs ranked
-    rmm       <- forAll $ pure $ PS.fromBools bs
+    rm       <- forAll $ pure $ PS.fromBools bs
 
-    PS.nextSibling rmm pos === BP.nextSibling bs pos
+    PS.nextSibling rm pos === BP.nextSibling bs pos
   it "nextSibling on ()()" $ requireTest $ do
     bs        <- forAll $ pure [True , False , True , False]
     pos       <- forAll $ pure 1
-    rmm       <- forAll $ pure $ PS.fromBools bs
+    rm       <- forAll $ pure $ PS.fromBools bs
 
-    PS.nextSibling rmm pos === BP.nextSibling bs pos
+    PS.nextSibling rm pos === BP.nextSibling bs pos
   it "(><) should append" $ requireTest $ do
     bs1       <- forAll $ G.bpBools (R.linear 1 1000)
     bs2       <- forAll $ G.bpBools (R.linear 1 1000)

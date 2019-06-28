@@ -11,22 +11,22 @@ import HaskellWorks.Data.Bits.FromBitTextByteString
 import HaskellWorks.Data.Naive
 import HaskellWorks.Data.Ops
 
-import qualified Data.Vector.Storable                          as DVS
-import qualified HaskellWorks.Data.BalancedParens.Gen          as G
-import qualified HaskellWorks.Data.BalancedParens.ParensSeq    as PS
-import qualified HaskellWorks.Data.BalancedParens.RangeMinMax  as RMM
-import qualified HaskellWorks.Data.BalancedParens.RangeMinMax2 as RMM2
-import qualified Hedgehog.Gen                                  as G
-import qualified Hedgehog.Range                                as R
+import qualified Data.Vector.Storable                       as DVS
+import qualified HaskellWorks.Data.BalancedParens.Gen       as G
+import qualified HaskellWorks.Data.BalancedParens.ParensSeq as PS
+import qualified HaskellWorks.Data.BalancedParens.RangeMin  as RM
+import qualified HaskellWorks.Data.BalancedParens.RangeMin2 as RM2
+import qualified Hedgehog.Gen                               as G
+import qualified Hedgehog.Range                             as R
 
 setupEnvVector :: Int -> IO (DVS.Vector Word64)
 setupEnvVector n = return $ DVS.fromList (take n (cycle [maxBound, 0]))
 
-setupEnvRmmVector :: Int -> IO (RMM.RangeMinMax (DVS.Vector Word64))
-setupEnvRmmVector n = return $ RMM.mkRangeMinMax $ DVS.fromList (take n (cycle [maxBound, 0]))
+setupEnvRmVector :: Int -> IO (RM.RangeMin (DVS.Vector Word64))
+setupEnvRmVector n = return $ RM.mkRangeMin $ DVS.fromList (take n (cycle [maxBound, 0]))
 
-setupEnvRmm2Vector :: Int -> IO (RMM2.RangeMinMax2 (DVS.Vector Word64))
-setupEnvRmm2Vector n = return $ RMM2.mkRangeMinMax2 $ DVS.fromList (take n (cycle [maxBound, 0]))
+setupEnvRm2Vector :: Int -> IO (RM2.RangeMin2 (DVS.Vector Word64))
+setupEnvRm2Vector n = return $ RM2.mkRangeMin2 $ DVS.fromList (take n (cycle [maxBound, 0]))
 
 setupEnvBP2 :: IO Word64
 setupEnvBP2 = return $ DVS.head (fromBitTextByteString "10")
@@ -79,25 +79,25 @@ benchVector =
     ]
   ]
 
-benchRmm :: [Benchmark]
-benchRmm =
-  [ bgroup "Rmm"
+benchRm :: [Benchmark]
+benchRm =
+  [ bgroup "Rm"
     [ env (G.sample (G.storableVector (R.singleton 1000) (G.word64 R.constantBounded))) $ \v -> bgroup "Vector64"
-      [ bench "mkRangeMinMax"     (nf   RMM.mkRangeMinMax v)
+      [ bench "mkRangeMin"        (nf   RM.mkRangeMin v)
       ]
-    , env (setupEnvRmmVector 1000000) $ \bv -> bgroup "RangeMinMax"
+    , env (setupEnvRmVector 1000000) $ \bv -> bgroup "RangeMin"
       [ bench "findClose"         (nf   (map (findClose bv)) [0, 1000..10000000])
       ]
     ]
   ]
 
-benchRmm2 :: [Benchmark]
-benchRmm2 =
-  [ bgroup "Rmm2"
+benchRm2 :: [Benchmark]
+benchRm2 =
+  [ bgroup "Rm2"
     [ env (G.sample (G.storableVector (R.singleton 1000) (G.word64 R.constantBounded))) $ \v -> bgroup "Vector64"
-      [ bench "mkRangeMinMax2"    (nf   RMM2.mkRangeMinMax2 v)
+      [ bench "mkRangeMin2"       (nf   RM2.mkRangeMin2 v)
       ]
-    , env (setupEnvRmm2Vector 1000000) $ \bv -> bgroup "RangeMinMax2"
+    , env (setupEnvRm2Vector 1000000) $ \bv -> bgroup "RangeMin2"
       [ bench "findClose"         (nf   (map (findClose bv)) [0, 1000..10000000])
       ]
     ]
@@ -125,6 +125,6 @@ benchParensSeq =
 main :: IO ()
 main = defaultMain $ mempty
   <> benchVector
-  <> benchRmm
-  <> benchRmm2
+  <> benchRm
+  <> benchRm2
   <> benchParensSeq
