@@ -3,11 +3,11 @@
 {-# LANGUAGE OverloadedStrings          #-}
 {-# LANGUAGE ScopedTypeVariables        #-}
 
-module HaskellWorks.Data.BalancedParens.RangeMinMaxSpec where
+module HaskellWorks.Data.BalancedParens.RangeMinSpec where
 
 import Data.Word
 import HaskellWorks.Data.BalancedParens
-import HaskellWorks.Data.BalancedParens.RangeMinMax
+import HaskellWorks.Data.BalancedParens.RangeMin
 import HaskellWorks.Data.Bits.BitLength
 import HaskellWorks.Data.Bits.BitShow
 import HaskellWorks.Data.Bits.FromBitTextByteString
@@ -33,27 +33,27 @@ factor = 16384
 {-# INLINE factor #-}
 
 spec :: Spec
-spec = describe "HaskellWorks.Data.BalancedParens.RangeMinMaxSpec" $ do
+spec = describe "HaskellWorks.Data.BalancedParens.RangeMinSpec" $ do
   it "For a simple bit string can find close" $ requireTest $ do
     let v = fromBitTextByteString "11101111 10100101 01111110 10110010 10111011 10111011 00011111 11011100" :: DVS.Vector Word64
-    let !rmm = mkRangeMinMax v
-    findClose rmm 61 === findClose v 61
+    let !rm = mkRangeMin v
+    findClose rm 61 === findClose v 61
   it "findClose should return the same result" $ requireProperty $ do
     v <- forAll $ G.storableVector (R.linear 1 4) (G.word64 R.constantBounded)
-    let !rmm = mkRangeMinMax v
+    let !rm = mkRangeMin v
     let len = bitLength v
-    [findClose rmm i | i <- [1..len]] === [findClose v i | i <- [1..len]]
+    [findClose rm i | i <- [1..len]] === [findClose v i | i <- [1..len]]
   it "findClose should return the same result over all counts" $ requireProperty $ do
     v <- forAll $ G.storableVector (R.linear 1 factor) (G.word64 R.constantBounded)
     p <- forAll $ G.count (R.linear 1 (bitLength v))
-    let !rmm = mkRangeMinMax v
-    findClose rmm p === findClose v p
+    let !rm = mkRangeMin v
+    findClose rm p === findClose v p
   it "nextSibling should return the same result" $ requireProperty $ do
     v <- forAll $ G.storableVector (R.linear 1 factor) (G.word64 R.constantBounded)
-    let !rmm = mkRangeMinMax v
-    nextSibling rmm 0 === nextSibling v 0
+    let !rm = mkRangeMin v
+    nextSibling rm 0 === nextSibling v 0
   it "nextSibling should return the same result over all counts" $ requireProperty $ do
     v <- forAll $ G.storableVector (R.linear 1 factor) (G.word64 R.constantBounded)
     p <- forAll $ G.count (R.linear 1 (bitLength v))
-    let !rmm = mkRangeMinMax v
-    nextSibling rmm p === nextSibling v p
+    let !rm = mkRangeMin v
+    nextSibling rm p === nextSibling v p

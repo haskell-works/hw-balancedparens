@@ -68,8 +68,8 @@ library
     HaskellWorks.Data.BalancedParens.OpenAt
     HaskellWorks.Data.BalancedParens.ParensSeq
     HaskellWorks.Data.BalancedParens.ParensSeq.Types
-    HaskellWorks.Data.BalancedParens.RangeMinMax
-    HaskellWorks.Data.BalancedParens.RangeMinMax2
+    HaskellWorks.Data.BalancedParens.RangeMin
+    HaskellWorks.Data.BalancedParens.RangeMin2
     HaskellWorks.Data.BalancedParens.Simple
   other-modules:      Paths_hw_balancedparens
   autogen-modules:    Paths_hw_balancedparens
@@ -104,8 +104,8 @@ test-suite hw-balancedparens-test
   other-modules:
     HaskellWorks.Data.BalancedParens.Internal.BroadwordSpec
     HaskellWorks.Data.BalancedParens.Internal.ParensSeqSpec
-    HaskellWorks.Data.BalancedParens.RangeMinMax2Spec
-    HaskellWorks.Data.BalancedParens.RangeMinMaxSpec
+    HaskellWorks.Data.BalancedParens.RangeMin2Spec
+    HaskellWorks.Data.BalancedParens.RangeMinSpec
     HaskellWorks.Data.BalancedParens.SimpleSpec
     Paths_hw_balancedparens
   build-depends:      hw-balancedparens

@@ -9,8 +9,8 @@ module HaskellWorks.Data.BalancedParens.Gen
   , bpParensSeq
   , vector
   , vec2
-  , randomRmm
-  , randomRmm2
+  , randomRm
+  , randomRm2
   ) where
 
 import Data.Coerce
@@ -20,13 +20,13 @@ import HaskellWorks.Data.BalancedParens.ParensSeq (ParensSeq)
 import HaskellWorks.Data.Positioning
 import Hedgehog
 
-import qualified Data.Vector                                   as DV
-import qualified Data.Vector.Storable                          as DVS
-import qualified HaskellWorks.Data.BalancedParens.ParensSeq    as PS
-import qualified HaskellWorks.Data.BalancedParens.RangeMinMax  as RMM
-import qualified HaskellWorks.Data.BalancedParens.RangeMinMax2 as RMM2
-import qualified Hedgehog.Gen                                  as G
-import qualified Hedgehog.Range                                as R
+import qualified Data.Vector                                as DV
+import qualified Data.Vector.Storable                       as DVS
+import qualified HaskellWorks.Data.BalancedParens.ParensSeq as PS
+import qualified HaskellWorks.Data.BalancedParens.RangeMin  as RM
+import qualified HaskellWorks.Data.BalancedParens.RangeMin2 as RM2
+import qualified Hedgehog.Gen                               as G
+import qualified Hedgehog.Range                             as R
 
 count :: MonadGen m => Range Count -> m Count
 count r = coerce <$> G.word64 (coerce <$> r)
@@ -77,12 +77,12 @@ vector r g = DV.fromList <$> G.list r g
 vec2 :: MonadGen m => m a -> m (a, a)
 vec2 g = (,) <$> g <*> g
 
-randomRmm :: MonadGen m => Range Int -> m (RMM.RangeMinMax (DVS.Vector Word64))
-randomRmm r = do
+randomRm :: MonadGen m => Range Int -> m (RM.RangeMin (DVS.Vector Word64))
+randomRm r = do
   v <- storableVector (fmap (64 *) r) (G.word64 R.constantBounded)
-  return (RMM.mkRangeMinMax v)
+  return (RM.mkRangeMin v)
 
-randomRmm2 :: MonadGen m => Range Int -> m (RMM2.RangeMinMax2 (DVS.Vector Word64))
-randomRmm2 r = do
+randomRm2 :: MonadGen m => Range Int -> m (RM2.RangeMin2 (DVS.Vector Word64))
+randomRm2 r = do
   v <- storableVector (fmap (64 *) r) (G.word64 R.constantBounded)
-  return (RMM2.mkRangeMinMax2 v)
+  return (RM2.mkRangeMin2 v)
