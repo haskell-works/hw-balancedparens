@@ -26,13 +26,13 @@ common base               { build-depends: base                 >= 4        && <
 common criterion          { build-depends: criterion            >= 1.2      && < 1.6    }
 common deepseq            { build-depends: deepseq              >= 1.4.2.0  && < 1.5    }
 common hedgehog           { build-depends: hedgehog             >= 1.0      && < 1.1    }
-common hspec              { build-depends: hspec                >= 2.2      && < 2.6    }
+common hspec              { build-depends: hspec                >= 2.2      && < 3.0    }
 common hw-hspec-hedgehog  { build-depends: hw-hspec-hedgehog    >= 0.1      && < 0.2    }
 common hw-bits            { build-depends: hw-bits              >= 0.4.0.0  && < 0.8    }
 common hw-excess          { build-depends: hw-excess            >= 0.2.2.0  && < 0.3    }
 common hw-fingertree      { build-depends: hw-fingertree        >= 0.1.1.0  && < 0.2    }
 common hw-prim            { build-depends: hw-prim              >= 0.6.2.25 && < 0.7    }
-common hw-rankselect-base { build-depends: hw-rankselect-base   >= 0.2.0.0  && < 0.4    }
+common hw-rankselect-base { build-depends: hw-rankselect-base   >= 0.3.2.1  && < 0.4    }
 common transformers       { build-depends: transformers         >= 0.5.6.2  && < 0.6    }
 common vector             { build-depends: vector               >= 0.12     && < 0.13   }
 
