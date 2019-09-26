@@ -1,4 +1,5 @@
 {-# LANGUAGE BangPatterns               #-}
+{-# LANGUAGE DeriveGeneric              #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE OverloadedStrings          #-}
 {-# LANGUAGE ScopedTypeVariables        #-}
@@ -6,6 +7,7 @@
 module HaskellWorks.Data.BalancedParens.RangeMin2Spec where
 
 import Data.Word
+import GHC.Generics
 import HaskellWorks.Data.BalancedParens
 import HaskellWorks.Data.BalancedParens.RangeMin
 import HaskellWorks.Data.Bits.BitShow
@@ -17,7 +19,7 @@ import qualified Data.Vector.Storable as DVS
 {-# ANN module ("HLint: Ignore Redundant do"        :: String) #-}
 {-# ANN module ("HLint: Ignore Reduce duplication"  :: String) #-}
 
-newtype ShowVector a = ShowVector a deriving (Eq, BitShow)
+newtype ShowVector a = ShowVector a deriving (Eq, BitShow, Generic)
 
 instance BitShow a => Show (ShowVector a) where
   show = bitShow

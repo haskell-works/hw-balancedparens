@@ -1,3 +1,4 @@
+{-# LANGUAGE DeriveGeneric              #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE OverloadedStrings          #-}
 {-# LANGUAGE ScopedTypeVariables        #-}
@@ -5,6 +6,7 @@
 module HaskellWorks.Data.BalancedParens.Internal.BroadwordSpec where
 
 import Data.Word
+import GHC.Generics
 import HaskellWorks.Data.BalancedParens.FindClose
 import HaskellWorks.Data.Bits.BitShow
 import HaskellWorks.Data.Bits.Broadword
@@ -21,7 +23,7 @@ import qualified Hedgehog.Range                       as R
 {-# ANN module ("HLint: Ignore Redundant do"        :: String) #-}
 {-# ANN module ("HLint: Ignore Reduce duplication"  :: String) #-}
 
-newtype ShowVector a = ShowVector a deriving (Eq, BitShow)
+newtype ShowVector a = ShowVector a deriving (Eq, BitShow, Generic)
 
 instance BitShow a => Show (ShowVector a) where
   show = bitShow

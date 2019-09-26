@@ -1,3 +1,4 @@
+{-# LANGUAGE DeriveGeneric              #-}
 {-# LANGUAGE FlexibleInstances          #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 
@@ -6,6 +7,7 @@ module HaskellWorks.Data.BalancedParens.Simple
   ) where
 
 import Control.Monad
+import GHC.Generics
 import HaskellWorks.Data.BalancedParens.BalancedParens
 import HaskellWorks.Data.BalancedParens.CloseAt
 import HaskellWorks.Data.BalancedParens.Enclose
@@ -22,7 +24,7 @@ import HaskellWorks.Data.RankSelect.Base.Select1
 import Prelude                                         as P
 
 newtype SimpleBalancedParens a = SimpleBalancedParens a
-  deriving (BalancedParens, FindOpen, FindClose, Enclose, OpenAt, CloseAt, BitLength, BitShow, Eq, Rank0, Rank1, Select0, Select1, TestBit)
+  deriving (BalancedParens, FindOpen, FindClose, Enclose, OpenAt, CloseAt, BitLength, BitShow, Eq, Rank0, Rank1, Select0, Select1, TestBit, Generic)
 
 instance Functor SimpleBalancedParens where
   fmap f (SimpleBalancedParens a) = SimpleBalancedParens (f a)
