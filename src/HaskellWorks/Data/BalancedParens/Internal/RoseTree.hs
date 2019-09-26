@@ -1,3 +1,5 @@
+{-# LANGUAGE DeriveGeneric #-}
+
 module HaskellWorks.Data.BalancedParens.Internal.RoseTree
   ( RoseTree(..)
   , toBools
@@ -6,9 +8,11 @@ module HaskellWorks.Data.BalancedParens.Internal.RoseTree
   , depth
   ) where
 
+import GHC.Generics
+
 newtype RoseTree = RoseTree
   { children :: [RoseTree]
-  } deriving (Eq, Show)
+  } deriving (Eq, Show, Generic)
 
 toBools :: RoseTree -> [Bool]
 toBools rt = toBools' rt []

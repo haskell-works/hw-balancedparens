@@ -1,3 +1,4 @@
+{-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE TupleSections #-}
 
 module HaskellWorks.Data.BalancedParens.Gen
@@ -16,6 +17,7 @@ module HaskellWorks.Data.BalancedParens.Gen
 import Data.Coerce
 import Data.Semigroup                             ((<>))
 import Data.Word
+import GHC.Generics
 import HaskellWorks.Data.BalancedParens.ParensSeq (ParensSeq)
 import HaskellWorks.Data.Positioning
 import Hedgehog
@@ -33,7 +35,7 @@ count r = coerce <$> G.word64 (coerce <$> r)
 
 data LR a = L a Int | R a Int deriving (Eq, Show)
 
-newtype BP = BP [Bool] deriving Eq
+newtype BP = BP [Bool] deriving (Eq, Generic)
 
 showBps :: [Bool] -> String
 showBps = fmap fromBool
