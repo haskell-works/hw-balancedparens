@@ -7,14 +7,14 @@ module HaskellWorks.Data.BalancedParens.CloseAt
 import Data.Vector.Storable             as DVS
 import Data.Word
 import HaskellWorks.Data.Bits.BitLength
-import HaskellWorks.Data.Bits.BitWise
 import HaskellWorks.Data.Bits.BitShown
+import HaskellWorks.Data.Bits.BitWise
 import HaskellWorks.Data.Bits.Broadword
-import HaskellWorks.Data.Positioning
 import HaskellWorks.Data.Naive
+import HaskellWorks.Data.Positioning
 
 closeAt' :: TestBit a => a -> Count -> Bool
-closeAt' v c = not (v .?. toPosition (c - 1))
+closeAt' v c = c > 0 && not (v .?. toPosition (c - 1))
 {-# INLINE closeAt' #-}
 
 class CloseAt v where
