@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP                        #-}
 {-# LANGUAGE DeriveGeneric              #-}
 {-# LANGUAGE DuplicateRecordFields      #-}
 {-# LANGUAGE FlexibleInstances          #-}
@@ -68,6 +69,10 @@ instance Semigroup Measure where
 
 instance Monoid Measure where
   mempty = Measure 0 0 0
+#if MIN_VERSION_GLASGOW_HASKELL(8, 4, 4, 0)
+#else
+  mappend = (<>)
+#endif
 
 instance FT.Measured Measure Elem where
   measure (Elem w size) = Measure { min, excess, size }
