@@ -18,8 +18,8 @@ import qualified HaskellWorks.Data.BalancedParens.ParensSeq      as PS
 import qualified Hedgehog.Gen                                    as G
 import qualified Hedgehog.Range                                  as R
 
-{-# ANN module ("HLint: Ignore Redundant do"        :: String) #-}
-{-# ANN module ("HLint: Ignore Reduce duplication"  :: String) #-}
+{-# ANN module ("HLint: ignore Redundant do"        :: String) #-}
+{-# ANN module ("HLint: ignore Reduce duplication"  :: String) #-}
 
 spec :: Spec
 spec = describe "HaskellWorks.Data.BalancedParens.Internal.ParensSeqSpec" $ do
