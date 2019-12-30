@@ -16,8 +16,8 @@ import Test.Hspec
 
 import qualified Data.Vector.Storable as DVS
 
-{-# ANN module ("HLint: Ignore Redundant do"        :: String) #-}
-{-# ANN module ("HLint: Ignore Reduce duplication"  :: String) #-}
+{-# ANN module ("HLint: ignore Redundant do"        :: String) #-}
+{-# ANN module ("HLint: ignore Reduce duplication"  :: String) #-}
 
 newtype ShowVector a = ShowVector a deriving (Eq, BitShow, Generic)
 
