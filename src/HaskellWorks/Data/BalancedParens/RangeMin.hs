@@ -87,23 +87,23 @@ mkRangeMin bp = RangeMin
         lenL0         = lenBP
         lenL1         = (DVS.length rmL0Min `div` pageSizeL1) + 1 :: Int
         lenL2         = (DVS.length rmL0Min `div` pageSizeL2) + 1 :: Int
-        allMinL0      = dvsConstructNI lenL0 (\i -> if i == lenBP then MinExcess (-64) (-64) else minExcess1 (bpv !!! fromIntegral i))
-        allMinL1      = dvsConstructNI lenL1 (\i -> minExcess1 (dropTake (i * pageSizeL1) pageSizeL1 bpv))
-        allMinL2      = dvsConstructNI lenL2 (\i -> minExcess1 (dropTake (i * pageSizeL2) pageSizeL2 bpv))
+        allMinL0      = DVS.generate lenL0 (\i -> if i == lenBP then MinExcess (-64) (-64) else minExcess1 (bpv !!! fromIntegral i))
+        allMinL1      = DVS.generate lenL1 (\i -> minExcess1 (dropTake (i * pageSizeL1) pageSizeL1 bpv))
+        allMinL2      = DVS.generate lenL2 (\i -> minExcess1 (dropTake (i * pageSizeL2) pageSizeL2 bpv))
         -- Note: (0xffffffffffffffc0 :: Int64) = -64
-        rmL0Excess   = dvsConstructNI lenL0 (\i -> fromIntegral (allExcess1 (pageFill i pageSizeL0 0xffffffffffffffc0 bpv))) :: DVS.Vector Int16
-        rmL1Excess   = dvsConstructNI lenL1 (\i -> fromIntegral (allExcess1 (pageFill i pageSizeL1 0xffffffffffffffc0 bpv))) :: DVS.Vector Int16
-        rmL2Excess   = dvsConstructNI lenL2 (\i -> fromIntegral (allExcess1 (pageFill i pageSizeL2 0xffffffffffffffc0 bpv))) :: DVS.Vector Int16
-        rmL0Min      = dvsConstructNI lenL0 (\i -> let MinExcess minE _ = allMinL0 DVS.! i in fromIntegral minE)
-        rmL1Min      = dvsConstructNI lenL1 (\i -> let MinExcess minE _ = allMinL1 DVS.! i in fromIntegral minE)
-        rmL2Min      = dvsConstructNI lenL2 (\i -> let MinExcess minE _ = allMinL2 DVS.! i in fromIntegral minE)
+        rmL0Excess    = DVS.generate lenL0 (\i -> fromIntegral (allExcess1 (pageFill i pageSizeL0 0xffffffffffffffc0 bpv))) :: DVS.Vector Int16
+        rmL1Excess    = DVS.generate lenL1 (\i -> fromIntegral (allExcess1 (pageFill i pageSizeL1 0xffffffffffffffc0 bpv))) :: DVS.Vector Int16
+        rmL2Excess    = DVS.generate lenL2 (\i -> fromIntegral (allExcess1 (pageFill i pageSizeL2 0xffffffffffffffc0 bpv))) :: DVS.Vector Int16
+        rmL0Min       = DVS.generate lenL0 (\i -> let MinExcess minE _ = allMinL0 DVS.! i in fromIntegral minE)
+        rmL1Min       = DVS.generate lenL1 (\i -> let MinExcess minE _ = allMinL1 DVS.! i in fromIntegral minE)
+        rmL2Min       = DVS.generate lenL2 (\i -> let MinExcess minE _ = allMinL2 DVS.! i in fromIntegral minE)
 
 dropTake :: DVS.Storable a => Int -> Int -> DVS.Vector a -> DVS.Vector a
 dropTake n o = DVS.take o . DVS.drop n
 {-# INLINE dropTake #-}
 
 dvsReword :: (DVS.Storable a, Integral a, DVS.Storable b, Num b) => DVS.Vector a -> DVS.Vector b
-dvsReword v = dvsConstructNI (DVS.length v) (\i -> fromIntegral (v DVS.! i))
+dvsReword v = DVS.generate (DVS.length v) (\i -> fromIntegral (v DVS.! i))
 {-# INLINE dvsReword #-}
 
 pageFill :: DVS.Storable a => Int -> Int -> a -> DVS.Vector a -> DVS.Vector a
@@ -115,10 +115,6 @@ dropTakeFill n o a v =  let r = DVS.take o (DVS.drop n v) in
                         let len = DVS.length r in
                         if len == o then r else DVS.concat [r, DVS.fromList (replicate (o - len) a)]
 {-# INLINE dropTakeFill #-}
-
-dvsConstructNI :: DVS.Storable a => Int -> (Int -> a) -> DVS.Vector a
-dvsConstructNI n g = DVS.constructN n (g . DVS.length)
-{-# INLINE dvsConstructNI #-}
 
 data FindState = FindBP
   | FindL0 | FindFromL0
