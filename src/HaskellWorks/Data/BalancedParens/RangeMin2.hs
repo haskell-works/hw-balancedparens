@@ -35,8 +35,9 @@ import HaskellWorks.Data.RankSelect.Base.Rank1
 import HaskellWorks.Data.Vector.AsVector64
 import Prelude                                         hiding (length)
 
-import qualified Data.Vector          as DV
-import qualified Data.Vector.Storable as DVS
+import qualified Data.Vector                                               as DV
+import qualified Data.Vector.Storable                                      as DVS
+import qualified HaskellWorks.Data.BalancedParens.Internal.Vector.Storable as DVS
 
 data RangeMin2 a = RangeMin2
   { rangeMin2BP       :: !a
@@ -95,8 +96,8 @@ pageSizeL4 = pageSizeL3 * factorL4
 mkRangeMin2 :: AsVector64 a => a -> RangeMin2 a
 mkRangeMin2 bp = RangeMin2
   { rangeMin2BP       = bp
-  , rangeMin2L0Min    = dvsReword rmL0Min
-  , rangeMin2L0Excess = dvsReword rmL0Excess
+  , rangeMin2L0Min    = DVS.reword rmL0Min
+  , rangeMin2L0Excess = DVS.reword rmL0Excess
   , rangeMin2L1Min    = rmL1Min
   , rangeMin2L1Excess = rmL1Excess
   , rangeMin2L2Min    = rmL2Min
@@ -115,39 +116,21 @@ mkRangeMin2 bp = RangeMin2
         lenL4         = (DVS.length rmL0Min `div` pageSizeL4) + 1 :: Int
         allMinL0      = DV.generate  lenL0 (\i -> if i == lenBP then MinExcess (-64) (-64) else minExcess1 (bpv !!! fromIntegral i))
         -- Note: (0xffffffffffffffc0 :: Int64) = -64
-        rmL0Excess    = DVS.generate lenL0 (\i -> fromIntegral (allExcess1 (pageFill i pageSizeL0 0xffffffffffffffc0 bpv))) :: DVS.Vector Int16
-        rmL1Excess    = DVS.generate lenL1 (\i -> fromIntegral (allExcess1 (pageFill i pageSizeL1 0xffffffffffffffc0 bpv))) :: DVS.Vector Int16
-        rmL2Excess    = DVS.generate lenL2 (\i -> fromIntegral (allExcess1 (pageFill i pageSizeL2 0xffffffffffffffc0 bpv))) :: DVS.Vector Int16
-        rmL3Excess    = DVS.generate lenL3 (\i -> fromIntegral (allExcess1 (pageFill i pageSizeL3 0xffffffffffffffc0 bpv))) :: DVS.Vector Int16
-        rmL4Excess    = DVS.generate lenL4 (\i -> fromIntegral (allExcess1 (pageFill i pageSizeL4 0xffffffffffffffc0 bpv))) :: DVS.Vector Int16
+        rmL0Excess    = DVS.generate lenL0 (\i -> fromIntegral (allExcess1 (DVS.pageFill i pageSizeL0 0xffffffffffffffc0 bpv))) :: DVS.Vector Int16
+        rmL1Excess    = DVS.generate lenL1 (\i -> fromIntegral (allExcess1 (DVS.pageFill i pageSizeL1 0xffffffffffffffc0 bpv))) :: DVS.Vector Int16
+        rmL2Excess    = DVS.generate lenL2 (\i -> fromIntegral (allExcess1 (DVS.pageFill i pageSizeL2 0xffffffffffffffc0 bpv))) :: DVS.Vector Int16
+        rmL3Excess    = DVS.generate lenL3 (\i -> fromIntegral (allExcess1 (DVS.pageFill i pageSizeL3 0xffffffffffffffc0 bpv))) :: DVS.Vector Int16
+        rmL4Excess    = DVS.generate lenL4 (\i -> fromIntegral (allExcess1 (DVS.pageFill i pageSizeL4 0xffffffffffffffc0 bpv))) :: DVS.Vector Int16
         rmL0Min       = DVS.generate lenL0 (\i -> let MinExcess minE _ = allMinL0 DV.! i in fromIntegral minE) :: DVS.Vector Int16
-        rmL1Min       = DVS.generate lenL1 (\i -> genMin 0 (pageFill i factorL1 0 rmL0Min) (pageFill i factorL1 0 rmL0Excess))
-        rmL2Min       = DVS.generate lenL2 (\i -> genMin 0 (pageFill i factorL2 0 rmL1Min) (pageFill i factorL2 0 rmL1Excess))
-        rmL3Min       = DVS.generate lenL3 (\i -> genMin 0 (pageFill i factorL3 0 rmL2Min) (pageFill i factorL3 0 rmL2Excess))
-        rmL4Min       = DVS.generate lenL4 (\i -> genMin 0 (pageFill i factorL4 0 rmL3Min) (pageFill i factorL4 0 rmL3Excess))
+        rmL1Min       = DVS.generate lenL1 (\i -> genMin 0 (DVS.pageFill i factorL1 0 rmL0Min) (DVS.pageFill i factorL1 0 rmL0Excess))
+        rmL2Min       = DVS.generate lenL2 (\i -> genMin 0 (DVS.pageFill i factorL2 0 rmL1Min) (DVS.pageFill i factorL2 0 rmL1Excess))
+        rmL3Min       = DVS.generate lenL3 (\i -> genMin 0 (DVS.pageFill i factorL3 0 rmL2Min) (DVS.pageFill i factorL3 0 rmL2Excess))
+        rmL4Min       = DVS.generate lenL4 (\i -> genMin 0 (DVS.pageFill i factorL4 0 rmL3Min) (DVS.pageFill i factorL4 0 rmL3Excess))
 
 genMin :: (Integral a, DVS.Storable a) => a -> DVS.Vector a -> DVS.Vector a -> a
 genMin mL mins excesses = if not (DVS.null mins) || not (DVS.null excesses)
-  then genMin (dvsLastOrZero mins `min` (mL + dvsLastOrZero excesses)) (DVS.init mins) (DVS.init excesses)
+  then genMin (DVS.lastOrZero mins `min` (mL + DVS.lastOrZero excesses)) (DVS.init mins) (DVS.init excesses)
   else mL
-
-pageFill :: DVS.Storable a => Int -> Int -> a -> DVS.Vector a -> DVS.Vector a
-pageFill n s = dropTakeFill (n * s) s
-{-# INLINE pageFill #-}
-
-dropTakeFill :: DVS.Storable a => Int -> Int -> a -> DVS.Vector a -> DVS.Vector a
-dropTakeFill n s a v =  let r = DVS.take s (DVS.drop n v) in
-                        let rLen = DVS.length r in
-                        if rLen == s then r else DVS.concat [r, DVS.replicate (s - rLen) a]
-{-# INLINE dropTakeFill #-}
-
-dvsReword :: (DVS.Storable a, Integral a, DVS.Storable b, Num b) => DVS.Vector a -> DVS.Vector b
-dvsReword v = DVS.generate (DVS.length v) (\i -> fromIntegral (v DVS.! i))
-{-# INLINE dvsReword #-}
-
-dvsLastOrZero :: (DVS.Storable a, Integral a) => DVS.Vector a -> a
-dvsLastOrZero v = if not (DVS.null v) then DVS.last v else 0
-{-# INLINE dvsLastOrZero #-}
 
 data FindState = FindBP
   | FindL0 | FindFromL0
