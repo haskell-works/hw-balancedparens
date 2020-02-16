@@ -30,11 +30,11 @@ common doctest-discover           { build-depends: doctest-discover           >=
 common generic-lens               { build-depends: generic-lens               >= 1.2.0.0    && < 1.3    }
 common hedgehog                   { build-depends: hedgehog                   >= 1.0        && < 1.1    }
 common hspec                      { build-depends: hspec                      >= 2.2        && < 3.0    }
-common hw-hspec-hedgehog          { build-depends: hw-hspec-hedgehog          >= 0.1        && < 0.2    }
 common hw-bits                    { build-depends: hw-bits                    >= 0.7.1.5    && < 0.8    }
 common hw-excess                  { build-depends: hw-excess                  >= 0.2.2.0    && < 0.3    }
 common hw-fingertree              { build-depends: hw-fingertree              >= 0.1.1.0    && < 0.2    }
-common hw-prim                    { build-depends: hw-prim                    >= 0.6.2.25   && < 0.7    }
+common hw-hspec-hedgehog          { build-depends: hw-hspec-hedgehog          >= 0.1        && < 0.2    }
+common hw-prim                    { build-depends: hw-prim                    >= 0.6.2.40   && < 0.7    }
 common hw-rankselect-base         { build-depends: hw-rankselect-base         >= 0.3.2.1    && < 0.4    }
 common lens                       { build-depends: lens                       >= 4          && < 5      }
 common mmap                       { build-depends: mmap                       >= 0.5.9      && < 0.6    }
@@ -88,6 +88,7 @@ library
                         HaskellWorks.Data.BalancedParens.Internal.Word32
                         HaskellWorks.Data.BalancedParens.Internal.Word64
                         HaskellWorks.Data.BalancedParens.Internal.Word8
+                        HaskellWorks.Data.BalancedParens.Jacobson
                         HaskellWorks.Data.BalancedParens.NewCloseAt
                         HaskellWorks.Data.BalancedParens.NewOpenAt
                         HaskellWorks.Data.BalancedParens.OpenAt
@@ -140,6 +141,7 @@ test-suite hw-balancedparens-test
                       , hw-balancedparens
                       , hw-balancedparens-gen
                       , hw-bits
+                      , hw-excess
                       , hw-hspec-hedgehog
                       , hw-prim
                       , hw-rankselect-base
@@ -151,9 +153,10 @@ test-suite hw-balancedparens-test
                         HaskellWorks.Data.BalancedParens.Broadword.Word16Spec
                         HaskellWorks.Data.BalancedParens.Broadword.Word32Spec
                         HaskellWorks.Data.BalancedParens.Broadword.Word64Spec
+                        HaskellWorks.Data.BalancedParens.FindCloseNSpec
                         HaskellWorks.Data.BalancedParens.Internal.BroadwordSpec
                         HaskellWorks.Data.BalancedParens.Internal.ParensSeqSpec
-                        HaskellWorks.Data.BalancedParens.FindCloseNSpec
+                        HaskellWorks.Data.BalancedParens.JacobsonSpec
                         HaskellWorks.Data.BalancedParens.RangeMin2Spec
                         HaskellWorks.Data.BalancedParens.RangeMinSpec
                         HaskellWorks.Data.BalancedParens.SimpleSpec
