@@ -68,6 +68,7 @@ library
                         HaskellWorks.Data.BalancedParens.Internal.List
                         HaskellWorks.Data.BalancedParens.Internal.ParensSeq
                         HaskellWorks.Data.BalancedParens.Internal.RoseTree
+                        HaskellWorks.Data.BalancedParens.Internal.Vector.Storable
                         HaskellWorks.Data.BalancedParens.Internal.Word
                         HaskellWorks.Data.BalancedParens.NewCloseAt
                         HaskellWorks.Data.BalancedParens.NewOpenAt
