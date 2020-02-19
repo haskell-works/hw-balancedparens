@@ -26,6 +26,14 @@ dropTakeFill n o a v =  let r = DVS.take o (DVS.drop n v) in
                         if len == o then r else DVS.concat [r, DVS.fromList (replicate (o - len) a)]
 {-# INLINE dropTakeFill #-}
 
-pageFill :: DVS.Storable a => Int -> Int -> a -> DVS.Vector a -> DVS.Vector a
+-- | Return the n-th page of size s from the input vector.  In the case where there isn't
+-- sufficient data to fill the page from the input vector, then the remainder of the page
+-- is filled with a.
+pageFill :: DVS.Storable a
+  => Int          -- ^ The n-th page to retrieve
+  -> Int          -- ^ The page size
+  -> a            -- ^ The element value to fill the page when input vector has insufficient values
+  -> DVS.Vector a -- ^ The input vector
+  -> DVS.Vector a -- ^ The page
 pageFill n s = dropTakeFill (n * s) s
 {-# INLINE pageFill #-}
