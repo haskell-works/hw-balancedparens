@@ -91,11 +91,8 @@ randomRm2 r = do
   v <- storableVector (fmap (64 *) r) (G.word64 R.constantBounded)
   return (RM2.mkRangeMin2 v)
 
-withGenT :: (MonadGen m, MonadGen n) => (GenT (GenBase m) a -> GenT (GenBase n) b) -> m a -> n b
-withGenT f = fromGenT . f . toGenT
-
-storableVectorWord64 :: MonadGen m => Range Int -> m Word64 -> m (DVS.Vector Word64)
-storableVectorWord64 r = withGenT $ \g -> do
+storableVectorWord64 :: MonadGen m => Range Int -> m (DVS.Vector Word64)
+storableVectorWord64 r = fromGenT $ do
   n <- integral_ r
   GenT $ \_ seed ->
     return $ flip (DVS.unfoldrN n) seed $ \s ->
