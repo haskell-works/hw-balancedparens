@@ -18,5 +18,5 @@ import qualified Hedgehog.Range                       as R
 spec :: Spec
 spec = describe "HaskellWorks.Data.BalancedParens.VectorGenSpec" $ do
   fit "Generate a vector" $ requireProperty $ do
-    !_ <- forAll $ G.storableVector (R.linear 1 16384) (G.word64 R.constantBounded)
+    !_ <- forAll $ G.storableVectorWord64 (R.linear 1 16384) (G.word64 R.constantBounded)
     return ()
