@@ -2,6 +2,7 @@
 
 module HaskellWorks.Data.BalancedParens.FindCloseN
   ( FindCloseN(..)
+  , findClose'
   ) where
 
 import Data.Word
