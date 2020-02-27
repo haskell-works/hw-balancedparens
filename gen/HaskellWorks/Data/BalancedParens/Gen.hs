@@ -1,5 +1,4 @@
 {-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE TupleSections #-}
 
 module HaskellWorks.Data.BalancedParens.Gen
   ( BP(..)
@@ -7,6 +6,7 @@ module HaskellWorks.Data.BalancedParens.Gen
   , bpBools
   , showBps
   , storableVector
+  , storableVectorWord64
   , bpParensSeq
   , vector
   , vec2
@@ -20,6 +20,8 @@ import GHC.Generics
 import HaskellWorks.Data.BalancedParens.ParensSeq (ParensSeq)
 import HaskellWorks.Data.Positioning
 import Hedgehog
+import Hedgehog.Internal.Gen
+import Hedgehog.Internal.Seed
 
 import qualified Data.Vector                                as DV
 import qualified Data.Vector.Storable                       as DVS
@@ -87,3 +89,10 @@ randomRm2 :: MonadGen m => Range Int -> m (RM2.RangeMin2 (DVS.Vector Word64))
 randomRm2 r = do
   v <- storableVector (fmap (64 *) r) (G.word64 R.constantBounded)
   return (RM2.mkRangeMin2 v)
+
+storableVectorWord64 :: MonadGen m => Range Int -> m (DVS.Vector Word64)
+storableVectorWord64 r = fromGenT $ do
+  n <- integral_ r
+  GenT $ \_ seed ->
+    return $ flip (DVS.unfoldrN n) seed $ \s ->
+      let (w, sb) = nextWord64 s in Just (w, sb)

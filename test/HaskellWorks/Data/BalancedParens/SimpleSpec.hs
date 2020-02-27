@@ -14,7 +14,6 @@ import Test.Hspec
 
 import qualified Data.Vector.Storable                 as DVS
 import qualified HaskellWorks.Data.BalancedParens.Gen as G
-import qualified Hedgehog.Gen                         as G
 import qualified Hedgehog.Range                       as R
 
 {-# ANN module ("HLint: ignore Redundant do"        :: String) #-}
@@ -124,5 +123,5 @@ spec = describe "HaskellWorks.Data.BalancedParens.SimpleSpec" $ do
     it "subtreeSize 10" $ requireTest $ subtreeSize bs 10 === Just  0
   describe "Does not suffer exceptions" $ do
     it "when calling nextSibling from valid locations" $ requireProperty $ do
-      v <- forAll $ G.storableVector (R.linear 1 64) (G.word64 R.constantBounded)
+      v <- forAll $ G.storableVectorWord64 (R.linear 1 64)
       [nextSibling v p | p <- [1..bitLength v]] === [nextSibling v p | p <- [1..bitLength v]]

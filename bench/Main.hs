@@ -95,7 +95,7 @@ benchVector =
 benchRm :: [Benchmark]
 benchRm =
   [ bgroup "Rm"
-    [ env (G.sample (G.storableVector (R.singleton 1000) (G.word64 R.constantBounded))) $ \v -> bgroup "Vector64"
+    [ env (G.sample (G.storableVectorWord64 (R.singleton 1000))) $ \v -> bgroup "Vector64"
       [ bench "mkRangeMin"        (nf   RM.mkRangeMin v)
       ]
     , env (setupEnvRmVector 1000000) $ \bv -> bgroup "RangeMin"
@@ -107,7 +107,7 @@ benchRm =
 benchRm2 :: [Benchmark]
 benchRm2 =
   [ bgroup "Rm2"
-    [ env (G.sample (G.storableVector (R.singleton 1000) (G.word64 R.constantBounded))) $ \v -> bgroup "Vector64"
+    [ env (G.sample (G.storableVectorWord64 (R.singleton 1000))) $ \v -> bgroup "Vector64"
       [ bench "mkRangeMin2"       (nf   RM2.mkRangeMin2 v)
       ]
     , env (setupEnvRm2Vector 1000000) $ \bv -> bgroup "RangeMin2"
