@@ -102,6 +102,7 @@ library hw-balancedparens-gen
                       , hspec
                       , hw-balancedparens
                       , hw-prim
+                      , transformers
                       , vector
   exposed-modules:      HaskellWorks.Data.BalancedParens.Gen
   hs-source-dirs:       gen

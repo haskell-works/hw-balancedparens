@@ -20,6 +20,9 @@ import GHC.Generics
 import HaskellWorks.Data.BalancedParens.ParensSeq (ParensSeq)
 import HaskellWorks.Data.Positioning
 import Hedgehog
+import Hedgehog.Internal.Gen
+import Hedgehog.Internal.Seed
+import Hedgehog.Internal.Tree
 
 import qualified Data.Vector                                as DV
 import qualified Data.Vector.Storable                       as DVS
@@ -69,8 +72,18 @@ bpBools r = do
 bpParensSeq ::  MonadGen m => Range Int -> m ParensSeq
 bpParensSeq = fmap PS.fromBools . bpBools
 
+withGenT :: (MonadGen m, MonadGen n) => (GenT (GenBase m) a -> GenT (GenBase n) b) -> m a -> n b
+withGenT f = fromGenT . f . toGenT
+
 storableVector :: (MonadGen m, DVS.Storable a) => Range Int -> m a -> m (DVS.Vector a)
-storableVector r g = DVS.fromList <$> G.list r g
+storableVector r = withGenT $ \g -> do
+  n <- integral_ r
+  GenT $ \size seed ->
+    flip (DVS.unfoldrNM n) seed $ \s ->
+      case split seed of
+        (sa, sb) -> do
+          a <- runGenT size sa g
+          return (Just (a, sb))
 
 vector :: MonadGen m => Range Int -> m a -> m (DV.Vector a)
 vector r g = DV.fromList <$> G.list r g
