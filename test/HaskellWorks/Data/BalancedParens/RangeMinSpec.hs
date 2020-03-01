@@ -40,21 +40,21 @@ spec = describe "HaskellWorks.Data.BalancedParens.RangeMinSpec" $ do
     let v = fromBitTextByteString "11101111 10100101 01111110 10110010 10111011 10111011 00011111 11011100" :: DVS.Vector Word64
     let !rm = mkRangeMin v
     findClose rm 61 === findClose v 61
-  it "findClose should return the same result" $ requireProperty $ do
+  it "findClose should return the same result" $ require . withTests 20 . property $ do
     v <- forAll $ G.storableVector (R.linear 1 4) (G.word64 R.constantBounded)
     let !rm = mkRangeMin v
     let len = bitLength v
     [findClose rm i | i <- [1..len]] === [findClose v i | i <- [1..len]]
-  it "findClose should return the same result over all counts" $ requireProperty $ do
+  it "findClose should return the same result over all counts" $ require . withTests 20 . property $ do
     v <- forAll $ G.storableVector (R.linear 1 factor) (G.word64 R.constantBounded)
     p <- forAll $ G.count (R.linear 1 (bitLength v))
     let !rm = mkRangeMin v
     findClose rm p === findClose v p
-  it "nextSibling should return the same result" $ requireProperty $ do
+  it "nextSibling should return the same result" $ require . withTests 20 . property $ do
     v <- forAll $ G.storableVector (R.linear 1 factor) (G.word64 R.constantBounded)
     let !rm = mkRangeMin v
     nextSibling rm 0 === nextSibling v 0
-  it "nextSibling should return the same result over all counts" $ requireProperty $ do
+  it "nextSibling should return the same result over all counts" $ require . withTests 20 . property $ do
     v <- forAll $ G.storableVector (R.linear 1 factor) (G.word64 R.constantBounded)
     p <- forAll $ G.count (R.linear 1 (bitLength v))
     let !rm = mkRangeMin v
