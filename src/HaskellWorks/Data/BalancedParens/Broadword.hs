@@ -20,6 +20,11 @@ import HaskellWorks.Data.Bits.Broadword
 
 import qualified Data.Bits as DB
 
+-- Source:
+--    Broadword Implementation of Parenthesis Queries
+--    Sebastiano Vigna
+--    Dipartimento di Scienze dell’Informazione
+--    Università degli Studi di Milano, Italy
 findCloseW64 :: Word64 -> Word64
 findCloseW64 x =                                                                                     -- let !_ = traceW "x00" x   in
   let !b00 = x - ((x .&. 0xaaaaaaaaaaaaaaaa) .>. 1)                                               in -- let !_ = traceW "b00" b00 in
