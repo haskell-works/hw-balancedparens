@@ -1,7 +1,7 @@
 cabal-version:  2.2
 
 name:                   hw-balancedparens
-version:                0.3.0.4
+version:                0.3.0.5
 synopsis:               Balanced parentheses
 description:            Balanced parentheses.
 category:               Data, Bit, Succinct Data Structures, Data Structures
