@@ -9,7 +9,7 @@ import Data.Word
 import GHC.Generics
 import HaskellWorks.Data.BalancedParens.FindClose
 import HaskellWorks.Data.Bits.BitShow
-import HaskellWorks.Data.Bits.Broadword
+import HaskellWorks.Data.Bits.Broadword.Type
 import HaskellWorks.Data.Bits.FromBitTextByteString
 import HaskellWorks.Hspec.Hedgehog
 import Hedgehog

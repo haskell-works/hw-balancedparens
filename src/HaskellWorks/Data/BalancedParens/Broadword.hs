@@ -16,7 +16,8 @@ module HaskellWorks.Data.BalancedParens.Broadword
 import Data.Int
 import Data.Word
 import HaskellWorks.Data.Bits.BitWise
-import HaskellWorks.Data.Bits.Broadword
+import HaskellWorks.Data.Bits.Broadword.Word64
+import HaskellWorks.Data.Bits.Word64
 
 import qualified Data.Bits as DB
 

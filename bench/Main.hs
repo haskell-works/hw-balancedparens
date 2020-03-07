@@ -6,7 +6,7 @@ import Criterion.Main
 import Data.Semigroup                               ((<>))
 import Data.Word
 import HaskellWorks.Data.BalancedParens.FindClose
-import HaskellWorks.Data.Bits.Broadword
+import HaskellWorks.Data.Bits.Broadword.Type
 import HaskellWorks.Data.Bits.FromBitTextByteString
 import HaskellWorks.Data.Naive
 import HaskellWorks.Data.Ops
