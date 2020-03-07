@@ -10,7 +10,7 @@ import HaskellWorks.Data.BalancedParens.CloseAt
 import HaskellWorks.Data.BalancedParens.FindCloseN
 import HaskellWorks.Data.Bits.BitShown
 import HaskellWorks.Data.Bits.BitWise
-import HaskellWorks.Data.Bits.Broadword
+import HaskellWorks.Data.Bits.Broadword.Type
 import HaskellWorks.Data.Naive
 import HaskellWorks.Data.Positioning
 

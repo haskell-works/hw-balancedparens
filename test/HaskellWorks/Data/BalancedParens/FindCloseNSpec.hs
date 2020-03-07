@@ -4,7 +4,7 @@
 module HaskellWorks.Data.BalancedParens.FindCloseNSpec where
 
 import HaskellWorks.Data.BalancedParens
-import HaskellWorks.Data.Bits.Broadword
+import HaskellWorks.Data.Bits.Broadword.Type
 import HaskellWorks.Hspec.Hedgehog
 import Hedgehog
 import Test.Hspec

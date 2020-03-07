@@ -4,12 +4,12 @@ module HaskellWorks.Data.BalancedParens.CloseAt
   ( CloseAt(..)
   ) where
 
-import Data.Vector.Storable             as DVS
+import Data.Vector.Storable                  as DVS
 import Data.Word
 import HaskellWorks.Data.Bits.BitLength
 import HaskellWorks.Data.Bits.BitShown
 import HaskellWorks.Data.Bits.BitWise
-import HaskellWorks.Data.Bits.Broadword
+import HaskellWorks.Data.Bits.Broadword.Type
 import HaskellWorks.Data.Naive
 import HaskellWorks.Data.Positioning
 
