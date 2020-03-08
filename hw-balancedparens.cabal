@@ -58,7 +58,8 @@ library
                       , vector
   exposed-modules:      HaskellWorks.Data.BalancedParens
                         HaskellWorks.Data.BalancedParens.BalancedParens
-                        HaskellWorks.Data.BalancedParens.Broadword
+                        HaskellWorks.Data.BalancedParens.Broadword.Word8
+                        HaskellWorks.Data.BalancedParens.Broadword.Word64
                         HaskellWorks.Data.BalancedParens.CloseAt
                         HaskellWorks.Data.BalancedParens.Enclose
                         HaskellWorks.Data.BalancedParens.FindClose
