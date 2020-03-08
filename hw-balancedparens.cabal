@@ -71,6 +71,10 @@ library
                         HaskellWorks.Data.BalancedParens.Internal.Trace
                         HaskellWorks.Data.BalancedParens.Internal.Vector.Storable
                         HaskellWorks.Data.BalancedParens.Internal.Word
+                        HaskellWorks.Data.BalancedParens.Internal.Word16
+                        HaskellWorks.Data.BalancedParens.Internal.Word32
+                        HaskellWorks.Data.BalancedParens.Internal.Word64
+                        HaskellWorks.Data.BalancedParens.Internal.Word8
                         HaskellWorks.Data.BalancedParens.NewCloseAt
                         HaskellWorks.Data.BalancedParens.NewOpenAt
                         HaskellWorks.Data.BalancedParens.OpenAt
