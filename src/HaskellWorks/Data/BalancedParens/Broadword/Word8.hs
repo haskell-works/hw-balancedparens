@@ -4,14 +4,14 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 
 module HaskellWorks.Data.BalancedParens.Broadword.Word8
-  ( ocCalc8
-  , showPadded
+  ( findCloseFar
   , kBitDiffPos
   ) where
 
 import Data.Int
 import Data.Word
 import HaskellWorks.Data.Bits.BitWise
+import HaskellWorks.Data.Bits.Broadword.Word8
 
 muk1 :: Word8
 muk1 = 0x33
@@ -19,11 +19,8 @@ muk1 = 0x33
 muk2 :: Word8
 muk2 = 0x0f
 
-showPadded :: Show a => Int -> a -> String
-showPadded n a = reverse (take n (reverse (show a) ++ [' ', ' ' ..]))
-
-ocCalc8 :: Word8 -> Word8 -> Word8
-ocCalc8 p x =                                                                                 -- let !_ = traceW ("ocCalc8 " <> show p <> " " <> bitShow x) (p, x) in
+findCloseFar :: Word8 -> Word8 -> Word8
+findCloseFar p x =                                                                            -- let !_ = traceW ("findCloseFar " <> show p <> " " <> bitShow x) (p, x) in
   let w     = 8 :: Int8                                                                   in  -- let !_ = traceW ("w     = " <> bitShow w    ) w     in
   let k1    = 1                                                                           in  -- let !_ = traceW ("k1    = " <> bitShow k1   ) k1    in
   let k2    = 2                                                                           in  -- let !_ = traceW ("k2    = " <> bitShow k2   ) k2    in
@@ -103,53 +100,3 @@ ocCalc8 p x =                                                                   
   let rrr   = sbk1 + pck1 + (((x .>. fromIntegral sbk1) .&. ((pck1 .<. 1) .|. 1)) .<. 1)  in  -- let !_ = traceW ("rrr   = " <> bitShow rrr  ) rrr   in
 
   rrr
-
--- | Initialise all sub-words of size k where 'k' ∈ { 2, 4, 8, 16, 32 } such that the highest bit is set to 1 and all other bits are cleared.
---
--- >>> import Numeric(showHex)
--- >>> showHex (h 2) ""
--- "aa"
--- >>> showHex (h 4) ""
--- "88"
--- >>> showHex (h 8) ""
--- "80"
-h :: Int -> Word8
-h 2 = 0xaa
-h 4 = 0x88
-h 8 = 0x80
-h k = error ("Invalid h k where k = " ++ show k)
-{-# INLINE h #-}
-
--- | Broadword subtraction of sub-words of size 'k' where 'k' ∈ { 2, 4, 8 }.
---
--- The subtraction respects 2's complement so sub-words may be regarded as signed or unsigned words.
---
--- >>> import Numeric(showHex)
--- >>> showHex (kBitDiff 8 0x02 0x01) ""
--- "1"
--- >>> showHex (kBitDiff 8 0x01 0x02) ""
--- "ff"
--- >>> showHex (kBitDiff 8 0xff 0xff) ""
--- "0"
-kBitDiff :: Int -> Word8 -> Word8 -> Word8
-kBitDiff k x y = ((x .|. h k) - (y .&. comp (h k))) .^. ((x .^. comp y) .&. h k)
-{-# INLINE kBitDiff #-}
-
--- | Broadword subtraction of sub-words of size 'k' where 'k' ∈ { 2, 4, 8 } where results are bounded from below by 0.
---
--- >>> import Numeric(showHex)
--- >>> showHex (kBitDiff 8 0x02 0x01) ""
--- "1"
--- >>> showHex (kBitDiff 8 0x01 0x02) ""
--- "ff"
--- >>> showHex (kBitDiff 8 0xff 0xff) ""
--- "0"
-kBitDiffPos :: Int -> Word8 -> Word8 -> Word8
-kBitDiffPos k x y =
-                                                                        -- let !_ = trace (">> x = " <> bitShow x) x in
-                                                                        -- let !_ = trace (">> y = " <> bitShow y) y in
-  let d = kBitDiff k x y                                            in  -- let !_ = trace (">> d = " <> bitShow d) d in
-  let s = kBitDiff k 0 ((comp d .&. h k) .>. fromIntegral (k - 1))  in  -- let !_ = trace (">> s = " <> bitShow s) s in
-  let r = d .&. s                                                   in  -- let !_ = trace (">> r = " <> bitShow r) r in
-  r
-{-# INLINE kBitDiffPos #-}
