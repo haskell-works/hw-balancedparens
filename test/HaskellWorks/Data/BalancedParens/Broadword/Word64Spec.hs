@@ -4,7 +4,6 @@
 module HaskellWorks.Data.BalancedParens.Broadword.Word64Spec where
 
 import HaskellWorks.Data.Bits.BitShow
-import HaskellWorks.Data.Bits.BitWise
 import HaskellWorks.Hspec.Hedgehog
 import Hedgehog
 import Test.Hspec
@@ -23,4 +22,4 @@ spec = describe "HaskellWorks.Data.BalancedParens.Broadword.Word64Spec" $ do
     p <- forAll $ G.word64 (R.linear 0 64)
     w <- forAll $ G.word64 R.constantBounded
     annotateShow $ bitShow w
-    W64.findCloseFar 0 (w .>. fromIntegral p) + p === SW64.findCloseFar p w
+    W64.findCloseFar p w === SW64.findCloseFar p w

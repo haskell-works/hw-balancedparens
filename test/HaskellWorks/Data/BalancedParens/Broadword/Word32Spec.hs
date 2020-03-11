@@ -4,7 +4,6 @@
 module HaskellWorks.Data.BalancedParens.Broadword.Word32Spec where
 
 import HaskellWorks.Data.Bits.BitShow
-import HaskellWorks.Data.Bits.BitWise
 import HaskellWorks.Hspec.Hedgehog
 import Hedgehog
 import Test.Hspec
@@ -23,9 +22,9 @@ spec = describe "HaskellWorks.Data.BalancedParens.Broadword.Word32Spec" $ do
     p <- forAll $ pure 0
     w <- forAll $ pure 0xe9f6e7ff
     annotateShow $ bitShow w
-    W32.findCloseFar 0 (w .>. fromIntegral p) + p === SW32.findCloseFar p w
+    W32.findCloseFar p w === SW32.findCloseFar p w
   it "findCloseFar" $ require $ withTests 10000 $ property $ do
     p <- forAll $ G.word32 (R.linear 0 32)
     w <- forAll $ G.word32 R.constantBounded
     annotateShow $ bitShow w
-    W32.findCloseFar 0 (w .>. fromIntegral p) + p === SW32.findCloseFar p w
+    W32.findCloseFar p w === SW32.findCloseFar p w

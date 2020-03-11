@@ -6,7 +6,6 @@ module HaskellWorks.Data.BalancedParens.Broadword.Word8Spec where
 import Control.Monad
 import Data.Semigroup                 ((<>))
 import HaskellWorks.Data.Bits.BitShow
-import HaskellWorks.Data.Bits.BitWise
 import HaskellWorks.Hspec.Hedgehog
 import Hedgehog
 import Test.Hspec
@@ -25,4 +24,4 @@ spec = describe "HaskellWorks.Data.BalancedParens.Broadword.Word8Spec" $ do
         it ("word " <> bitShow w0) $ requireTest $ do
           p <- forAll $ pure p0
           w <- forAll $ pure w0
-          W8.findCloseFar 0 (w .>. fromIntegral p) + p === SW8.findCloseFar p w
+          W8.findCloseFar p w === SW8.findCloseFar p w
