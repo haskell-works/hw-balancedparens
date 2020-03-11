@@ -15,9 +15,11 @@ import HaskellWorks.Data.Bits.Broadword.Word8
 
 muk1 :: Word8
 muk1 = 0x33
+{-# INLINE muk1 #-}
 
 muk2 :: Word8
 muk2 = 0x0f
+{-# INLINE muk2 #-}
 
 findCloseFar :: Word8 -> Word8 -> Word8
 findCloseFar p x =                                                                            -- let !_ = traceW ("findCloseFar " <> show p <> " " <> bitShow x) (p, x) in
@@ -68,9 +70,8 @@ findCloseFar p x =                                                              
 
   let pak2  = pck3                                                                        in  -- let !_ = traceW ("pak2  = " <> bitShow pak2 ) pak2  in
   let sak2  = sb3                                                                         in  -- let !_ = traceW ("sak2  = " <> bitShow sak2 ) sak2  in
-                                                                                              -- let !_ = trace  "===========================" sak2  in
 
-  let ek2   = 0xff .&. comp (0xff .>. fromIntegral sak2)                                  in  -- let !_ = traceW ("ek2   = " <> bitShow ek2  ) ek2   in
+  let ek2   = 0xaa .&. comp (0xff .>. fromIntegral sak2)                                  in  -- let !_ = traceW ("ek2   = " <> bitShow ek2  ) ek2   in
   let fk2   = ((ck2 .>. fromIntegral sak2) .|. ek2) .&. mask2                             in  -- let !_ = traceW ("fk2   = " <> bitShow fk2  ) fk2   in
   let gk2   = pak2 - fk2                                                                  in  -- let !_ = traceW ("gk2   = " <> bitShow gk2  ) gk2   in
   let bak2  = gk2 .>. fromIntegral (w - 1)                                                in  -- let !_ = traceW ("bak2  = " <> bitShow bak2 ) bak2  in
@@ -84,7 +85,6 @@ findCloseFar p x =                                                              
 
   let pak1  = pck2                                                                        in  -- let !_ = traceW ("pak1  = " <> bitShow pak1 ) pak1  in
   let sak1  = sb2                                                                         in  -- let !_ = traceW ("sak1  = " <> bitShow sak1 ) sak1  in
-                                                                                              -- let !_ = trace  "===========================" sak2  in
 
   let ek1   = 0xaa .&. comp (0xff .>. fromIntegral sak1)                                  in  -- let !_ = traceW ("ek1   = " <> bitShow ek1  ) ek1   in
   let fk1   = ((ck1 .>. fromIntegral sak1) .|. ek1) .&. mask1                             in  -- let !_ = traceW ("fk1   = " <> bitShow fk1  ) fk1   in

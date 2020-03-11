@@ -58,6 +58,7 @@ library
                       , vector
   exposed-modules:      HaskellWorks.Data.BalancedParens
                         HaskellWorks.Data.BalancedParens.BalancedParens
+                        HaskellWorks.Data.BalancedParens.Broadword.Word16
                         HaskellWorks.Data.BalancedParens.Broadword.Word64
                         HaskellWorks.Data.BalancedParens.Broadword.Word8
                         HaskellWorks.Data.BalancedParens.CloseAt
@@ -70,10 +71,10 @@ library
                         HaskellWorks.Data.BalancedParens.Internal.ParensSeq
                         HaskellWorks.Data.BalancedParens.Internal.RoseTree
                         HaskellWorks.Data.BalancedParens.Internal.Show
-                        HaskellWorks.Data.BalancedParens.Internal.Slow.Word8
                         HaskellWorks.Data.BalancedParens.Internal.Slow.Word16
                         HaskellWorks.Data.BalancedParens.Internal.Slow.Word32
                         HaskellWorks.Data.BalancedParens.Internal.Slow.Word64
+                        HaskellWorks.Data.BalancedParens.Internal.Slow.Word8
                         HaskellWorks.Data.BalancedParens.Internal.Trace
                         HaskellWorks.Data.BalancedParens.Internal.Vector.Storable
                         HaskellWorks.Data.BalancedParens.Internal.Word
@@ -119,6 +120,7 @@ test-suite hw-balancedparens-test
   type:                 exitcode-stdio-1.0
   main-is:              Spec.hs
   other-modules:        HaskellWorks.Data.BalancedParens.Broadword.Word8Spec
+                        HaskellWorks.Data.BalancedParens.Broadword.Word16Spec
                         HaskellWorks.Data.BalancedParens.Internal.BroadwordSpec
                         HaskellWorks.Data.BalancedParens.Internal.ParensSeqSpec
                         HaskellWorks.Data.BalancedParens.FindCloseNSpec
