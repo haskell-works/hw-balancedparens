@@ -59,6 +59,7 @@ library
   exposed-modules:      HaskellWorks.Data.BalancedParens
                         HaskellWorks.Data.BalancedParens.BalancedParens
                         HaskellWorks.Data.BalancedParens.Broadword.Word16
+                        HaskellWorks.Data.BalancedParens.Broadword.Word32
                         HaskellWorks.Data.BalancedParens.Broadword.Word64
                         HaskellWorks.Data.BalancedParens.Broadword.Word8
                         HaskellWorks.Data.BalancedParens.CloseAt
@@ -121,6 +122,7 @@ test-suite hw-balancedparens-test
   main-is:              Spec.hs
   other-modules:        HaskellWorks.Data.BalancedParens.Broadword.Word8Spec
                         HaskellWorks.Data.BalancedParens.Broadword.Word16Spec
+                        HaskellWorks.Data.BalancedParens.Broadword.Word32Spec
                         HaskellWorks.Data.BalancedParens.Internal.BroadwordSpec
                         HaskellWorks.Data.BalancedParens.Internal.ParensSeqSpec
                         HaskellWorks.Data.BalancedParens.FindCloseNSpec
