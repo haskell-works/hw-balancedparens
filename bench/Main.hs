@@ -6,18 +6,22 @@ import Criterion.Main
 import Data.Semigroup                               ((<>))
 import Data.Word
 import HaskellWorks.Data.BalancedParens.FindClose
+import HaskellWorks.Data.Bits.BitShow
+import HaskellWorks.Data.Bits.BitWise
 import HaskellWorks.Data.Bits.Broadword.Type
 import HaskellWorks.Data.Bits.FromBitTextByteString
 import HaskellWorks.Data.Naive
 import HaskellWorks.Data.Ops
 
-import qualified Data.Vector.Storable                       as DVS
-import qualified HaskellWorks.Data.BalancedParens.Gen       as G
-import qualified HaskellWorks.Data.BalancedParens.ParensSeq as PS
-import qualified HaskellWorks.Data.BalancedParens.RangeMin  as RM
-import qualified HaskellWorks.Data.BalancedParens.RangeMin2 as RM2
-import qualified Hedgehog.Gen                               as G
-import qualified Hedgehog.Range                             as R
+import qualified Data.Vector.Storable                                  as DVS
+import qualified HaskellWorks.Data.BalancedParens.Broadword.Word64     as BW64
+import qualified HaskellWorks.Data.BalancedParens.Gen                  as G
+import qualified HaskellWorks.Data.BalancedParens.Internal.Slow.Word64 as SW64
+import qualified HaskellWorks.Data.BalancedParens.ParensSeq            as PS
+import qualified HaskellWorks.Data.BalancedParens.RangeMin             as RM
+import qualified HaskellWorks.Data.BalancedParens.RangeMin2            as RM2
+import qualified Hedgehog.Gen                                          as G
+import qualified Hedgehog.Range                                        as R
 
 setupEnvVector :: Int -> IO (DVS.Vector Word64)
 setupEnvVector n = return $ DVS.fromList (take n (cycle [maxBound, 0]))
@@ -45,6 +49,16 @@ setupEnvBP32 = return $ DVS.head (fromBitTextByteString "11111000 11101000 11101
 
 setupEnvBP64 :: IO Word64
 setupEnvBP64 = return $ DVS.head (fromBitTextByteString "11111000 11101000 11101000 11101000 11101000 11101000 11101000 11100000")
+
+benchWord64 :: [Benchmark]
+benchWord64 = foldMap mkBenchWord64Group [0 .. 64]
+  where mkBenchWord64Group :: Word64 -> [Benchmark]
+        mkBenchWord64Group p = let q = (1 .<. p) - 1 in
+          [ bgroup "Word64"
+            [ bench ("Broadword find close " <> bitShow q) (whnf (BW64.findCloseFar 0) q)
+            , bench ("Naive     find close " <> bitShow q) (whnf (SW64.findCloseFar 0) q)
+            ]
+          ]
 
 benchVector :: [Benchmark]
 benchVector =
@@ -124,6 +138,7 @@ benchParensSeq =
 
 main :: IO ()
 main = defaultMain $ mempty
+  <> benchWord64
   <> benchVector
   <> benchRm
   <> benchRm2
