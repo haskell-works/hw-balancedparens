@@ -15,6 +15,8 @@ import HaskellWorks.Data.Bits.BitWise
 import HaskellWorks.Data.Bits.Broadword.Word64
 import HaskellWorks.Data.Bits.Word64
 
+import qualified Data.Bits as B
+
 muk1 :: Word64
 muk1 = 0x3333333333333333
 {-# INLINE muk1 #-}
@@ -34,6 +36,9 @@ muk4 = 0x0000ffff0000ffff
 muk5 :: Word64
 muk5 = 0x00000000ffffffff
 {-# INLINE muk5 #-}
+
+(.>+.) :: Word64 -> Word64 -> Word64
+(.>+.) a b = fromIntegral ((fromIntegral a :: Int64) `B.shiftR` fromIntegral b)
 
 findCloseFar :: Word64 -> Word64 -> Word64
 findCloseFar p w =
@@ -108,7 +113,7 @@ findCloseFar p w =
   let sak6  = 0                                                                           in
 
   let fk6   = (ck6 .>. fromIntegral sak6) .&. mask6                                       in
-  let bk6   = ((qak6 - fk6) .>. fromIntegral (wsz - 1)) - 1                               in
+  let bk6   = comp ((qak6 - fk6) .>+. 63)                                                 in
   let mk6   = bk6 .&. mask6                                                               in
   let pbk6  = qak6 - ((ck6 .>. fromIntegral sak6) .&. mk6)                                in
   let pck6  = pbk6 + ((ok6 .>. fromIntegral sak6) .&. mk6)                                in
@@ -119,7 +124,8 @@ findCloseFar p w =
 
   let ek5   = 0x0000002000000020 .&. comp (0xffffffffffffffff .>. fromIntegral sak5)      in
   let fk5   = ((ck5 .>. fromIntegral sak5) .|. ek5) .&. mask5                             in
-  let bk5   = ((qak5 - fk5) .>. fromIntegral (wsz - 1)) - 1                               in
+  -- TODO try sign extended shifting:
+  let bk5   = comp ((qak5 - fk5) .>+. 63)                                                 in
   let mk5   = bk5 .&. mask5                                                               in
   let pbk5  = qak5 - (((ck5 .>. fromIntegral sak5) .|. ek5) .&. mk5)                      in
   let pck5  = pbk5 + ( (ok5 .>. fromIntegral sak5)          .&. mk5)                      in
@@ -130,7 +136,7 @@ findCloseFar p w =
 
   let ek4   = 0x0010001000100010 .&. comp (0xffffffffffffffff .>. fromIntegral sak4)      in
   let fk4   = ((ck4 .>. fromIntegral sak4) .|. ek4) .&. mask4                             in
-  let bk4   = ((qak4 - fk4) .>. fromIntegral (wsz - 1)) - 1                               in
+  let bk4   = comp ((qak4 - fk4) .>+. 63)                                                 in
   let mk4   = bk4 .&. mask4                                                               in
   let pbk4  = qak4 - (((ck4 .>. fromIntegral sak4) .|. ek4) .&. mk4)                      in
   let pck4  = pbk4 + ( (ok4 .>. fromIntegral sak4)          .&. mk4)                      in
@@ -141,7 +147,7 @@ findCloseFar p w =
 
   let ek3   = 0x0808080808080808 .&. comp (0xffffffffffffffff .>. fromIntegral sak3)      in
   let fk3   = ((ck3 .>. fromIntegral sak3) .|. ek3) .&. mask3                             in
-  let bk3   = ((qak3 - fk3) .>. fromIntegral (wsz - 1)) - 1                               in
+  let bk3   = comp ((qak3 - fk3) .>+. 63)                                                 in
   let mk3   = bk3 .&. mask3                                                               in
   let pbk3  = qak3 - (((ck3 .>. fromIntegral sak3) .|. ek3) .&. mk3)                      in
   let pck3  = pbk3 + ( (ok3 .>. fromIntegral sak3)          .&. mk3)                      in
@@ -163,7 +169,7 @@ findCloseFar p w =
 
   let ek1   = 0xaaaaaaaaaaaaaaaa .&. comp (0xffffffffffffffff .>. fromIntegral sak1)      in
   let fk1   = ((ck1 .>. fromIntegral sak1) .|. ek1) .&. mask1                             in
-  let bk1   = ((qak1 - fk1) .>. fromIntegral (wsz - 1)) - 1                               in
+  let bk1   = comp ((qak1 - fk1) .>+. 63)                                                 in
   let mk1   = bk1  .&. mask1                                                              in
   let pbk1  = qak1 - (((ck1 .>. fromIntegral sak1) .|. ek1) .&. mk1)                      in
   let pck1  = pbk1 + ( (ok1 .>. fromIntegral sak1)          .&. mk1)                      in
