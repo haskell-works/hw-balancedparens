@@ -21,8 +21,9 @@ muk2 = 0x0f
 {-# INLINE muk2 #-}
 
 findCloseFar :: Word8 -> Word8 -> Word8
-findCloseFar p x =
-  let w     = 8 :: Int8                                                                   in
+findCloseFar p w =
+  let x     = w .>. fromIntegral p                                                        in
+  let wsz   = 8 :: Int8                                                                   in
   let k1    = 1                                                                           in
   let k2    = 2                                                                           in
   let k3    = 3                                                                           in
@@ -55,12 +56,12 @@ findCloseFar p x =
   let ok3  = ok3L + ok3R                                                                  in
   let ck3  =  (ck2 .&.  muk2) + kBitDiffPos 8 eck2 eok2                                   in
 
-  let pak3  = p                                                                           in
+  let pak3  = 0                                                                           in
   let sak3  = 0                                                                           in
 
   let fk3   = (ck3 .>. fromIntegral sak3) .&. mask3                                       in
   let gk3   = pak3 - fk3                                                                  in
-  let bak3  = gk3 .>. fromIntegral (w - 1)                                                in
+  let bak3  = gk3 .>. fromIntegral (wsz - 1)                                              in
   let bk3   = bak3 - 1                                                                    in
   let mk3   = bk3 .&. mask3                                                               in
   let pbk3  = pak3 - ((ck3 .>. fromIntegral sak3) .&. mk3)                                in
@@ -73,7 +74,7 @@ findCloseFar p x =
   let ek2   = 0xaa .&. comp (0xff .>. fromIntegral sak2)                                  in
   let fk2   = ((ck2 .>. fromIntegral sak2) .|. ek2) .&. mask2                             in
   let gk2   = pak2 - fk2                                                                  in
-  let bak2  = gk2 .>. fromIntegral (w - 1)                                                in
+  let bak2  = gk2 .>. fromIntegral (wsz - 1)                                              in
   let bk2   = bak2 - 1                                                                    in
   let mk2   = bk2 .&. mask2                                                               in
   let pc2   = ((ck2 .>. fromIntegral sak2) .|. ek2) .&. mk2                               in
@@ -88,7 +89,7 @@ findCloseFar p x =
   let ek1   = 0xaa .&. comp (0xff .>. fromIntegral sak1)                                  in
   let fk1   = ((ck1 .>. fromIntegral sak1) .|. ek1) .&. mask1                             in
   let gk1   = pak1 - fk1                                                                  in
-  let bk1   = (gk1 .>. fromIntegral (w - 1)) - 1                                          in
+  let bk1   = (gk1 .>. fromIntegral (wsz - 1)) - 1                                        in
   let mk1   = bk1  .&. mask1                                                              in
   let pc1   = ((ck1 .>. fromIntegral sak1) .|. ek1) .&. mk1                               in
   let po1   =  (ok1 .>. fromIntegral sak1)          .&. mk1                               in
@@ -98,5 +99,5 @@ findCloseFar p x =
 
   let rrr   = sbk1 + pck1 + (((x .>. fromIntegral sbk1) .&. ((pck1 .<. 1) .|. 1)) .<. 1)  in
 
-  rrr
+  rrr + p
 {-# INLINE findCloseFar #-}

@@ -6,7 +6,6 @@ module HaskellWorks.Data.BalancedParens.Broadword.Word16Spec where
 import Data.Maybe
 import HaskellWorks.Data.Bits.BitRead
 import HaskellWorks.Data.Bits.BitShow
-import HaskellWorks.Data.Bits.BitWise
 import HaskellWorks.Hspec.Hedgehog
 import Hedgehog
 import Numeric
@@ -27,10 +26,10 @@ spec = describe "HaskellWorks.Data.BalancedParens.Broadword.Word16Spec" $ do
     w <- forAll $ pure $ fromJust $ bitRead "11111111 11110100"
     annotateShow $ bitShow w
     annotateShow $ showHex w ""
-    W16.findCloseFar 0 (w .>. fromIntegral p) + p === SW16.findCloseFar p w
+    W16.findCloseFar p w === SW16.findCloseFar p w
 
   it "findCloseFar" $ require $ withTests 1000 $ property $ do
     p <- forAll $ G.word16 (R.linear 0 16)
     w <- forAll $ G.word16 R.constantBounded
     annotateShow $ bitShow w
-    W16.findCloseFar 0 (w .>. fromIntegral p) + p === SW16.findCloseFar p w
+    W16.findCloseFar p w === SW16.findCloseFar p w
