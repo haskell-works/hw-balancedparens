@@ -25,7 +25,7 @@ spec = describe "HaskellWorks.Data.BalancedParens.Broadword.Word32Spec" $ do
     annotateShow $ bitShow w
     W32.findCloseFar 0 (w .>. fromIntegral p) + p === SW32.findCloseFar p w
   it "findCloseFar" $ require $ withTests 10000 $ property $ do
-    p <- forAll $ pure 0
+    p <- forAll $ G.word32 (R.linear 0 32)
     w <- forAll $ G.word32 R.constantBounded
     annotateShow $ bitShow w
     W32.findCloseFar 0 (w .>. fromIntegral p) + p === SW32.findCloseFar p w

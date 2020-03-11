@@ -5,7 +5,6 @@
 
 module HaskellWorks.Data.BalancedParens.Broadword.Word8
   ( findCloseFar
-  , kBitDiffPos
   ) where
 
 import Data.Int

@@ -6,7 +6,6 @@
 
 module HaskellWorks.Data.BalancedParens.Broadword.Word32
   ( findCloseFar
-  , kBitDiffPos
   ) where
 
 import Data.Int
@@ -105,10 +104,6 @@ findCloseFar p x =                                                              
   let pck5  = pbk5 + ((ok5 .>. fromIntegral sak5) .&. mk5)                                in  let !_ = traceW ("pck5  = " <> bitShow pck5 ) pck5  in
   let sbk5  = sak5 + (t8k5 .&. bk5)                                                       in  let !_ = traceW ("sbk5  = " <> bitShow sbk5 ) sbk5  in
 
-  -- sbk5:
-  --   got        00000100 00000000 00000000 00000000 = 32
-  --   expecting  00000100 00000000 00000000 00000000 = 32
-
   let pak4  = pck5                                                                        in  let !_ = traceW ("pak4  = " <> bitShow pak4 ) pak4  in
   let sak4  = sbk5                                                                        in  let !_ = traceW ("sak4  = " <> bitShow sak4 ) sak4  in
 
@@ -125,16 +120,6 @@ findCloseFar p x =                                                              
   let pak3  = pck4                                                                        in  let !_ = traceW ("pak3  = " <> bitShow pak3 ) pak3  in
   let sak3  = sbk4                                                                        in  let !_ = traceW ("sak3  = " <> bitShow sak3 ) sak3  in
 
-  --  fk4
-  --    got     00010000 00010000 00000000 00000000 = 2056
-  --    expect  00001000 00000000 00000000 00000000 = 16
-  --  bk4
-  --    got     00000000 00000000 00000000 00000000 = 0
-  --    expect  11111111 11111111 11111111 11111111 = -1
-  --  sbk4
-  --    got     00000100 00000000 00000000 00000000 = 32
-  --    expect  00001100 00000000 00000000 00000000 = 48
-
   let ek3   = 0x08080808 .&. comp (0xffffffff .>. fromIntegral sak3)                      in  let !_ = traceW ("ek3   = " <> bitShow ek3  ) ek3   in
   let fk3   = ((ck3 .>. fromIntegral sak3) .|. ek3) .&. mask3                             in  let !_ = traceW ("fk3   = " <> bitShow fk3  ) fk3   in
   let gk3   = pak3 - fk3                                                                  in  let !_ = traceW ("gk3   = " <> bitShow gk3  ) gk3   in
@@ -144,10 +129,6 @@ findCloseFar p x =                                                              
   let pbk3  = pak3 - ((ck3 .>. fromIntegral sak3) .|. ek3) .&. mk3                        in  let !_ = traceW ("pbk3  = " <> bitShow pbk3 ) pbk3  in
   let pck3  = pbk3 +  (ok3 .>. fromIntegral sak3)          .&. mk3                        in  let !_ = traceW ("pck3  = " <> bitShow pck3 ) pck3  in
   let sbk3  = sak3 + (t8k3 .&. bk3)                                                       in  let !_ = traceW ("sbk3  = " <> bitShow sbk3 ) sbk3  in
-
-  --  sbk3
-  --    got     00010100 00000000 00000000 00000000 = 40
-  --    expect  00001100 00000000 00000000 00000000 = 48
 
   let pak2  = pck3                                                                        in  let !_ = traceW ("pak2  = " <> bitShow pak2 ) pak2  in
   let sak2  = sbk3                                                                        in  let !_ = traceW ("sak2  = " <> bitShow sak2 ) sak2  in
@@ -162,11 +143,6 @@ findCloseFar p x =                                                              
   let pck2  = pbk2 +  (ok2 .>. fromIntegral sak2)          .&. mk2                        in  let !_ = traceW ("pck2  = " <> bitShow pck2 ) pck2  in
   let sbk2  = sak2 + (t8k2 .&. bk2)                                                       in  let !_ = traceW ("sbk2  = " <> bitShow sbk2 ) sbk2  in
 
-  --  sbk2
-  --    got     00110100 00000000 00000000 00000000 = 44
-  --    expect  00001100 00000000 00000000 00000000 = 48
-  --
-
   let pak1  = pck2                                                                        in  let !_ = traceW ("pak1  = " <> bitShow pak1 ) pak1  in
   let sak1  = sbk2                                                                        in  let !_ = traceW ("sak1  = " <> bitShow sak1 ) sak1  in
 
@@ -180,10 +156,6 @@ findCloseFar p x =                                                              
   let pbk1  = pak1 - pc1                                                                  in  let !_ = traceW ("pbk1  = " <> bitShow pbk1 ) pbk1  in
   let pck1  = pbk1 + po1                                                                  in  let !_ = traceW ("pck1  = " <> bitShow pck1 ) pck1  in
   let sbk1  = sak1 + (t8k1 .&. bk1)                                                       in  let !_ = traceW ("sbk1  = " <> bitShow sbk1 ) sbk1  in
-
-  --  sbk1
-  --    got       00110100 00000000 00000000 00000000 = 44
-  --    expecting 01001100 00000000 00000000 00000000 = 50
 
   let rrr   = sbk1 + pck1 + (((x .>. fromIntegral sbk1) .&. ((pck1 .<. 1) .|. 1)) .<. 1)  in  let !_ = traceW ("rrr   = " <> bitShow rrr  ) rrr   in
 
