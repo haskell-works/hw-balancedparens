@@ -6,7 +6,6 @@
 
 module HaskellWorks.Data.BalancedParens.Broadword.Word16
   ( findCloseFar
-  , kBitDiffPos
   ) where
 
 import Data.Int
