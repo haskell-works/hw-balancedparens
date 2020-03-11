@@ -79,28 +79,28 @@ findCloseFar p w =
 
   let eok2 =   ok2 .&.  muk2                                                              in
   let eck2 =  (ck2 .&. (muk2 .<. t64k2)) .>. t64k2                                        in
-  let ok3L = ((ok2 .&. (muk2 .<. t64k2)) .>. t64k2)                                       in
+  let ok3L =  (ok2 .&. (muk2 .<. t64k2)) .>. t64k2                                        in
   let ok3R = kBitDiffPos 8 eok2 eck2                                                      in
   let ok3  = ok3L + ok3R                                                                  in
   let ck3  =  (ck2 .&.  muk2) + kBitDiffPos 8 eck2 eok2                                   in
 
   let eok3 =   ok3 .&.  muk3                                                              in
   let eck3 =  (ck3 .&. (muk3 .<. t64k3)) .>. t64k3                                        in
-  let ok4L = ((ok3 .&. (muk3 .<. t64k3)) .>. t64k3)                                       in
+  let ok4L =  (ok3 .&. (muk3 .<. t64k3)) .>. t64k3                                        in
   let ok4R = kBitDiffPos 16 eok3 eck3                                                     in
   let ok4  = ok4L + ok4R                                                                  in
   let ck4  =  (ck3 .&.  muk3) + kBitDiffPos 16 eck3 eok3                                  in
 
   let eok4 =   ok4 .&.  muk4                                                              in
   let eck4 =  (ck4 .&. (muk4 .<. t64k4)) .>. t64k4                                        in
-  let ok5L = ((ok4 .&. (muk4 .<. t64k4)) .>. t64k4)                                       in
+  let ok5L =  (ok4 .&. (muk4 .<. t64k4)) .>. t64k4                                        in
   let ok5R = kBitDiffPos 32 eok4 eck4                                                     in
   let ok5  = ok5L + ok5R                                                                  in
   let ck5  =  (ck4 .&.  muk4) + kBitDiffPos 32 eck4 eok4                                  in
 
   let eok5 =   ok5 .&.  muk5                                                              in
   let eck5 =  (ck5 .&. (muk5 .<. t64k5)) .>. t64k5                                        in
-  let ok6L = ((ok5 .&. (muk5 .<. t64k5)) .>. t64k5)                                       in
+  let ok6L =  (ok5 .&. (muk5 .<. t64k5)) .>. t64k5                                        in
   let ok6R = kBitDiffPos 32 eok5 eck5                                                     in
   let ok6  = ok6L + ok6R                                                                  in
   let ck6  =  (ck5 .&.  muk5) + kBitDiffPos 32 eck5 eok5                                  in
@@ -109,9 +109,7 @@ findCloseFar p w =
   let sak6  = 0                                                                           in
 
   let fk6   = (ck6 .>. fromIntegral sak6) .&. mask6                                       in
-  let gk6   = qak6 - fk6                                                                  in
-  let bak6  = gk6 .>. fromIntegral (wsz - 1)                                              in
-  let bk6   = bak6 - 1                                                                    in
+  let bk6   = ((qak6 - fk6) .>. fromIntegral (wsz - 1)) - 1                               in
   let mk6   = bk6 .&. mask6                                                               in
   let pbk6  = qak6 - ((ck6 .>. fromIntegral sak6) .&. mk6)                                in
   let pck6  = pbk6 + ((ok6 .>. fromIntegral sak6) .&. mk6)                                in
@@ -122,12 +120,10 @@ findCloseFar p w =
 
   let ek5   = 0x0000002000000020 .&. comp (0xffffffffffffffff .>. fromIntegral sak5)      in
   let fk5   = ((ck5 .>. fromIntegral sak5) .|. ek5) .&. mask5                             in
-  let gk5   = qak5 - fk5                                                                  in
-  let bak5  = gk5 .>. fromIntegral (wsz- 1)                                               in
-  let bk5   = bak5 - 1                                                                    in
+  let bk5   = ((qak5 - fk5) .>. fromIntegral (wsz - 1)) - 1                               in
   let mk5   = bk5 .&. mask5                                                               in
-  let pbk5  = qak5 - ((ck5 .>. fromIntegral sak5) .|. ek5) .&. mk5                        in
-  let pck5  = pbk5 +  (ok5 .>. fromIntegral sak5)          .&. mk5                        in
+  let pbk5  = qak5 - (((ck5 .>. fromIntegral sak5) .|. ek5) .&. mk5)                      in
+  let pck5  = pbk5 + ( (ok5 .>. fromIntegral sak5)          .&. mk5)                      in
   let sbk5  = sak5 + (t8k5 .&. bk5)                                                       in
 
   let qak4  = pck5                                                                        in
@@ -135,12 +131,10 @@ findCloseFar p w =
 
   let ek4   = 0x0010001000100010 .&. comp (0xffffffffffffffff .>. fromIntegral sak4)      in
   let fk4   = ((ck4 .>. fromIntegral sak4) .|. ek4) .&. mask4                             in
-  let gk4   = qak4 - fk4                                                                  in
-  let bak4  = gk4 .>. fromIntegral (wsz - 1)                                              in
-  let bk4   = bak4 - 1                                                                    in
+  let bk4   = ((qak4 - fk4) .>. fromIntegral (wsz - 1)) - 1                               in
   let mk4   = bk4 .&. mask4                                                               in
-  let pbk4  = qak4 - ((ck4 .>. fromIntegral sak4) .|. ek4) .&. mk4                        in
-  let pck4  = pbk4 +  (ok4 .>. fromIntegral sak4)          .&. mk4                        in
+  let pbk4  = qak4 - (((ck4 .>. fromIntegral sak4) .|. ek4) .&. mk4)                      in
+  let pck4  = pbk4 + ( (ok4 .>. fromIntegral sak4)          .&. mk4)                      in
   let sbk4  = sak4 + (t8k4 .&. bk4)                                                       in
 
   let qak3  = pck4                                                                        in
@@ -148,12 +142,10 @@ findCloseFar p w =
 
   let ek3   = 0x0808080808080808 .&. comp (0xffffffffffffffff .>. fromIntegral sak3)      in
   let fk3   = ((ck3 .>. fromIntegral sak3) .|. ek3) .&. mask3                             in
-  let gk3   = qak3 - fk3                                                                  in
-  let bak3  = gk3 .>. fromIntegral (wsz - 1)                                              in
-  let bk3   = bak3 - 1                                                                    in
+  let bk3   = ((qak3 - fk3) .>. fromIntegral (wsz - 1)) - 1                               in
   let mk3   = bk3 .&. mask3                                                               in
-  let pbk3  = qak3 - ((ck3 .>. fromIntegral sak3) .|. ek3) .&. mk3                        in
-  let pck3  = pbk3 +  (ok3 .>. fromIntegral sak3)          .&. mk3                        in
+  let pbk3  = qak3 - (((ck3 .>. fromIntegral sak3) .|. ek3) .&. mk3)                      in
+  let pck3  = pbk3 + ( (ok3 .>. fromIntegral sak3)          .&. mk3)                      in
   let sbk3  = sak3 + (t8k3 .&. bk3)                                                       in
 
   let qak2  = pck3                                                                        in
@@ -161,12 +153,10 @@ findCloseFar p w =
 
   let ek2   = 0xaaaaaaaaaaaaaaaa .&. comp (0xffffffffffffffff .>. fromIntegral sak2)      in
   let fk2   = ((ck2 .>. fromIntegral sak2) .|. ek2) .&. mask2                             in
-  let gk2   = qak2 - fk2                                                                  in
-  let bak2  = gk2 .>. fromIntegral (wsz - 1)                                              in
-  let bk2   = bak2 - 1                                                                    in
+  let bk2   = ((qak2 - fk2) .>. fromIntegral (wsz - 1)) - 1                               in
   let mk2   = bk2 .&. mask2                                                               in
-  let pbk2  = qak2 - ((ck2 .>. fromIntegral sak2) .|. ek2) .&. mk2                        in
-  let pck2  = pbk2 +  (ok2 .>. fromIntegral sak2)          .&. mk2                        in
+  let pbk2  = qak2 - (((ck2 .>. fromIntegral sak2) .|. ek2) .&. mk2)                      in
+  let pck2  = pbk2 + ( (ok2 .>. fromIntegral sak2)          .&. mk2)                      in
   let sbk2  = sak2 + (t8k2 .&. bk2)                                                       in
 
   let qak1  = pck2                                                                        in
@@ -174,13 +164,10 @@ findCloseFar p w =
 
   let ek1   = 0xaaaaaaaaaaaaaaaa .&. comp (0xffffffffffffffff .>. fromIntegral sak1)      in
   let fk1   = ((ck1 .>. fromIntegral sak1) .|. ek1) .&. mask1                             in
-  let gk1   = qak1 - fk1                                                                  in
-  let bk1   = (gk1 .>. fromIntegral (wsz - 1)) - 1                                        in
+  let bk1   = ((qak1 - fk1) .>. fromIntegral (wsz - 1)) - 1                               in
   let mk1   = bk1  .&. mask1                                                              in
-  let pc1   = ((ck1 .>. fromIntegral sak1) .|. ek1) .&. mk1                               in
-  let po1   =  (ok1 .>. fromIntegral sak1)          .&. mk1                               in
-  let pbk1  = qak1 - pc1                                                                  in
-  let pck1  = pbk1 + po1                                                                  in
+  let pbk1  = qak1 - (((ck1 .>. fromIntegral sak1) .|. ek1) .&. mk1)                      in
+  let pck1  = pbk1 + ( (ok1 .>. fromIntegral sak1)          .&. mk1)                      in
   let sbk1  = sak1 + (t8k1 .&. bk1)                                                       in
 
   let rrr   = sbk1 + pck1 + (((x .>. fromIntegral sbk1) .&. ((pck1 .<. 1) .|. 1)) .<. 1)  in
