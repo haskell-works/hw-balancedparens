@@ -3,7 +3,6 @@
 module Main where
 
 import Criterion.Main
-import Data.Semigroup                               ((<>))
 import Data.Word
 import HaskellWorks.Data.BalancedParens.FindClose
 import HaskellWorks.Data.Bits.BitShow

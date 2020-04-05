@@ -4,7 +4,6 @@
 module HaskellWorks.Data.BalancedParens.Broadword.Word8Spec where
 
 import Control.Monad
-import Data.Semigroup                 ((<>))
 import HaskellWorks.Data.Bits.BitShow
 import HaskellWorks.Hspec.Hedgehog
 import Hedgehog
