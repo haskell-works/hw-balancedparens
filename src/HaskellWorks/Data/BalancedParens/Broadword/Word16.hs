@@ -8,7 +8,6 @@ module HaskellWorks.Data.BalancedParens.Broadword.Word16
   ) where
 
 import Data.Int
-import Data.Semigroup                          ((<>))
 import Data.Word
 import HaskellWorks.Data.Bits.BitWise
 import HaskellWorks.Data.Bits.Broadword.Word16

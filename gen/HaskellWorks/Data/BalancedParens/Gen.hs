@@ -15,7 +15,6 @@ module HaskellWorks.Data.BalancedParens.Gen
   ) where
 
 import Data.Coerce
-import Data.Semigroup                             ((<>))
 import Data.Word
 import GHC.Generics
 import HaskellWorks.Data.BalancedParens.ParensSeq (ParensSeq)
