@@ -21,7 +21,6 @@ module HaskellWorks.Data.BalancedParens.ParensSeq
 
 import Data.Coerce
 import Data.Foldable
-import Data.Monoid
 import Data.Word
 import HaskellWorks.Data.BalancedParens.Internal.ParensSeq (Elem (Elem), ParensSeq (ParensSeq), ParensSeqFt)
 import HaskellWorks.Data.Bits.BitWise

@@ -22,7 +22,6 @@ module HaskellWorks.Data.BalancedParens.Internal.ParensSeq
 
 import Control.DeepSeq
 import Data.Int
-import Data.Monoid                                (Monoid)
 import Data.Word
 import GHC.Generics
 import HaskellWorks.Data.Bits.BitWise
