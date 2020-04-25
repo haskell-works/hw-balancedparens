@@ -35,6 +35,11 @@ muk5 :: Word64
 muk5 = 0x00000000ffffffff
 {-# INLINE muk5 #-}
 
+-- | Find the position of the first unmatch parenthesis.
+--
+-- This is the broadword implementation of 'HaskellWorks.Data.BalancedParens.Internal.Slow.Word64.findCloseFor'.
+--
+-- See [Broadword Implementation of Parenthesis Queries](https://arxiv.org/pdf/1301.5468.pdf), Sebastiano Vigna, 2013
 findCloseFar :: Word64 -> Word64 -> Word64
 findCloseFar p w =
   let x     = w .>. p                                                                     in
@@ -174,11 +179,9 @@ findCloseFar p w =
   rrr + p
 {-# INLINE findCloseFar #-}
 
--- Source:
---    Broadword Implementation of Parenthesis Queries
---    Sebastiano Vigna
---    Dipartimento di Scienze dell’Informazione
---    Università degli Studi di Milano, Italy
+-- | Find the position of the first unmatch parenthesis within a word.
+--
+-- See [Broadword Implementation of Parenthesis Queries](https://arxiv.org/pdf/1301.5468.pdf), Sebastiano Vigna, 2013
 findClose :: Word64 -> Word64
 findClose x =
   let !b00 = x - ((x .&. 0xaaaaaaaaaaaaaaaa) .>. 1)                                               in

@@ -20,6 +20,11 @@ muk2 :: Word8
 muk2 = 0x0f
 {-# INLINE muk2 #-}
 
+-- | Find the position of the first unmatch parenthesis.
+--
+-- This is the broadword implementation of 'HaskellWorks.Data.BalancedParens.Internal.Slow.Word8.findCloseFor'.
+--
+-- See [Broadword Implementation of Parenthesis Queries](https://arxiv.org/pdf/1301.5468.pdf), Sebastiano Vigna, 2013
 findCloseFar :: Word8 -> Word8 -> Word8
 findCloseFar p w =
   let x     = w .>. fromIntegral p                                                        in
