@@ -54,8 +54,8 @@ benchWord64 = foldMap mkBenchWord64Group [0 .. 64]
   where mkBenchWord64Group :: Word64 -> [Benchmark]
         mkBenchWord64Group p = let q = (1 .<. p) - 1 in
           [ bgroup "Word64"
-            [ bench ("Broadword find close " <> bitShow q) (whnf (BW64.findCloseFar 0) q)
-            , bench ("Naive     find close " <> bitShow q) (whnf (SW64.findCloseFar 0) q)
+            [ bench ("Broadword find close " <> bitShow q) (whnf (BW64.findUnmatchedCloseFar 0) q)
+            , bench ("Naive     find close " <> bitShow q) (whnf (SW64.findUnmatchedCloseFar 0) q)
             ]
           ]
 

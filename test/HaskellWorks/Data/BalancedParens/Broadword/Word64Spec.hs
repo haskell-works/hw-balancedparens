@@ -8,7 +8,7 @@ import HaskellWorks.Hspec.Hedgehog
 import Hedgehog
 import Test.Hspec
 
-import qualified HaskellWorks.Data.BalancedParens.Broadword.Word64     as W64
+import qualified HaskellWorks.Data.BalancedParens.Broadword.Word64     as BW64
 import qualified HaskellWorks.Data.BalancedParens.Internal.Slow.Word64 as SW64
 import qualified Hedgehog.Gen                                          as G
 import qualified Hedgehog.Range                                        as R
@@ -18,8 +18,8 @@ import qualified Hedgehog.Range                                        as R
 
 spec :: Spec
 spec = describe "HaskellWorks.Data.BalancedParens.Broadword.Word64Spec" $ do
-  it "findCloseFar" $ require $ withTests 100000 $ property $ do
+  it "findUnmatchedCloseFar" $ require $ withTests 100000 $ property $ do
     p <- forAll $ G.word64 (R.linear 0 64)
     w <- forAll $ G.word64 R.constantBounded
     annotateShow $ bitShow w
-    W64.findCloseFar p w === SW64.findCloseFar p w
+    BW64.findUnmatchedCloseFar p w === SW64.findUnmatchedCloseFar p w

@@ -21,15 +21,15 @@ import qualified Hedgehog.Range                                        as R
 
 spec :: Spec
 spec = describe "HaskellWorks.Data.BalancedParens.Broadword.Word16Spec" $ do
-  it "findCloseFar 0 [11111111 11110100]" $ requireTest $ do
+  it "findUnmatchedCloseFar 0 [11111111 11110100]" $ requireTest $ do
     p <- forAll $ pure 0
     w <- forAll $ pure $ fromJust $ bitRead "11111111 11110100"
     annotateShow $ bitShow w
     annotateShow $ showHex w ""
-    W16.findCloseFar p w === SW16.findCloseFar p w
+    W16.findUnmatchedCloseFar p w === SW16.findUnmatchedCloseFar p w
 
-  it "findCloseFar" $ require $ withTests 1000 $ property $ do
+  it "findUnmatchedCloseFar" $ require $ withTests 1000 $ property $ do
     p <- forAll $ G.word16 (R.linear 0 16)
     w <- forAll $ G.word16 R.constantBounded
     annotateShow $ bitShow w
-    W16.findCloseFar p w === SW16.findCloseFar p w
+    W16.findUnmatchedCloseFar p w === SW16.findUnmatchedCloseFar p w

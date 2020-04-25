@@ -17,10 +17,10 @@ import qualified HaskellWorks.Data.BalancedParens.Internal.Slow.Word8 as SW8
 
 spec :: Spec
 spec = describe "HaskellWorks.Data.BalancedParens.Broadword.Word8Spec" $ do
-  describe "findCloseFar" $ do
+  describe "findUnmatchedCloseFar" $ do
     forM_ [0 .. 8] $ \p0 -> do
       forM_ [0 .. 0xff] $ \w0 -> do
         it ("word " <> bitShow w0) $ requireTest $ do
           p <- forAll $ pure p0
           w <- forAll $ pure w0
-          W8.findCloseFar p w === SW8.findCloseFar p w
+          W8.findUnmatchedCloseFar p w === SW8.findUnmatchedCloseFar p w

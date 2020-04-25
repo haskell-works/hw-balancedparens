@@ -6,7 +6,7 @@
 
 module HaskellWorks.Data.BalancedParens.Broadword.Word64
   ( findClose
-  , findCloseFar
+  , findUnmatchedCloseFar
   ) where
 
 import Data.Int
@@ -40,8 +40,8 @@ muk5 = 0x00000000ffffffff
 -- This is the broadword implementation of 'HaskellWorks.Data.BalancedParens.Internal.Slow.Word64.findCloseFor'.
 --
 -- See [Broadword Implementation of Parenthesis Queries](https://arxiv.org/pdf/1301.5468.pdf), Sebastiano Vigna, 2013
-findCloseFar :: Word64 -> Word64 -> Word64
-findCloseFar p w =
+findUnmatchedCloseFar :: Word64 -> Word64 -> Word64
+findUnmatchedCloseFar p w =
   let x     = w .>. p                                                                     in
   let wsz   = 64 :: Int64                                                                 in
   let k1    = 1                                                                           in
@@ -177,7 +177,7 @@ findCloseFar p w =
   let rrr   = sbk1 + pck1 + (((x .>. fromIntegral sbk1) .&. ((pck1 .<. 1) .|. 1)) .<. 1)  in
 
   rrr + p
-{-# INLINE findCloseFar #-}
+{-# INLINE findUnmatchedCloseFar #-}
 
 -- | Find the position of the first unmatch parenthesis within a word.
 --
