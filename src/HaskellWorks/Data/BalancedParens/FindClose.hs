@@ -13,8 +13,8 @@ import HaskellWorks.Data.Bits.Broadword.Type
 import HaskellWorks.Data.Naive
 import HaskellWorks.Data.Positioning
 
-import qualified Data.Vector.Storable                              as DVS
-import qualified HaskellWorks.Data.BalancedParens.Broadword.Word64 as W64
+import qualified Data.Vector.Storable                                       as DVS
+import qualified HaskellWorks.Data.BalancedParens.Internal.Broadword.Word64 as W64
 
 class FindClose v where
   findClose   :: v -> Count -> Maybe Count
@@ -65,7 +65,7 @@ instance FindClose (Naive Word64) where
 
 instance FindClose (Broadword Word64) where
   findClose (Broadword w) p = let x = w .>. (p - 1) in
-    case negate (x .&. 1) .&. W64.findClose x of
+    case negate (x .&. 1) .&. W64.findUnmatchedClose x of
       127 -> Nothing
       r   -> let r' = fromIntegral r + p in if r' > 64 then Nothing else Just r'
   {-# INLINE findClose #-}
