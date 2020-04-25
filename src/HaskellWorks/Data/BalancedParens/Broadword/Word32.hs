@@ -28,6 +28,11 @@ muk4 :: Word32
 muk4 = 0x0000ffff
 {-# INLINE muk4 #-}
 
+-- | Find the position of the first unmatch parenthesis.
+--
+-- This is the broadword implementation of 'HaskellWorks.Data.BalancedParens.Internal.Slow.Word32.findCloseFor'.
+--
+-- See [Broadword Implementation of Parenthesis Queries](https://arxiv.org/pdf/1301.5468.pdf), Sebastiano Vigna, 2013
 findCloseFar :: Word32 -> Word32 -> Word32
 findCloseFar p w =
   let x     = w .>. fromIntegral p                                                        in
