@@ -4,7 +4,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 
 module HaskellWorks.Data.BalancedParens.Broadword.Word8
-  ( findCloseFar
+  ( findUnmatchedCloseFar
   ) where
 
 import Data.Int
@@ -25,8 +25,8 @@ muk2 = 0x0f
 -- This is the broadword implementation of 'HaskellWorks.Data.BalancedParens.Internal.Slow.Word8.findCloseFor'.
 --
 -- See [Broadword Implementation of Parenthesis Queries](https://arxiv.org/pdf/1301.5468.pdf), Sebastiano Vigna, 2013
-findCloseFar :: Word8 -> Word8 -> Word8
-findCloseFar p w =
+findUnmatchedCloseFar :: Word8 -> Word8 -> Word8
+findUnmatchedCloseFar p w =
   let x     = w .>. fromIntegral p                                                        in
   let wsz   = 8 :: Int8                                                                   in
   let k1    = 1                                                                           in
@@ -96,4 +96,4 @@ findCloseFar p w =
   let rrr   = sbk1 + pck1 + (((x .>. fromIntegral sbk1) .&. ((pck1 .<. 1) .|. 1)) .<. 1)  in
 
   rrr + p
-{-# INLINE findCloseFar #-}
+{-# INLINE findUnmatchedCloseFar #-}

@@ -73,6 +73,7 @@ library
                         HaskellWorks.Data.BalancedParens.FindCloseN
                         HaskellWorks.Data.BalancedParens.FindOpen
                         HaskellWorks.Data.BalancedParens.FindOpenN
+                        HaskellWorks.Data.BalancedParens.Internal.Broadword.Word64
                         HaskellWorks.Data.BalancedParens.Internal.List
                         HaskellWorks.Data.BalancedParens.Internal.ParensSeq
                         HaskellWorks.Data.BalancedParens.Internal.RoseTree
