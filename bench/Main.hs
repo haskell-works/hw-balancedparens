@@ -12,15 +12,15 @@ import HaskellWorks.Data.Bits.FromBitTextByteString
 import HaskellWorks.Data.Naive
 import HaskellWorks.Data.Ops
 
-import qualified Data.Vector.Storable                                  as DVS
-import qualified HaskellWorks.Data.BalancedParens.Broadword.Word64     as BW64
-import qualified HaskellWorks.Data.BalancedParens.Gen                  as G
-import qualified HaskellWorks.Data.BalancedParens.Internal.Slow.Word64 as SW64
-import qualified HaskellWorks.Data.BalancedParens.ParensSeq            as PS
-import qualified HaskellWorks.Data.BalancedParens.RangeMin             as RM
-import qualified HaskellWorks.Data.BalancedParens.RangeMin2            as RM2
-import qualified Hedgehog.Gen                                          as G
-import qualified Hedgehog.Range                                        as R
+import qualified Data.Vector.Storable                                                             as DVS
+import qualified HaskellWorks.Data.BalancedParens.Gen                                             as G
+import qualified HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Word64 as BW64
+import qualified HaskellWorks.Data.BalancedParens.Internal.Slow.Word64                            as SW64
+import qualified HaskellWorks.Data.BalancedParens.ParensSeq                                       as PS
+import qualified HaskellWorks.Data.BalancedParens.RangeMin                                        as RM
+import qualified HaskellWorks.Data.BalancedParens.RangeMin2                                       as RM2
+import qualified Hedgehog.Gen                                                                     as G
+import qualified Hedgehog.Range                                                                   as R
 
 setupEnvVector :: Int -> IO (DVS.Vector Word64)
 setupEnvVector n = return $ DVS.fromList (take n (cycle [maxBound, 0]))

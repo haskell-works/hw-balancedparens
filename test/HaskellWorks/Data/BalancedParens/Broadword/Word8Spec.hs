@@ -9,11 +9,11 @@ import HaskellWorks.Hspec.Hedgehog
 import Hedgehog
 import Test.Hspec
 
-import qualified HaskellWorks.Data.BalancedParens.Broadword.Word8     as BW8
-import qualified HaskellWorks.Data.BalancedParens.FindClose           as C
-import qualified HaskellWorks.Data.BalancedParens.Internal.Slow.Word8 as SW8
-import qualified Hedgehog.Gen                                         as G
-import qualified Hedgehog.Range                                       as R
+import qualified HaskellWorks.Data.BalancedParens.FindClose                                      as C
+import qualified HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Word8 as BW8
+import qualified HaskellWorks.Data.BalancedParens.Internal.Slow.Word8                            as SW8
+import qualified Hedgehog.Gen                                                                    as G
+import qualified Hedgehog.Range                                                                  as R
 
 {-# ANN module ("HLint: ignore Redundant do"        :: String) #-}
 {-# ANN module ("HLint: ignore Reduce duplication"  :: String) #-}

@@ -3,7 +3,7 @@
 {-# LANGUAGE InstanceSigs        #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
-module HaskellWorks.Data.BalancedParens.Broadword.Word8
+module HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Word8
   ( findUnmatchedCloseFar
   , findClose
   ) where
