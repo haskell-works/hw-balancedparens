@@ -13,8 +13,8 @@ import HaskellWorks.Data.Bits.Broadword.Type
 import HaskellWorks.Data.Naive
 import HaskellWorks.Data.Positioning
 
-closeAt' :: TestBit a => a -> Count -> Bool
-closeAt' v c = c > 0 && not (v .?. toPosition (c - 1))
+closeAt' :: (TestBit a, BitLength a) => a -> Count -> Bool
+closeAt' v c = c > 0 && not (v .?. toPosition (c - 1)) || c > bitLength v
 {-# INLINE closeAt' #-}
 
 class CloseAt v where

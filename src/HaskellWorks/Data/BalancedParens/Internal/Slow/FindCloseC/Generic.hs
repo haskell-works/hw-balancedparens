@@ -1,5 +1,3 @@
-{-# LANGUAGE LambdaCase #-}
-
 module HaskellWorks.Data.BalancedParens.Internal.Slow.FindCloseC.Generic
   ( findCloseC
   ) where

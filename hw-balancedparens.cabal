@@ -71,6 +71,10 @@ library
                         HaskellWorks.Data.BalancedParens.FindCloseN
                         HaskellWorks.Data.BalancedParens.FindOpen
                         HaskellWorks.Data.BalancedParens.FindOpenN
+                        HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.Vector16
+                        HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.Vector32
+                        HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.Vector64
+                        HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.Vector8
                         HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Word16
                         HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Word32
                         HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Word64
@@ -146,16 +150,21 @@ test-suite hw-balancedparens-test
                       , hw-balancedparens-gen
                       , hw-bits
                       , hw-hspec-hedgehog
+                      , hw-int
                       , hw-prim
                       , hw-rankselect-base
                       , transformers
                       , vector
   type:                 exitcode-stdio-1.0
   main-is:              Spec.hs
-  other-modules:        HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Word8Spec
+  other-modules:        HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.Vector8Spec
+                        HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.Vector16Spec
+                        HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.Vector32Spec
+                        HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.Vector64Spec
                         HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Word16Spec
                         HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Word32Spec
                         HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Word64Spec
+                        HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Word8Spec
                         HaskellWorks.Data.BalancedParens.Internal.BroadwordSpec
                         HaskellWorks.Data.BalancedParens.Internal.ParensSeqSpec
                         HaskellWorks.Data.BalancedParens.FindCloseNSpec
@@ -180,16 +189,16 @@ benchmark bench
   hs-source-dirs:       bench
                       , gen
 
-test-suite doctest
-  import:               base, config
-                      , doctest
-                      , doctest-discover
-                      , hw-balancedparens
-                      , hw-bits
-                      , hw-prim
-  default-language:     Haskell2010
-  type:                 exitcode-stdio-1.0
-  ghc-options:          -threaded -rtsopts -with-rtsopts=-N
-  main-is:              DoctestDriver.hs
-  HS-Source-Dirs:       doctest
-  build-tool-depends:   doctest-discover:doctest-discover
+-- test-suite doctest
+--   import:               base, config
+--                       , doctest
+--                       , doctest-discover
+--                       , hw-balancedparens
+--                       , hw-bits
+--                       , hw-prim
+--   default-language:     Haskell2010
+--   type:                 exitcode-stdio-1.0
+--   ghc-options:          -threaded -rtsopts -with-rtsopts=-N
+--   main-is:              DoctestDriver.hs
+--   HS-Source-Dirs:       doctest
+--   build-tool-depends:   doctest-discover:doctest-discover
