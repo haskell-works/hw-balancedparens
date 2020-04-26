@@ -3,9 +3,7 @@
 
 module HaskellWorks.Data.BalancedParens.Broadword.Word16Spec where
 
-import Control.Monad                    (mfilter)
 import Data.Maybe
-import HaskellWorks.Data.Bits.BitLength
 import HaskellWorks.Data.Bits.BitRead
 import HaskellWorks.Data.Bits.BitShow
 import HaskellWorks.Hspec.Hedgehog
@@ -40,4 +38,4 @@ spec = describe "HaskellWorks.Data.BalancedParens.Broadword.Word16Spec" $ do
     p <- forAll $ G.word64 (R.linear 1 128)
     w <- forAll $ G.word16 R.constantBounded
     annotateShow $ bitShow w
-    mfilter (<= bitLength w) (BW16.findClose w p) === mfilter (<= bitLength w) (C.findClose w p)
+    BW16.findClose w p === C.findClose w p

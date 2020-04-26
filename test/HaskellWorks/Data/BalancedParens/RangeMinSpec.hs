@@ -6,6 +6,7 @@
 
 module HaskellWorks.Data.BalancedParens.RangeMinSpec where
 
+import Control.Monad                                (mfilter)
 import Data.Word
 import GHC.Generics
 import HaskellWorks.Data.BalancedParens
@@ -44,12 +45,12 @@ spec = describe "HaskellWorks.Data.BalancedParens.RangeMinSpec" $ do
     v <- forAll $ G.storableVector (R.linear 1 4) (G.word64 R.constantBounded)
     let !rm = mkRangeMin v
     let len = bitLength v
-    [findClose rm i | i <- [1..len]] === [findClose v i | i <- [1..len]]
+    [mfilter (<= bitLength v) (findClose rm i) | i <- [1..len]] === [mfilter (<= bitLength v) (findClose v i) | i <- [1..len]]
   it "findClose should return the same result over all counts" $ requireProperty $ do
     v <- forAll $ G.storableVector (R.linear 1 factor) (G.word64 R.constantBounded)
     p <- forAll $ G.count (R.linear 1 (bitLength v))
     let !rm = mkRangeMin v
-    findClose rm p === findClose v p
+    mfilter (<= bitLength v) (findClose rm p) === mfilter (<= bitLength v) (findClose v p)
   it "nextSibling should return the same result" $ requireProperty $ do
     v <- forAll $ G.storableVector (R.linear 1 factor) (G.word64 R.constantBounded)
     let !rm = mkRangeMin v

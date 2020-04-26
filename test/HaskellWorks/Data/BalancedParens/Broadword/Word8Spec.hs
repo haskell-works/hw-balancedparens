@@ -3,8 +3,7 @@
 
 module HaskellWorks.Data.BalancedParens.Broadword.Word8Spec where
 
-import Control.Monad                    (forM_, mfilter)
-import HaskellWorks.Data.Bits.BitLength
+import Control.Monad                  (forM_)
 import HaskellWorks.Data.Bits.BitShow
 import HaskellWorks.Hspec.Hedgehog
 import Hedgehog
@@ -32,4 +31,4 @@ spec = describe "HaskellWorks.Data.BalancedParens.Broadword.Word8Spec" $ do
     p <- forAll $ G.word64 (R.linear 1 128)
     w <- forAll $ G.word8 R.constantBounded
     annotateShow $ bitShow w
-    mfilter (<= bitLength w) (BW8.findClose w p) === mfilter (<= bitLength w) (C.findClose w p)
+    BW8.findClose w p === C.findClose w p
