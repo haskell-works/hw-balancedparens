@@ -11,7 +11,6 @@ module HaskellWorks.Data.BalancedParens.Broadword.Word64
 import Data.Int
 import Data.Word
 import HaskellWorks.Data.BalancedParens.CloseAt
-import HaskellWorks.Data.Bits.BitLength
 import HaskellWorks.Data.Bits.BitWise
 import HaskellWorks.Data.Bits.Broadword.Word64
 import HaskellWorks.Data.Positioning
@@ -180,15 +179,16 @@ findUnmatchedCloseFar p w =
   rrr + p
 {-# INLINE findUnmatchedCloseFar #-}
 
+-- | Find the position of the matching close parenthesis.
+--
+-- The position argument and return value is one-based.
+--
+-- If the parenthesis at the input position is an a close, then that is considered the
+-- matching close parenthesis.
 findClose :: Word64 -> Count -> Maybe Count
 findClose v p = if p > 0
-  then if p <= bitLength v
-    then if closeAt v p
-      then Just p
-      else case findUnmatchedCloseFar p v of
-        q -> if q < bitLength v
-          then Just (q + 1)
-          else Nothing
-    else Nothing
+  then if closeAt v p
+    then Just p
+    else let q = findUnmatchedCloseFar p v in Just (q + 1)
   else Just 0
 {-# INLINE findClose #-}

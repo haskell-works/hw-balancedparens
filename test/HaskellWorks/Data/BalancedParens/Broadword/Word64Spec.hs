@@ -3,6 +3,8 @@
 
 module HaskellWorks.Data.BalancedParens.Broadword.Word64Spec where
 
+import Control.Monad                    (mfilter)
+import HaskellWorks.Data.Bits.BitLength
 import HaskellWorks.Data.Bits.BitShow
 import HaskellWorks.Hspec.Hedgehog
 import Hedgehog
@@ -25,7 +27,7 @@ spec = describe "HaskellWorks.Data.BalancedParens.Broadword.Word64Spec" $ do
     annotateShow $ bitShow w
     BW64.findUnmatchedCloseFar p w === SW64.findUnmatchedCloseFar p w
   it "findClose" $ require $ withTests 1000 $ property $ do
-    p <- forAll $ G.word64 (R.linear 1 64)
+    p <- forAll $ G.word64 (R.linear 1 128)
     w <- forAll $ G.word64 R.constantBounded
     annotateShow $ bitShow w
-    BW64.findClose w p === C.findClose w p
+    mfilter (<= bitLength w) (BW64.findClose w p) === mfilter (<= bitLength w) (C.findClose w p)
