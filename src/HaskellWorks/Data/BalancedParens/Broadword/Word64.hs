@@ -5,12 +5,16 @@
 
 module HaskellWorks.Data.BalancedParens.Broadword.Word64
   ( findUnmatchedCloseFar
+  , findClose
   ) where
 
 import Data.Int
 import Data.Word
+import HaskellWorks.Data.BalancedParens.CloseAt
+import HaskellWorks.Data.Bits.BitLength
 import HaskellWorks.Data.Bits.BitWise
 import HaskellWorks.Data.Bits.Broadword.Word64
+import HaskellWorks.Data.Positioning
 
 muk1 :: Word64
 muk1 = 0x3333333333333333
@@ -175,3 +179,16 @@ findUnmatchedCloseFar p w =
 
   rrr + p
 {-# INLINE findUnmatchedCloseFar #-}
+
+findClose :: Word64 -> Count -> Maybe Count
+findClose v p = if p > 0
+  then if p <= bitLength v
+    then if closeAt v p
+      then Just p
+      else case findUnmatchedCloseFar p v of
+        q -> if q < bitLength v
+          then Just (q + 1)
+          else Nothing
+    else Nothing
+  else Just 0
+{-# INLINE findClose #-}
