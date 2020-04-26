@@ -19,7 +19,7 @@ class FindCloseN v where
   findCloseN :: v -> Count -> Count -> Maybe Count
 
 findClose' :: (BitLength a, CloseAt a, TestBit a) => a -> Count -> Count -> Maybe Count
-findClose' v c p = if 0 < p && p <= bitLength v
+findClose' v c p = if 0 < p
   then if v `closeAt` p
     then if c <= 1
       then Just p
