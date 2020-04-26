@@ -3,14 +3,18 @@
 
 module HaskellWorks.Data.BalancedParens.Broadword.Word8Spec where
 
-import Control.Monad
+import Control.Monad                    (forM_, mfilter)
+import HaskellWorks.Data.Bits.BitLength
 import HaskellWorks.Data.Bits.BitShow
 import HaskellWorks.Hspec.Hedgehog
 import Hedgehog
 import Test.Hspec
 
-import qualified HaskellWorks.Data.BalancedParens.Broadword.Word8     as W8
+import qualified HaskellWorks.Data.BalancedParens.Broadword.Word8     as BW8
+import qualified HaskellWorks.Data.BalancedParens.FindClose           as C
 import qualified HaskellWorks.Data.BalancedParens.Internal.Slow.Word8 as SW8
+import qualified Hedgehog.Gen                                         as G
+import qualified Hedgehog.Range                                       as R
 
 {-# ANN module ("HLint: ignore Redundant do"        :: String) #-}
 {-# ANN module ("HLint: ignore Reduce duplication"  :: String) #-}
@@ -23,4 +27,9 @@ spec = describe "HaskellWorks.Data.BalancedParens.Broadword.Word8Spec" $ do
         it ("word " <> bitShow w0) $ requireTest $ do
           p <- forAll $ pure p0
           w <- forAll $ pure w0
-          W8.findUnmatchedCloseFar p w === SW8.findUnmatchedCloseFar p w
+          BW8.findUnmatchedCloseFar p w === SW8.findUnmatchedCloseFar p w
+  it "findClose" $ require $ withTests 1000 $ property $ do
+    p <- forAll $ G.word64 (R.linear 1 128)
+    w <- forAll $ G.word8 R.constantBounded
+    annotateShow $ bitShow w
+    mfilter (<= bitLength w) (BW8.findClose w p) === mfilter (<= bitLength w) (C.findClose w p)

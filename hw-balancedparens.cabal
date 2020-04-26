@@ -34,6 +34,7 @@ common hw-hspec-hedgehog          { build-depends: hw-hspec-hedgehog          >=
 common hw-bits                    { build-depends: hw-bits                    >= 0.7.1.5    && < 0.8    }
 common hw-excess                  { build-depends: hw-excess                  >= 0.2.2.0    && < 0.3    }
 common hw-fingertree              { build-depends: hw-fingertree              >= 0.1.1.0    && < 0.2    }
+common hw-int                     { build-depends: hw-int                     >= 0.0.2      && < 0.0.3  }
 common hw-prim                    { build-depends: hw-prim                    >= 0.6.2.25   && < 0.7    }
 common hw-rankselect-base         { build-depends: hw-rankselect-base         >= 0.3.2.1    && < 0.4    }
 common lens                       { build-depends: lens                       >= 4          && < 5      }
@@ -58,6 +59,7 @@ library
                       , hw-bits
                       , hw-excess
                       , hw-fingertree
+                      , hw-int
                       , hw-prim
                       , hw-rankselect-base
                       , vector

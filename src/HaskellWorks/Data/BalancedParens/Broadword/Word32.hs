@@ -5,12 +5,16 @@
 
 module HaskellWorks.Data.BalancedParens.Broadword.Word32
   ( findUnmatchedCloseFar
+  , findClose
   ) where
 
 import Data.Int
 import Data.Word
+import HaskellWorks.Data.BalancedParens.CloseAt
 import HaskellWorks.Data.Bits.BitWise
 import HaskellWorks.Data.Bits.Broadword.Word32
+import HaskellWorks.Data.Int.Widen
+import HaskellWorks.Data.Positioning
 
 muk1 :: Word32
 muk1 = 0x33333333
@@ -33,9 +37,9 @@ muk4 = 0x0000ffff
 -- This is the broadword implementation of 'HaskellWorks.Data.BalancedParens.Internal.Slow.Word32.findCloseFor'.
 --
 -- See [Broadword Implementation of Parenthesis Queries](https://arxiv.org/pdf/1301.5468.pdf), Sebastiano Vigna, 2013
-findUnmatchedCloseFar :: Word32 -> Word32 -> Word32
+findUnmatchedCloseFar :: Word64 -> Word32 -> Word64
 findUnmatchedCloseFar p w =
-  let x     = w .>. fromIntegral p                                                        in
+  let x     = w .>. p                                                                     in
   let wsz   = 32 :: Int32                                                                 in
   let k1    = 1                                                                           in
   let k2    = 2                                                                           in
@@ -147,5 +151,19 @@ findUnmatchedCloseFar p w =
 
   let rrr   = sbk1 + pck1 + (((x .>. fromIntegral sbk1) .&. ((pck1 .<. 1) .|. 1)) .<. 1)  in
 
-  rrr + p
+  widen rrr + p
 {-# INLINE findUnmatchedCloseFar #-}
+
+-- | Find the position of the matching close parenthesis.
+--
+-- The position argument and return value is one-based.
+--
+-- If the parenthesis at the input position is an a close, then that is considered the
+-- matching close parenthesis.
+findClose :: Word32 -> Count -> Maybe Count
+findClose v p = if p > 0
+  then if closeAt v p
+    then Just p
+    else let q = findUnmatchedCloseFar p v in Just (q + 1)
+  else Just 0
+{-# INLINE findClose #-}

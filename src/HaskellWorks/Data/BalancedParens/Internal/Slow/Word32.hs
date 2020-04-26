@@ -68,11 +68,11 @@ import HaskellWorks.Data.Bits.BitWise
 -- 7
 -- >>> findUnmatchedCloseFar 8 $ fromJust $ bitRead "11110000 11110000 11110000 11110000"
 -- 32
-findUnmatchedCloseFar :: Word32 -> Word32 -> Word32
+findUnmatchedCloseFar :: Word64 -> Word32 -> Word64
 findUnmatchedCloseFar = go 0
-  where go :: Word32 -> Word32 -> Word32 -> Word32
+  where go :: Word64 -> Word64 -> Word32 -> Word64
         go d 32 _ = 32 + d
-        go d i w = case (w .>. fromIntegral i) .&. 1 of
+        go d i w = case (w .>. i) .&. 1 of
           1 -> go (d + 1) (i + 1) w
           _ -> if d == 0
             then i

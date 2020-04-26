@@ -3,12 +3,15 @@
 
 module HaskellWorks.Data.BalancedParens.Broadword.Word32Spec where
 
+import Control.Monad                    (mfilter)
+import HaskellWorks.Data.Bits.BitLength
 import HaskellWorks.Data.Bits.BitShow
 import HaskellWorks.Hspec.Hedgehog
 import Hedgehog
 import Test.Hspec
 
 import qualified HaskellWorks.Data.BalancedParens.Broadword.Word32     as BW32
+import qualified HaskellWorks.Data.BalancedParens.FindClose            as C
 import qualified HaskellWorks.Data.BalancedParens.Internal.Slow.Word32 as SW32
 import qualified Hedgehog.Gen                                          as G
 import qualified Hedgehog.Range                                        as R
@@ -24,7 +27,12 @@ spec = describe "HaskellWorks.Data.BalancedParens.Broadword.Word32Spec" $ do
     annotateShow $ bitShow w
     BW32.findUnmatchedCloseFar p w === SW32.findUnmatchedCloseFar p w
   it "findUnmatchedCloseFar" $ require $ withTests 10000 $ property $ do
-    p <- forAll $ G.word32 (R.linear 0 32)
+    p <- forAll $ G.word64 (R.linear 0 32)
     w <- forAll $ G.word32 R.constantBounded
     annotateShow $ bitShow w
     BW32.findUnmatchedCloseFar p w === SW32.findUnmatchedCloseFar p w
+  it "findClose" $ require $ withTests 1000 $ property $ do
+    p <- forAll $ G.word64 (R.linear 1 128)
+    w <- forAll $ G.word32 R.constantBounded
+    annotateShow $ bitShow w
+    mfilter (<= bitLength w) (BW32.findClose w p) === mfilter (<= bitLength w) (C.findClose w p)
