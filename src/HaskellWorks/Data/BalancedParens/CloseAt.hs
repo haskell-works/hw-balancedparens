@@ -18,6 +18,22 @@ closeAt' v c = c > 0 && not (v .?. toPosition (c - 1))
 {-# INLINE closeAt' #-}
 
 class CloseAt v where
+  -- | Determine if the parenthesis at the give position (one-based) is a close.
+  --
+  -- >>> :set -XTypeApplications
+  -- >>> import HaskellWorks.Data.Bits.BitRead
+  -- >>> import Data.Maybe
+  --
+  -- >>> closeAt (fromJust $ bitRead @Word8 "10101010") 1
+  -- False
+  --
+  -- >>> closeAt (fromJust $ bitRead @Word8 "10101010") 2
+  -- True
+  --
+  -- If the parenthesis at the given position does not exist in the input, it is considered to be a close.
+  --
+  -- >>> closeAt (fromJust $ bitRead @Word8 "10101010") 9
+  -- True
   closeAt     :: v -> Count -> Bool
 
 instance (BitLength a, TestBit a) => CloseAt (BitShown a) where
