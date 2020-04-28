@@ -80,6 +80,7 @@ library
                         HaskellWorks.Data.BalancedParens.Internal.ParensSeq
                         HaskellWorks.Data.BalancedParens.Internal.RoseTree
                         HaskellWorks.Data.BalancedParens.Internal.Show
+                        HaskellWorks.Data.BalancedParens.Internal.Slow.FindCloseN.Generic
                         HaskellWorks.Data.BalancedParens.Internal.Slow.FindUnmatchedCloseFar.Word16
                         HaskellWorks.Data.BalancedParens.Internal.Slow.FindUnmatchedCloseFar.Word32
                         HaskellWorks.Data.BalancedParens.Internal.Slow.FindUnmatchedCloseFar.Word64
