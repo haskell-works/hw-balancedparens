@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings   #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
-module HaskellWorks.Data.BalancedParens.Broadword.Word64Spec where
+module HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Word64Spec where
 
 import HaskellWorks.Data.Bits.BitShow
 import HaskellWorks.Data.Naive
