@@ -150,10 +150,10 @@ test-suite hw-balancedparens-test
                       , vector
   type:                 exitcode-stdio-1.0
   main-is:              Spec.hs
-  other-modules:        HaskellWorks.Data.BalancedParens.Broadword.Word8Spec
-                        HaskellWorks.Data.BalancedParens.Broadword.Word16Spec
-                        HaskellWorks.Data.BalancedParens.Broadword.Word32Spec
-                        HaskellWorks.Data.BalancedParens.Broadword.Word64Spec
+  other-modules:        HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Word8Spec
+                        HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Word16Spec
+                        HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Word32Spec
+                        HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Word64Spec
                         HaskellWorks.Data.BalancedParens.Internal.BroadwordSpec
                         HaskellWorks.Data.BalancedParens.Internal.ParensSeqSpec
                         HaskellWorks.Data.BalancedParens.FindCloseNSpec

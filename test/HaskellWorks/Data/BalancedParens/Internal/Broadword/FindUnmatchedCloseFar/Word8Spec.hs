@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings   #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
-module HaskellWorks.Data.BalancedParens.Broadword.Word8Spec where
+module HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Word8Spec where
 
 import Control.Monad                  (forM_)
 import HaskellWorks.Data.Bits.BitShow
