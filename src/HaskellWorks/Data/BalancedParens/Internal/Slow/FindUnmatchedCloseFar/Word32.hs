@@ -1,6 +1,6 @@
 {-# LANGUAGE LambdaCase #-}
 
-module HaskellWorks.Data.BalancedParens.Internal.Slow.Word32
+module HaskellWorks.Data.BalancedParens.Internal.Slow.FindUnmatchedCloseFar.Word32
   ( findUnmatchedCloseFar
   ) where
 

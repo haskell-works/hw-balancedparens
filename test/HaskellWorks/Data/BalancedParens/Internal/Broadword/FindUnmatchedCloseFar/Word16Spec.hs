@@ -13,7 +13,7 @@ import Test.Hspec
 
 import qualified HaskellWorks.Data.BalancedParens.FindClose                                       as C
 import qualified HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Word16 as BW16
-import qualified HaskellWorks.Data.BalancedParens.Internal.Slow.Word16                            as SW16
+import qualified HaskellWorks.Data.BalancedParens.Internal.Slow.FindUnmatchedCloseFar.Word16      as SW16
 import qualified Hedgehog.Gen                                                                     as G
 import qualified Hedgehog.Range                                                                   as R
 
