@@ -42,6 +42,20 @@ muk5 = 0x00000000ffffffff
 -- See [Broadword Implementation of Parenthesis Queries](https://arxiv.org/pdf/1301.5468.pdf), Sebastiano Vigna, 2013
 findUnmatchedCloseFar :: Word64 -> Word64 -> Word64
 findUnmatchedCloseFar p w =
+  --  Keys:
+  --    * k1: Level of sub-words of size 2 = 1 .<. 1
+  --    * k2: Level of sub-words of size 4 = 1 .<. 2
+  --    * k3: Level of sub-words of size 8 = 1 .<. 3
+  --    * o: Open count
+  --    * c: Close count
+  --    * e: Excess
+  --    * L: Left half of sub-word
+  --    * R: Right half of sub-word
+  --    * b: deficit at position whole-word mask
+  --    * m: deficit at position sub-word mask
+  --    * pa: position accumulator
+  --    * sa: shift accumulator
+  --    * f: far sub-block close parens count
   let x     = w .>. p                                                                     in
   let wsz   = 64 :: Int64                                                                 in
   let k1    = 1                                                                           in
