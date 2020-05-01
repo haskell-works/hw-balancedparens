@@ -38,8 +38,8 @@ muk4 = 0x0000ffff
 -- This is the broadword implementation of 'HaskellWorks.Data.BalancedParens.Internal.Slow.Word32.findCloseFor'.
 --
 -- See [Broadword Implementation of Parenthesis Queries](https://arxiv.org/pdf/1301.5468.pdf), Sebastiano Vigna, 2013
-findUnmatchedCloseFar :: Word64 -> Word32 -> Word64
-findUnmatchedCloseFar p w =
+findUnmatchedCloseFar :: Word64 -> Word64 -> Word32 -> Word64
+findUnmatchedCloseFar c p w =
   --  Keys:
   --    * k1: Level of sub-words of size 2 = 1 .<. 1
   --    * k2: Level of sub-words of size 4 = 1 .<. 2
@@ -110,10 +110,11 @@ findUnmatchedCloseFar p w =
   let ok5  = ok5L + ok5R                                                                        in
   let ck5  =  (ck4 .&.  muk4) + kBitDiffPos 32 eck4 eok4                                        in
 
-  let pak5  = 0                                                                                 in
+  let pak5  = c                                                                                 in
   let sak5  = 0                                                                                 in
 
-  let fk5   = (ck5 .>. fromIntegral sak5) .&. mask5                                             in
+  let hk5   = 0x00200020 .&. comp (0xffffffff .>. fromIntegral sak5)                            in
+  let fk5   = ((ck5 .>. fromIntegral sak5) .|. hk5) .&. mask5                                   in
   let bk5   = ((narrow pak5 - fk5) .>. fromIntegral (wsz - 1)) - 1                              in
   let mk5   = bk5 .&. mask5                                                                     in
   let pbk5  = pak5 - widen ((ck5 .>. fromIntegral sak5) .&. mk5)                                in
@@ -123,44 +124,44 @@ findUnmatchedCloseFar p w =
   let pak4  = pck5                                                                              in
   let sak4  = sbk5                                                                              in
 
-  let ek4   = 0x00100010 .&. comp (0xffffffff .>. fromIntegral sak4)                            in
-  let fk4   = ((ck4 .>. fromIntegral sak4) .|. ek4) .&. mask4                                   in
+  let hk4   = 0x00100010 .&. comp (0xffffffff .>. fromIntegral sak4)                            in
+  let fk4   = ((ck4 .>. fromIntegral sak4) .|. hk4) .&. mask4                                   in
   let bk4   = ((narrow pak4 - fk4) .>. fromIntegral (wsz - 1)) - 1                              in
   let mk4   = bk4 .&. mask4                                                                     in
-  let pbk4  = pak4 - widen (((ck4 .>. fromIntegral sak4) .|. ek4) .&. mk4)                      in
+  let pbk4  = pak4 - widen (((ck4 .>. fromIntegral sak4) .|. hk4) .&. mk4)                      in
   let pck4  = pbk4 + widen ( (ok4 .>. fromIntegral sak4)          .&. mk4)                      in
   let sbk4  = sak4 + widen (t8k4 .&. bk4)                                                       in
 
   let pak3  = pck4                                                                              in
   let sak3  = sbk4                                                                              in
 
-  let ek3   = 0x08080808 .&. comp (0xffffffff .>. fromIntegral sak3)                            in
-  let fk3   = ((ck3 .>. fromIntegral sak3) .|. ek3) .&. mask3                                   in
+  let hk3   = 0x08080808 .&. comp (0xffffffff .>. fromIntegral sak3)                            in
+  let fk3   = ((ck3 .>. fromIntegral sak3) .|. hk3) .&. mask3                                   in
   let bk3   = ((narrow pak3 - fk3) .>. fromIntegral (wsz - 1)) - 1                              in
   let mk3   = bk3 .&. mask3                                                                     in
-  let pbk3  = pak3 - widen (((ck3 .>. fromIntegral sak3) .|. ek3) .&. mk3)                      in
+  let pbk3  = pak3 - widen (((ck3 .>. fromIntegral sak3) .|. hk3) .&. mk3)                      in
   let pck3  = pbk3 + widen ( (ok3 .>. fromIntegral sak3)          .&. mk3)                      in
   let sbk3  = sak3 + widen (t8k3 .&. bk3)                                                       in
 
   let pak2  = pck3                                                                              in
   let sak2  = sbk3                                                                              in
 
-  let ek2   = 0xaaaaaaaa .&. comp (0xffffffff .>. fromIntegral sak2)                            in
-  let fk2   = ((ck2 .>. fromIntegral sak2) .|. ek2) .&. mask2                                   in
+  let hk2   = 0x44444444 .&. comp (0xffffffff .>. fromIntegral sak2)                            in
+  let fk2   = ((ck2 .>. fromIntegral sak2) .|. hk2) .&. mask2                                   in
   let bk2   = ((narrow pak2 - fk2) .>. fromIntegral (wsz - 1)) - 1                              in
   let mk2   = bk2 .&. mask2                                                                     in
-  let pbk2  = pak2 - widen (((ck2 .>. fromIntegral sak2) .|. ek2) .&. mk2)                      in
+  let pbk2  = pak2 - widen (((ck2 .>. fromIntegral sak2) .|. hk2) .&. mk2)                      in
   let pck2  = pbk2 + widen ( (ok2 .>. fromIntegral sak2)          .&. mk2)                      in
   let sbk2  = sak2 + widen (t8k2 .&. bk2)                                                       in
 
   let pak1  = pck2                                                                              in
   let sak1  = sbk2                                                                              in
 
-  let ek1   = 0xaaaaaaaa .&. comp (0xffffffff .>. fromIntegral sak1)                            in
-  let fk1   = ((ck1 .>. fromIntegral sak1) .|. ek1) .&. mask1                                   in
+  let hk1   = 0xaaaaaaaa .&. comp (0xffffffff .>. fromIntegral sak1)                            in
+  let fk1   = ((ck1 .>. fromIntegral sak1) .|. hk1) .&. mask1                                   in
   let bk1   = ((narrow pak1 - fk1) .>. fromIntegral (wsz - 1)) - 1                              in
   let mk1   = bk1  .&. mask1                                                                    in
-  let pbk1  = pak1 - widen (((ck1 .>. fromIntegral sak1) .|. ek1) .&. mk1)                      in
+  let pbk1  = pak1 - widen (((ck1 .>. fromIntegral sak1) .|. hk1) .&. mk1)                      in
   let pck1  = pbk1 + widen ( (ok1 .>. fromIntegral sak1)          .&. mk1)                      in
   let sbk1  = sak1 + widen (t8k1 .&. bk1)                                                       in
 
@@ -179,6 +180,6 @@ findClose :: Word32 -> Count -> Maybe Count
 findClose v p = if p > 0
   then if closeAt v p
     then Just p
-    else let q = findUnmatchedCloseFar p v in Just (q + 1)
+    else let q = findUnmatchedCloseFar 0 p v in Just (q + 1)
   else Just 0
 {-# INLINE findClose #-}

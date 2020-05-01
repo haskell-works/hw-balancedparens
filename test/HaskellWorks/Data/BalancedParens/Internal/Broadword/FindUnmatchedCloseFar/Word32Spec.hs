@@ -23,12 +23,13 @@ spec = describe "HaskellWorks.Data.BalancedParens.Broadword.Word32Spec" $ do
     p <- forAll $ pure 0
     w <- forAll $ pure 0xe9f6e7ff
     annotateShow $ bitShow w
-    BW32.findUnmatchedCloseFar p w === SW32.findUnmatchedCloseFar p w
-  it "findUnmatchedCloseFar" $ require $ withTests 10000 $ property $ do
+    BW32.findUnmatchedCloseFar 0 p w === SW32.findUnmatchedCloseFar 0 p w
+  it "findUnmatchedCloseFar" $ require $ withTests 40000 $ property $ do
+    c <- forAll $ G.word64 (R.linear 0 64)
     p <- forAll $ G.word64 (R.linear 0 32)
     w <- forAll $ G.word32 R.constantBounded
     annotateShow $ bitShow w
-    BW32.findUnmatchedCloseFar p w === SW32.findUnmatchedCloseFar p w
+    BW32.findUnmatchedCloseFar c p w === SW32.findUnmatchedCloseFar c p w
   it "findClose" $ require $ withTests 1000 $ property $ do
     p <- forAll $ G.word64 (R.linear 1 128)
     w <- forAll $ G.word32 R.constantBounded

@@ -27,13 +27,13 @@ spec = describe "HaskellWorks.Data.BalancedParens.Broadword.Word16Spec" $ do
     w <- forAll $ pure $ fromJust $ bitRead "11111111 11110100"
     annotateShow $ bitShow w
     annotateShow $ showHex w ""
-    BW16.findUnmatchedCloseFar p w === SW16.findUnmatchedCloseFar p w
-
-  it "findUnmatchedCloseFar" $ require $ withTests 1000 $ property $ do
+    BW16.findUnmatchedCloseFar 0 p w === SW16.findUnmatchedCloseFar 0 p w
+  it "findUnmatchedCloseFar" $ require $ withTests 2000 $ property $ do
+    c <- forAll $ G.word64 (R.linear 0 64)
     p <- forAll $ G.word64 (R.linear 0 16)
     w <- forAll $ G.word16 R.constantBounded
     annotateShow $ bitShow w
-    BW16.findUnmatchedCloseFar p w === SW16.findUnmatchedCloseFar p w
+    BW16.findUnmatchedCloseFar c p w === SW16.findUnmatchedCloseFar c p w
   it "findClose" $ require $ withTests 1000 $ property $ do
     p <- forAll $ G.word64 (R.linear 1 128)
     w <- forAll $ G.word16 R.constantBounded

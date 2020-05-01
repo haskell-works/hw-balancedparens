@@ -21,10 +21,11 @@ import qualified Hedgehog.Range                                                 
 spec :: Spec
 spec = describe "HaskellWorks.Data.BalancedParens.Broadword.Word64Spec" $ do
   it "findUnmatchedCloseFar" $ require $ withTests 100000 $ property $ do
-    p <- forAll $ G.word64 (R.linear 0 64)
+    c <- forAll $ G.word64 (R.linear 0 128)
+    p <- forAll $ G.word64 (R.linear 0 128)
     w <- forAll $ G.word64 R.constantBounded
     annotateShow $ bitShow w
-    BW64.findUnmatchedCloseFar p w === SW64.findUnmatchedCloseFar p w
+    BW64.findUnmatchedCloseFar c p w === SW64.findUnmatchedCloseFar c p w
   it "findClose" $ require $ withTests 1000 $ property $ do
     p <- forAll $ G.word64 (R.linear 1 128)
     w <- forAll $ G.word64 R.constantBounded
