@@ -3,7 +3,6 @@
 
 module HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Word8Spec where
 
-import Control.Monad                  (forM_)
 import HaskellWorks.Data.Bits.BitShow
 import HaskellWorks.Hspec.Hedgehog
 import Hedgehog
@@ -20,13 +19,12 @@ import qualified Hedgehog.Range                                                 
 
 spec :: Spec
 spec = describe "HaskellWorks.Data.BalancedParens.Broadword.Word8Spec" $ do
-  describe "findUnmatchedCloseFar" $ do
-    forM_ [0 .. 8] $ \p0 -> do
-      forM_ [0 .. 0xff] $ \w0 -> do
-        it ("word " <> bitShow w0) $ requireTest $ do
-          p <- forAll $ pure p0
-          w <- forAll $ pure w0
-          BW8.findUnmatchedCloseFar p w === SW8.findUnmatchedCloseFar p w
+  it "findUnmatchedCloseFar" $ require $ withTests 1000 $ property $ do
+    c <- forAll $ G.word64 (R.linear 0 64)
+    p <- forAll $ G.word64 (R.linear 0 8)
+    w <- forAll $ G.word8 R.constantBounded
+    annotateShow $ bitShow w
+    BW8.findUnmatchedCloseFar c p w === SW8.findUnmatchedCloseFar c p w
   it "findClose" $ require $ withTests 1000 $ property $ do
     p <- forAll $ G.word64 (R.linear 1 128)
     w <- forAll $ G.word8 R.constantBounded
