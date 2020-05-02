@@ -184,9 +184,9 @@ main = do
   benchCorpusVectorBroadword <- mkBenchCorpusVector
 
   defaultMain $ mempty
-    -- <> benchWord64
-    -- <> benchVector
-    -- <> benchRm
-    -- <> benchRm2
-    -- <> benchParensSeq
+    <> benchWord64
+    <> benchVector
+    <> benchRm
+    <> benchRm2
+    <> benchParensSeq
     <> benchCorpusVectorBroadword
