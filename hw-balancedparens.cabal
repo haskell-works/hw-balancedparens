@@ -25,6 +25,7 @@ common base                       { build-depends: base                       >=
 common bytestring                 { build-depends: bytestring                 >= 0.9        && < 0.11   }
 common criterion                  { build-depends: criterion                  >= 1.2        && < 1.6    }
 common deepseq                    { build-depends: deepseq                    >= 1.4.2.0    && < 1.5    }
+common directory                  { build-depends: directory                  >= 1.2.2      && < 1.4    }
 common doctest                    { build-depends: doctest                    >= 0.16.2     && < 0.17   }
 common doctest-discover           { build-depends: doctest-discover           >= 0.2        && < 0.3    }
 common generic-lens               { build-depends: generic-lens               >= 1.2.0.0    && < 2.1    }
@@ -178,10 +179,14 @@ test-suite hw-balancedparens-test
 benchmark bench
   import:               base, config
                       , criterion
+                      , deepseq
+                      , directory
+                      , generic-lens
                       , hedgehog
                       , hw-balancedparens
                       , hw-bits
                       , hw-prim
+                      , lens
                       , vector
   other-modules:        HaskellWorks.Data.BalancedParens.Gen
   type:                 exitcode-stdio-1.0
