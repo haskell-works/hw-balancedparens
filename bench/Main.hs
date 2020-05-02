@@ -1,9 +1,20 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE DataKinds           #-}
+{-# LANGUAGE DeriveAnyClass      #-}
+{-# LANGUAGE DeriveGeneric       #-}
+{-# LANGUAGE OverloadedStrings   #-}
+{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE TypeApplications    #-}
 
 module Main where
 
+import Control.DeepSeq
+import Control.Lens                                 ((^.))
+import Control.Monad
 import Criterion.Main
+import Data.Generics.Product.Any
+import Data.Maybe
 import Data.Word
+import GHC.Generics
 import HaskellWorks.Data.BalancedParens.FindClose
 import HaskellWorks.Data.Bits.BitShow
 import HaskellWorks.Data.Bits.BitWise
@@ -12,15 +23,23 @@ import HaskellWorks.Data.Bits.FromBitTextByteString
 import HaskellWorks.Data.Naive
 import HaskellWorks.Data.Ops
 
+import qualified Data.List                                                                        as L
 import qualified Data.Vector.Storable                                                             as DVS
+import qualified HaskellWorks.Data.BalancedParens.FindClose                                       as CLS
 import qualified HaskellWorks.Data.BalancedParens.Gen                                             as G
+import qualified HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.Vector64           as BWV64
 import qualified HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Word64 as BW64
 import qualified HaskellWorks.Data.BalancedParens.Internal.Slow.FindUnmatchedCloseFar.Word64      as SW64
 import qualified HaskellWorks.Data.BalancedParens.ParensSeq                                       as PS
 import qualified HaskellWorks.Data.BalancedParens.RangeMin                                        as RM
 import qualified HaskellWorks.Data.BalancedParens.RangeMin2                                       as RM2
+import qualified HaskellWorks.Data.FromForeignRegion                                              as IO
+import qualified HaskellWorks.Data.Length                                                         as HW
 import qualified Hedgehog.Gen                                                                     as G
 import qualified Hedgehog.Range                                                                   as R
+import qualified System.Directory                                                                 as IO
+
+{-# ANN module ("HLint: ignore Monoid law, left identity"      :: String) #-}
 
 setupEnvVector :: Int -> IO (DVS.Vector Word64)
 setupEnvVector n = return $ DVS.fromList (take n (cycle [maxBound, 0]))
@@ -129,16 +148,45 @@ benchParensSeq =
     , env (G.sample (G.vec2 (G.bpParensSeq (R.singleton 100000)))) $ \ ~(ps1, ps2) -> bgroup "ParensSeq"
       [ bench "(<>)"          (nf (ps1 <>) ps2)
       ]
-    , env (G.sample (G.list (R.singleton 100) (G.word64 (R.constantBounded)))) $ \ws -> bgroup "ParensSeq"
+    , env (G.sample (G.list (R.singleton 100) (G.word64 R.constantBounded))) $ \ws -> bgroup "ParensSeq"
       [ bench "fromWord64s"   (nf PS.fromWord64s ws)
       ]
     ]
   ]
 
+data EnvCorpusVector = EnvCorpusVector
+  { vector :: DVS.Vector Word64
+  , rmm2   :: RM2.RangeMin2 (DVS.Vector Word64)
+  } deriving (Generic, NFData)
+
+mkEnvCorpusVector :: FilePath -> IO EnvCorpusVector
+mkEnvCorpusVector file = do
+  myVector <- IO.mmapFromForeignRegion file
+  myRmm2 <- pure $ RM2.mkRangeMin2 myVector
+  return EnvCorpusVector
+    { vector  = myVector
+    , rmm2    = myRmm2
+    }
+
+mkBenchCorpusVector :: IO [Benchmark]
+mkBenchCorpusVector = do
+  entries <- IO.listDirectory "data/bench"
+  let files = L.sort (("data/bench/" ++) <$> (".ib.idx" `L.isSuffixOf`) `filter` entries)
+  benchmarks <- forM files $ \file -> return
+    [ env (mkEnvCorpusVector file) $ \e -> bgroup "Loading lazy byte string into Word64s" $ mempty
+      <> [bench ("BWV64.findClose with sum " <> file) (whnf (sum . mapMaybe (BWV64.findClose (e ^. the @"vector"))) [1 .. HW.length (e ^. the @"vector") * 64])]
+      <> [bench ("CLS.findClose   with sum " <> file) (whnf (sum . mapMaybe (CLS.findClose   (e ^. the @"rmm2"  ))) [1 .. HW.length (e ^. the @"vector") * 64])]
+    ]
+  return (join benchmarks)
+
 main :: IO ()
-main = defaultMain $ mempty
-  <> benchWord64
-  <> benchVector
-  <> benchRm
-  <> benchRm2
-  <> benchParensSeq
+main = do
+  benchCorpusVectorBroadword <- mkBenchCorpusVector
+
+  defaultMain $ mempty
+    -- <> benchWord64
+    -- <> benchVector
+    -- <> benchRm
+    -- <> benchRm2
+    -- <> benchParensSeq
+    <> benchCorpusVectorBroadword

@@ -26,4 +26,4 @@ cabal.sandbox.config
 /stack-ci.yaml
 /.ghc.environment.*
 /cabal.project.local
-
+/data
