@@ -51,10 +51,6 @@ spec = describe "HaskellWorks.Data.BalancedParens.RangeMinSpec" $ do
     p <- forAll $ G.count (R.linear 1 (bitLength v))
     let !rm = mkRangeMin v
     mfilter (<= bitLength v) (findClose rm p) === mfilter (<= bitLength v) (findClose v p)
-  it "nextSibling should return the same result" $ requireProperty $ do
-    v <- forAll $ G.storableVector (R.linear 1 factor) (G.word64 R.constantBounded)
-    let !rm = mkRangeMin v
-    nextSibling rm 0 === nextSibling v 0
   it "nextSibling should return the same result over all counts" $ requireProperty $ do
     v <- forAll $ G.storableVector (R.linear 1 factor) (G.word64 R.constantBounded)
     p <- forAll $ G.count (R.linear 1 (bitLength v))

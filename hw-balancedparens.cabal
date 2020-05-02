@@ -145,6 +145,7 @@ executable hw-balancedparens
 
 test-suite hw-balancedparens-test
   import:               base, config
+                      , directory
                       , hedgehog
                       , hspec
                       , hw-balancedparens
