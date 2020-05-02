@@ -13,8 +13,12 @@ import HaskellWorks.Data.Bits.Broadword.Type
 import HaskellWorks.Data.Naive
 import HaskellWorks.Data.Positioning
 
-import qualified Data.Vector.Storable                                       as DVS
-import qualified HaskellWorks.Data.BalancedParens.Internal.Broadword.Word64 as W64
+import qualified Data.Vector.Storable                                                   as DVS
+import qualified HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.Vector16 as BWV16
+import qualified HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.Vector32 as BWV32
+import qualified HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.Vector64 as BWV64
+import qualified HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.Vector8  as BWV8
+import qualified HaskellWorks.Data.BalancedParens.Internal.Broadword.Word64             as W64
 
 class FindClose v where
   findClose   :: v -> Count -> Maybe Count
@@ -28,19 +32,35 @@ instance FindClose [Bool] where
   {-# INLINE findClose #-}
 
 instance FindClose (DVS.Vector Word8) where
-  findClose v p = if v `closeAt` p then Just p else findCloseN v 1 (p + 1)
+  findClose = BWV8.findClose
   {-# INLINE findClose #-}
 
 instance FindClose (DVS.Vector Word16) where
-  findClose v p = if v `closeAt` p then Just p else findCloseN v 1 (p + 1)
+  findClose = BWV16.findClose
   {-# INLINE findClose #-}
 
 instance FindClose (DVS.Vector Word32) where
-  findClose v p = if v `closeAt` p then Just p else findCloseN v 1 (p + 1)
+  findClose = BWV32.findClose
   {-# INLINE findClose #-}
 
 instance FindClose (DVS.Vector Word64) where
-  findClose v p = if v `closeAt` p then Just p else findCloseN v 1 (p + 1)
+  findClose = BWV64.findClose
+  {-# INLINE findClose #-}
+
+instance FindClose (Naive (DVS.Vector Word8)) where
+  findClose (Naive v) p = if v `closeAt` p then Just p else findCloseN v 1 (p + 1)
+  {-# INLINE findClose #-}
+
+instance FindClose (Naive (DVS.Vector Word16)) where
+  findClose (Naive v) p = if v `closeAt` p then Just p else findCloseN v 1 (p + 1)
+  {-# INLINE findClose #-}
+
+instance FindClose (Naive (DVS.Vector Word32)) where
+  findClose (Naive v) p = if v `closeAt` p then Just p else findCloseN v 1 (p + 1)
+  {-# INLINE findClose #-}
+
+instance FindClose (Naive (DVS.Vector Word64)) where
+  findClose (Naive v) p = if v `closeAt` p then Just p else findCloseN v 1 (p + 1)
   {-# INLINE findClose #-}
 
 instance FindClose Word8 where
