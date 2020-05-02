@@ -17,6 +17,7 @@ import qualified HaskellWorks.Data.BalancedParens.Internal.Slow.FindUnmatchedClo
 import qualified Hedgehog.Gen                                                                     as G
 import qualified Hedgehog.Range                                                                   as R
 
+
 {-# ANN module ("HLint: ignore Redundant do"        :: String) #-}
 {-# ANN module ("HLint: ignore Reduce duplication"  :: String) #-}
 

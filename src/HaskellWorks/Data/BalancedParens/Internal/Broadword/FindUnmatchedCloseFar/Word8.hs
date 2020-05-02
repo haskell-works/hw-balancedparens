@@ -160,5 +160,5 @@ findClose v p = if p > 0
   then if closeAt v p
     then Just p
     else let q = findUnmatchedCloseFar 0 p v in Just (q + 1)
-  else Just 0
+  else Just (findUnmatchedCloseFar 1 p v)
 {-# INLINE findClose #-}
