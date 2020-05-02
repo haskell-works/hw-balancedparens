@@ -107,4 +107,4 @@ spec = describe "HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.V
             _   <- forAll $ pure file
             p   <- forAll $ G.word64 (R.linear 1 (bitLength v))
             _   <- forAll $ pure $ bitShow v
-            CLS.findClose v p === CLS.findClose rmm2 p
+            mfilter (<= bitLength v) (CLS.findClose v p) === CLS.findClose rmm2 p

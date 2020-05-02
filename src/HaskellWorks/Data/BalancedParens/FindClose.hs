@@ -21,7 +21,31 @@ import qualified HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.V
 import qualified HaskellWorks.Data.BalancedParens.Internal.Broadword.Word64             as W64
 
 class FindClose v where
-  findClose   :: v -> Count -> Maybe Count
+  -- | Find the closing parenthesis that machines the open parenthesis at the current position.
+  --
+  -- If the parenthesis at the current position is an close parenthesis, then return the current position.
+  --
+  -- Indexes are 1-based.  1 corresponds to open and 0 corresponds to close.
+  --
+  -- If we run out of bits in the supplied bit-string, the implementation my either return Nothing, or
+  -- assume all the bits that follow are zeros.
+  --
+  -- >>> :set -XTypeApplications
+  -- >>> import Data.Maybe
+  -- >>> import HaskellWorks.Data.Bits.BitRead
+  -- >>> findClose (fromJust (bitRead @Word64 "00000000")) 1
+  -- Just 1
+  -- >>> findClose (fromJust (bitRead @Word64 "10101010")) 1
+  -- Just 2
+  -- >>> findClose (fromJust (bitRead @Word64 "10101010")) 2
+  -- Just 2
+  -- >>> findClose (fromJust (bitRead @Word64 "10101010")) 3
+  -- Just 4
+  -- >>> findClose (fromJust (bitRead @Word64 "11010010")) 1
+  -- Just 6
+  -- >>> findClose (fromJust (bitRead @Word64 "11110000")) 1
+  -- Just 8
+  findClose :: v -> Count -> Maybe Count
 
 instance (FindClose a) => FindClose (BitShown a) where
   findClose = findClose . bitShown
