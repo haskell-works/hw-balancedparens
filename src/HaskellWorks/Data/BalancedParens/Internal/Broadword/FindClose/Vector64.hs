@@ -42,5 +42,5 @@ findClose' v p = if DVS.length v > 0
           then  findCloseCont v 1 (q - bitLength w)
           else Just (q + 1)
     else Just (p * 2)
-  where w  = DVS.head v
+  where w  = v !!! 0
 {-# INLINE findClose' #-}
