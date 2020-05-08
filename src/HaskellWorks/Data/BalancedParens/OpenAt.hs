@@ -15,7 +15,7 @@ import HaskellWorks.Data.Positioning
 import qualified Data.Vector.Storable as DVS
 
 class OpenAt v where
-  openAt      :: v -> Count -> Bool
+  openAt :: v -> Count -> Bool
 
 openAt' :: (BitLength a, TestBit a) => a -> Count -> Bool
 openAt' v c = (0 <= c && c < bitLength v) && (v .?. toPosition (c - 1))

@@ -96,7 +96,7 @@ splitAt n (ParensSeq parens) = case FT.split (PS.atSizeBelowZero n) parens of
         else (ParensSeq (lt |> PS.Elem ((w .<. u) .>. u) n'), ParensSeq (PS.Elem (w .>. n') (nw - n') <| rrt))
       FT.EmptyL          -> (ParensSeq lt, ParensSeq FT.empty)
 
-firstChild  :: ParensSeq -> Count -> Maybe Count
+firstChild :: ParensSeq -> Count -> Maybe Count
 firstChild ps n = case FT.viewl ft of
   PS.Elem w nw :< rt -> if nw >= 2
     then case w .&. 3 of
@@ -116,7 +116,7 @@ firstChild ps n = case FT.viewl ft of
   FT.EmptyL -> Nothing
   where ParensSeq ft = drop (n - 1) ps
 
-nextSibling  :: ParensSeq -> Count -> Maybe Count
+nextSibling :: ParensSeq -> Count -> Maybe Count
 nextSibling (ParensSeq ps) n = do
   let (lt0, rt0) = PS.ftSplit (PS.atSizeBelowZero (n - 1)) ps
   _ <- case FT.viewl rt0 of

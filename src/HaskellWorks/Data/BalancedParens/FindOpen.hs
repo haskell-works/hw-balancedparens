@@ -14,7 +14,7 @@ import HaskellWorks.Data.Positioning
 import qualified Data.Vector.Storable as DVS
 
 class FindOpen v where
-  findOpen    :: v -> Count -> Maybe Count
+  findOpen :: v -> Count -> Maybe Count
 
 instance (FindOpen a) => FindOpen (BitShown a) where
   findOpen = findOpen . bitShown
