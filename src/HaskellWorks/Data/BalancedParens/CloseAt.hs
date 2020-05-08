@@ -34,7 +34,7 @@ class CloseAt v where
   --
   -- >>> closeAt (fromJust $ bitRead @Word8 "10101010") 9
   -- True
-  closeAt     :: v -> Count -> Bool
+  closeAt :: v -> Count -> Bool
 
 instance (BitLength a, TestBit a) => CloseAt (BitShown a) where
   closeAt = closeAt' . bitShown

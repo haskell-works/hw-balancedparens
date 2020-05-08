@@ -22,20 +22,22 @@ import qualified Data.Vector.Storable as DVS
 
 class (OpenAt v, CloseAt v, FindOpen v, FindClose v, Enclose v) => BalancedParens v where
   -- TODO Second argument should be Int
-  firstChild  :: v -> Count -> Maybe Count
-  nextSibling :: v -> Count -> Maybe Count
-  parent      :: v -> Count -> Maybe Count
+  firstChild :: v -> Count -> Maybe Count
   firstChild  v p = if openAt v p && openAt v (p + 1)   then Just (p + 1) else Nothing
+  {-# INLINE firstChild #-}
+
+  nextSibling :: v -> Count -> Maybe Count
   nextSibling v p = if closeAt v p
     then Nothing
     else openAt v `mfilter` (findClose v p >>= (\q ->
       if p /= q
         then return (q + 1)
         else Nothing))
-  parent      v p = enclose   v p >>= (\r -> if r >= 1 then return r      else Nothing)
-  {-# INLINE firstChild   #-}
-  {-# INLINE nextSibling  #-}
-  {-# INLINE parent       #-}
+  {-# INLINE nextSibling #-}
+
+  parent :: v -> Count -> Maybe Count
+  parent v p = enclose v p >>= (\r -> if r >= 1 then return r      else Nothing)
+  {-# INLINE parent #-}
 
 depth :: (BalancedParens v, Rank0 v, Rank1 v) => v -> Count -> Maybe Count
 depth v p = (\q -> rank1 v q - rank0 v q) <$> findOpen v p

@@ -14,7 +14,7 @@ import HaskellWorks.Data.Positioning
 import qualified Data.Vector.Storable as DVS
 
 class NewCloseAt v where
-  newCloseAt     :: v -> Count -> Bool
+  newCloseAt :: v -> Count -> Bool
 
 newCloseAt' :: TestBit a => a -> Count -> Bool
 newCloseAt' v c = not (v .?. toPosition c)

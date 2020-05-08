@@ -13,7 +13,7 @@ import HaskellWorks.Data.Positioning
 import qualified Data.Vector.Storable as DVS
 
 class Enclose v where
-  enclose     :: v -> Count -> Maybe Count
+  enclose :: v -> Count -> Maybe Count
 
 instance (Enclose a) => Enclose (BitShown a) where
   enclose = enclose . bitShown
