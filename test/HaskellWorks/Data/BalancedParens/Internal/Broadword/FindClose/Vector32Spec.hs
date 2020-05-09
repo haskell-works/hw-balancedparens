@@ -19,9 +19,10 @@ import qualified HaskellWorks.Data.BalancedParens.Internal.Slow.FindCloseN.Gener
 import qualified Hedgehog.Gen                                                           as G
 import qualified Hedgehog.Range                                                         as R
 
-{-# ANN module ("HLint: ignore Evaluate"            :: String) #-}
-{-# ANN module ("HLint: ignore Reduce duplication"  :: String) #-}
-{-# ANN module ("HLint: ignore Redundant do"        :: String) #-}
+{- HLINT ignore "Evaluate"            -}
+{- HLINT ignore "Redundant do"        -}
+{- HLINT ignore "Redundant return"    -}
+{- HLINT ignore "Reduce duplication"  -}
 
 spec :: Spec
 spec = describe "HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.Vector32Spec" $ do

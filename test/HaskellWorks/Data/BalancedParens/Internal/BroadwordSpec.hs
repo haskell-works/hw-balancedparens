@@ -20,8 +20,9 @@ import qualified HaskellWorks.Data.BalancedParens.Gen as G
 import qualified Hedgehog.Gen                         as G
 import qualified Hedgehog.Range                       as R
 
-{-# ANN module ("HLint: ignore Redundant do"        :: String) #-}
-{-# ANN module ("HLint: ignore Reduce duplication"  :: String) #-}
+{- HLINT ignore "Redundant do"        -}
+{- HLINT ignore "Redundant return"    -}
+{- HLINT ignore "Reduce duplication"  -}
 
 newtype ShowVector a = ShowVector a deriving (Eq, BitShow, Generic)
 

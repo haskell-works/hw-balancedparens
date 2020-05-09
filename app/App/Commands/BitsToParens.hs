@@ -17,9 +17,6 @@ import qualified App.IO                    as IO
 import qualified Data.ByteString.Builder   as B
 import qualified Data.ByteString.Lazy      as LBS
 
-{-# ANN module ("HLint: ignore Redundant do"      :: String) #-}
-{-# ANN module ("HLint: ignore Redundant return"  :: String) #-}
-
 bitString :: Word8 -> B.Builder
 bitString w =
   go ((w .>. 0) .&. 1) <>

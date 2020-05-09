@@ -18,8 +18,8 @@ import qualified App.Commands.Options.Type as Z
 import qualified App.IO                    as IO
 import qualified Data.ByteString.Lazy      as LBS
 
-{-# ANN module ("HLint: ignore Redundant do"      :: String) #-}
-{-# ANN module ("HLint: ignore Redundant return"  :: String) #-}
+{- HLINT ignore "Redundant do"      -}
+{- HLINT ignore "Redundant return"  -}
 
 unparens :: LBS.ByteString -> LBS.ByteString
 unparens = LBS.unfoldr go . (0, 0, )

@@ -26,9 +26,9 @@ import qualified Hedgehog.Range                                                 
 import qualified System.Directory                                                      as IO
 import qualified System.IO.Unsafe                                                      as IO
 
-{-# ANN module ("HLint: ignore Evaluate"            :: String) #-}
-{-# ANN module ("HLint: ignore Reduce duplication"  :: String) #-}
-{-# ANN module ("HLint: ignore Redundant do"        :: String) #-}
+{- HLINT ignore "Redundant do"        -}
+{- HLINT ignore "Redundant return"    -}
+{- HLINT ignore "Reduce duplication"  -}
 
 testFiles :: [FilePath]
 testFiles = IO.unsafePerformIO $ do
