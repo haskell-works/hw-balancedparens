@@ -39,7 +39,7 @@ import qualified Hedgehog.Gen                                                   
 import qualified Hedgehog.Range                                                                   as R
 import qualified System.Directory                                                                 as IO
 
-{-# ANN module ("HLint: ignore Monoid law, left identity"      :: String) #-}
+{- HLINT ignore "Monoid law, left identity" -}
 
 setupEnvVector :: Int -> IO (DVS.Vector Word64)
 setupEnvVector n = return $ DVS.fromList (take n (cycle [maxBound, 0]))

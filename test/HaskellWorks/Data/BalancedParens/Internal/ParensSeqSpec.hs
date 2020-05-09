@@ -1,6 +1,5 @@
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
-{-# LANGUAGE OverloadedStrings          #-}
-{-# LANGUAGE ScopedTypeVariables        #-}
+{-# LANGUAGE OverloadedStrings   #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module HaskellWorks.Data.BalancedParens.Internal.ParensSeqSpec where
 
@@ -17,8 +16,9 @@ import qualified HaskellWorks.Data.BalancedParens.ParensSeq      as PS
 import qualified Hedgehog.Gen                                    as G
 import qualified Hedgehog.Range                                  as R
 
-{-# ANN module ("HLint: ignore Redundant do"        :: String) #-}
-{-# ANN module ("HLint: ignore Reduce duplication"  :: String) #-}
+{- HLINT ignore "Redundant do"        -}
+{- HLINT ignore "Redundant return"    -}
+{- HLINT ignore "Reduce duplication"  -}
 
 spec :: Spec
 spec = describe "HaskellWorks.Data.BalancedParens.Internal.ParensSeqSpec" $ do
