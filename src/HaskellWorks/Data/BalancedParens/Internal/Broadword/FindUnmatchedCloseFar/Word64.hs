@@ -5,7 +5,6 @@
 
 module HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Word64
   ( findUnmatchedCloseFar
-  , findClose
   ) where
 
 import Data.Int

@@ -76,6 +76,10 @@ library
                         HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.Vector32
                         HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.Vector64
                         HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.Vector8
+                        HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.Word16
+                        HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.Word32
+                        HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.Word64
+                        HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.Word8
                         HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Word16
                         HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Word32
                         HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Word64
