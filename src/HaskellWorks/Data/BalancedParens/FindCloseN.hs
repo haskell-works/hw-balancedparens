@@ -16,6 +16,11 @@ import qualified Data.Vector.Storable                                           
 import qualified HaskellWorks.Data.BalancedParens.Internal.Slow.FindCloseN.Generic as G
 
 class FindCloseN v where
+  -- | Find the position of the corresponding close parenthesis carrying in a number of open parentheses starting from a given position.
+  --
+  -- All positions are one based.
+  --
+  -- See the reference implementation 'G.findCloseN' for details
   findCloseN :: v -> Count -> Count -> Maybe Count
 
 instance (CloseAt a, TestBit a, BitLength a) => FindCloseN (BitShown a) where
