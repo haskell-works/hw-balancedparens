@@ -48,6 +48,6 @@ findClose :: Word16 -> Count -> Maybe Count
 findClose v p = if p > 0
   then if closeAt v p
     then Just p
-    else let q = W16.findUnmatchedCloseFar 0 p v in Just (q + 1)
+    else Just (W16.findUnmatchedCloseFar 0 p v + 1)
   else Just (W16.findUnmatchedCloseFar 1 p v)
 {-# INLINE findClose #-}
