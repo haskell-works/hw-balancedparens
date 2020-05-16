@@ -9,12 +9,10 @@ module HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar
 
 import Data.Int
 import Data.Word
-import HaskellWorks.Data.BalancedParens.CloseAt
 import HaskellWorks.Data.Bits.BitWise
 import HaskellWorks.Data.Bits.Broadword.Word32
 import HaskellWorks.Data.Int.Narrow
 import HaskellWorks.Data.Int.Widen
-import HaskellWorks.Data.Positioning
 
 muk1 :: Word32
 muk1 = 0x33333333
@@ -168,17 +166,3 @@ findUnmatchedCloseFar c p w =
 
   rrr + p
 {-# INLINE findUnmatchedCloseFar #-}
-
--- | Find the position of the matching close parenthesis.
---
--- The position argument and return value is one-based.
---
--- If the parenthesis at the input position is an a close, then that is considered the
--- matching close parenthesis.
-findClose :: Word32 -> Count -> Maybe Count
-findClose v p = if p > 0
-  then if closeAt v p
-    then Just p
-    else let q = findUnmatchedCloseFar 0 p v in Just (q + 1)
-  else Just 0
-{-# INLINE findClose #-}

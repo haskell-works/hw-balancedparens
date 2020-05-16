@@ -9,12 +9,10 @@ module HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar
 
 import Data.Int
 import Data.Word
-import HaskellWorks.Data.BalancedParens.CloseAt
 import HaskellWorks.Data.Bits.BitWise
 import HaskellWorks.Data.Bits.Broadword.Word8
 import HaskellWorks.Data.Int.Narrow
 import HaskellWorks.Data.Int.Widen
-import HaskellWorks.Data.Positioning
 
 muk1 :: Word8
 muk1 = 0x33
