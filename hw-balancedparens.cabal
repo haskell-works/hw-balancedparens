@@ -32,7 +32,7 @@ common generic-lens               { build-depends: generic-lens               >=
 common hedgehog                   { build-depends: hedgehog                   >= 1.0        && < 1.1    }
 common hspec                      { build-depends: hspec                      >= 2.2        && < 3.0    }
 common hw-hspec-hedgehog          { build-depends: hw-hspec-hedgehog          >= 0.1        && < 0.2    }
-common hw-bits                    { build-depends: hw-bits                    >= 0.7.1.5    && < 0.8    }
+common hw-bits                    { build-depends: hw-bits                    >= 0.7.2.1    && < 0.8    }
 common hw-excess                  { build-depends: hw-excess                  >= 0.2.2.0    && < 0.3    }
 common hw-fingertree              { build-depends: hw-fingertree              >= 0.1.1.0    && < 0.2    }
 common hw-int                     { build-depends: hw-int                     >= 0.0.2      && < 0.0.3  }
@@ -80,6 +80,10 @@ library
                         HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.Word32
                         HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.Word64
                         HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.Word8
+                        HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Vector16
+                        HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Vector32
+                        HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Vector64
+                        HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Vector8
                         HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Word16
                         HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Word32
                         HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Word64
@@ -91,6 +95,10 @@ library
                         HaskellWorks.Data.BalancedParens.Internal.Show
                         HaskellWorks.Data.BalancedParens.Internal.Slow.FindCloseC.Generic
                         HaskellWorks.Data.BalancedParens.Internal.Slow.FindCloseN.Generic
+                        HaskellWorks.Data.BalancedParens.Internal.Slow.FindUnmatchedCloseFar.Vector16
+                        HaskellWorks.Data.BalancedParens.Internal.Slow.FindUnmatchedCloseFar.Vector32
+                        HaskellWorks.Data.BalancedParens.Internal.Slow.FindUnmatchedCloseFar.Vector64
+                        HaskellWorks.Data.BalancedParens.Internal.Slow.FindUnmatchedCloseFar.Vector8
                         HaskellWorks.Data.BalancedParens.Internal.Slow.FindUnmatchedCloseFar.Word16
                         HaskellWorks.Data.BalancedParens.Internal.Slow.FindUnmatchedCloseFar.Word32
                         HaskellWorks.Data.BalancedParens.Internal.Slow.FindUnmatchedCloseFar.Word64
@@ -163,7 +171,11 @@ test-suite hw-balancedparens-test
                       , vector
   type:                 exitcode-stdio-1.0
   main-is:              Spec.hs
-  other-modules:        HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.Vector8Spec
+  other-modules:        HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Vector8Spec
+                        HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Vector16Spec
+                        HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Vector32Spec
+                        HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Vector64Spec
+                        HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.Vector8Spec
                         HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.Vector16Spec
                         HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.Vector32Spec
                         HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.Vector64Spec
