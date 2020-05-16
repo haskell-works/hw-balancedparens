@@ -9,6 +9,7 @@ import Hedgehog
 import Test.Hspec
 
 import qualified HaskellWorks.Data.BalancedParens.FindClose                                      as C
+import qualified HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.Word8             as BW8
 import qualified HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Word8 as BW8
 import qualified HaskellWorks.Data.BalancedParens.Internal.Slow.FindUnmatchedCloseFar.Word8      as SW8
 import qualified Hedgehog.Gen                                                                    as G
