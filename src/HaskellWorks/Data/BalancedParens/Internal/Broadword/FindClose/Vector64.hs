@@ -2,45 +2,53 @@ module HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.Vector64
   ( findClose
   ) where
 
-import Data.Int
 import Data.Word
-import HaskellWorks.Data.AtIndex
 import HaskellWorks.Data.BalancedParens.CloseAt
-import HaskellWorks.Data.Bits.BitLength
-import HaskellWorks.Data.Int.Unsigned
 import HaskellWorks.Data.Positioning
 
-import qualified Data.Vector.Storable                                                             as DVS
-import qualified HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Word64 as BW64
-import qualified HaskellWorks.Data.Drop                                                           as HW
-import qualified HaskellWorks.Data.Length                                                         as HW
+import qualified Data.Vector.Storable                                                               as DVS
+import qualified HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Vector64 as BWV64
 
-findCloseCont :: DVS.Vector Word64 -> Int64 -> Count -> Maybe Count
-findCloseCont v i c = if i < HW.end v
-  then case BW64.findUnmatchedCloseFar c 0 w of
-    q -> if q >= bitLength w
-      then findCloseCont v (i + 1) (q - bitLength w)
-      else Just (b + q + 1)
-  else Just (b + c + 1)
-  where b  = unsigned i * bitLength w -- base
-        w  = v !!! fromIntegral i
-{-# INLINE findCloseCont #-}
-
+-- | Find the position of the matching close parenthesis.
+--
+-- The position argument and return value is one-based.
+--
+-- If the parenthesis at the input position is an a close, then that is considered the
+-- matching close parenthesis.
+--
+-- >>> import HaskellWorks.Data.Bits.BitRead
+-- >>> import Data.Maybe
+--
+-- The following scans for the matching close parenthesis for the open parenthesis at position 1:
+--
+-- >>> findClose (fromJust $ bitRead "10000000") 1
+-- Just 2
+--
+-- >>> findClose (fromJust $ bitRead "11000000") 1
+-- Just 4
+--
+-- >>> findClose (fromJust $ bitRead "11010000") 1
+-- Just 6
+--
+-- The following scans for the matching close parenthesis for the open parenthesis at position 2:
+--
+-- >>> findClose (fromJust $ bitRead "11010000") 2
+-- Just 3
+--
+-- If the input position has a close parenthesis, then that position is returned:
+--
+-- >>> findClose (fromJust $ bitRead "11010000") 3
+-- Just 3
+--
+-- The scan can continue past the end of the input word because every bit after then end of the
+-- word is considered to be zero, which is a closing parenthesis:
+--
+-- >>> findClose (fromJust $ bitRead "11111110") 1
+-- Just 14
 findClose :: DVS.Vector Word64 -> Count -> Maybe Count
-findClose _ 0 = Nothing
-findClose v p = fmap (+ vd) (findClose' (HW.drop vi v) (p - vd))
-  where vi = (p - 1) `div` elemBitLength v
-        vd = vi * elemBitLength v
+findClose v p = if p > 0
+  then if closeAt v p
+    then Just p
+    else Just (BWV64.findUnmatchedCloseFar 0 p v + 1)
+  else Just (BWV64.findUnmatchedCloseFar 1 p v)
 {-# INLINE findClose #-}
-
-findClose' :: DVS.Vector Word64 -> Count -> Maybe Count
-findClose' v p = if DVS.length v > 0
-    then if closeAt w p
-      then Just p
-      else case BW64.findUnmatchedCloseFar 0 p w of
-        q -> if q >= bitLength w
-          then  findCloseCont v 1 (q - bitLength w)
-          else Just (q + 1)
-    else Just (p * 2)
-  where w  = v !!! 0
-{-# INLINE findClose' #-}
