@@ -88,7 +88,7 @@ spec = describe "HaskellWorks.Data.BalancedParens.Internal.ParensSeqSpec" $ do
     PS.firstChild ps pos === BP.firstChild bs pos
   it "firstChild should select first child" $ requireTest $ do
     let bps = "((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((()))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))"
-    let bs  = fmap (\c -> if c == '(' then True else False) bps
+    let bs  = fmap (== '(') bps
     let ps = PS.fromBools bs
 
     PS.firstChild ps 64 === Just 65
@@ -114,13 +114,13 @@ spec = describe "HaskellWorks.Data.BalancedParens.Internal.ParensSeqSpec" $ do
 
     PS.toBools (ps1 >< ps2) === PS.toBools ps1 >< PS.toBools ps2
   it "(<|) should cons" $ requireTest $ do
-    b         <- forAll $ G.bool
+    b         <- forAll   G.bool
     bs        <- forAll $ G.bpBools (R.linear 1 1000)
     ps        <- forAll $ pure $ PS.fromBools bs
 
     PS.toBools (b <| ps) === b:PS.toBools ps
   it "(|>) should snoc" $ requireTest $ do
-    b         <- forAll $ G.bool
+    b         <- forAll   G.bool
     bs        <- forAll $ G.bpBools (R.linear 1 1000)
     ps        <- forAll $ pure $ PS.fromBools bs
 

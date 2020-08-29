@@ -26,6 +26,7 @@ import qualified Hedgehog.Range                                                 
 import qualified System.Directory                                                      as IO
 import qualified System.IO.Unsafe                                                      as IO
 
+{- HLINT ignore "Evaluate"            -}
 {- HLINT ignore "Redundant do"        -}
 {- HLINT ignore "Redundant return"    -}
 {- HLINT ignore "Reduce duplication"  -}
@@ -102,7 +103,7 @@ spec = describe "HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.V
       forM_ testFiles $ \file -> do
         it ("File " <> file) $ do
           v     <- IO.mmapFromForeignRegion file
-          rmm2  <- pure $ RM2.mkRangeMin2 (v :: DVS.Vector Word64)
+          let rmm2 = RM2.mkRangeMin2 (v :: DVS.Vector Word64)
           require $ withTests 100000 $ property $ do
             _   <- forAll $ pure file
             p   <- forAll $ G.word64 (R.linear 1 (bitLength v))

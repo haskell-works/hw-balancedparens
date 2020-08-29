@@ -1,5 +1,4 @@
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
-{-# LANGUAGE ScopedTypeVariables        #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module HaskellWorks.Data.BalancedParens.SimpleSpec where
 
