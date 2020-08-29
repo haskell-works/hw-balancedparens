@@ -1,5 +1,3 @@
-{-# LANGUAGE LambdaCase #-}
-
 module HaskellWorks.Data.BalancedParens.Internal.Slow.FindUnmatchedCloseFar.Word8
   ( findUnmatchedCloseFar
   ) where

@@ -1,5 +1,4 @@
 {-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE TupleSections #-}
 
 module HaskellWorks.Data.BalancedParens.Gen
   ( BP(..)
@@ -28,6 +27,8 @@ import qualified HaskellWorks.Data.BalancedParens.RangeMin  as RM
 import qualified HaskellWorks.Data.BalancedParens.RangeMin2 as RM2
 import qualified Hedgehog.Gen                               as G
 import qualified Hedgehog.Range                             as R
+
+{- HLINT ignore "Use guards" -}
 
 count :: MonadGen m => Range Count -> m Count
 count r = coerce <$> G.word64 (coerce <$> r)

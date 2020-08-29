@@ -144,7 +144,7 @@ benchParensSeq =
       , bench "nextSibling"   (nf (map (PS.nextSibling ps)) [1,101..100000])
       , bench "(<|)"          (nf (<| ps) True)
       , bench "(|>)"          (nf (ps |>) True)
-      , bench "drop"          (nf (fmap (flip PS.drop  ps)) [1,101..100000])
+      , bench "drop"          (nf (fmap (`PS.drop` ps)) [1,101..100000])
       ]
     , env (G.sample (G.vec2 (G.bpParensSeq (R.singleton 100000)))) $ \ ~(ps1, ps2) -> bgroup "ParensSeq"
       [ bench "(<>)"          (nf (ps1 <>) ps2)
@@ -163,7 +163,7 @@ data EnvCorpusVector = EnvCorpusVector
 mkEnvCorpusVector :: FilePath -> IO EnvCorpusVector
 mkEnvCorpusVector file = do
   myVector <- IO.mmapFromForeignRegion file
-  myRmm2 <- pure $ RM2.mkRangeMin2 myVector
+  let myRmm2 = RM2.mkRangeMin2 myVector
   return EnvCorpusVector
     { vector  = myVector
     , rmm2    = myRmm2
