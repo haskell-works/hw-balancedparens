@@ -24,7 +24,6 @@ import qualified HaskellWorks.Data.BalancedParens.RangeMin2                     
 import qualified HaskellWorks.Data.FromForeignRegion                                   as IO
 import qualified Hedgehog.Gen                                                          as G
 import qualified Hedgehog.Range                                                        as R
-import qualified System.Directory                                                      as IO
 import qualified System.IO.Unsafe                                                      as IO
 
 {- HLINT ignore "Evaluate"            -}
