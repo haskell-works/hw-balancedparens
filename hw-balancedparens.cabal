@@ -125,12 +125,14 @@ library
 library hw-balancedparens-gen
   import:               base, config
                       , deepseq
+                      , directory
                       , hedgehog
                       , hspec
                       , hw-balancedparens
                       , hw-prim
                       , vector
   exposed-modules:      HaskellWorks.Data.BalancedParens.Gen
+                        HaskellWorks.Data.BalancedParens.Internal.IO
   hs-source-dirs:       gen
 
 executable hw-balancedparens
@@ -201,15 +203,14 @@ benchmark bench
                       , generic-lens
                       , hedgehog
                       , hw-balancedparens
+                      , hw-balancedparens-gen
                       , hw-bits
                       , hw-prim
                       , lens
                       , vector
-  other-modules:        HaskellWorks.Data.BalancedParens.Gen
   type:                 exitcode-stdio-1.0
   main-is:              Main.hs
   hs-source-dirs:       bench
-                      , gen
 
 test-suite doctest
   import:               base, config

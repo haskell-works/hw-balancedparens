@@ -18,6 +18,7 @@ import qualified Data.List                                                      
 import qualified Data.Vector.Storable                                                  as DVS
 import qualified HaskellWorks.Data.BalancedParens.FindClose                            as CLS
 import qualified HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.Vector8 as V8
+import qualified HaskellWorks.Data.BalancedParens.Internal.IO                          as IO
 import qualified HaskellWorks.Data.BalancedParens.Internal.Slow.FindCloseN.Generic     as G
 import qualified HaskellWorks.Data.BalancedParens.RangeMin2                            as RM2
 import qualified HaskellWorks.Data.FromForeignRegion                                   as IO
@@ -33,7 +34,7 @@ import qualified System.IO.Unsafe                                               
 
 testFiles :: [FilePath]
 testFiles = IO.unsafePerformIO $ do
-  files <- IO.listDirectory "data/test"
+  files <- IO.safeListDirectory "data/test"
   return $ L.sort (("data/test/" ++) <$> (".ib.idx" `L.isSuffixOf`) `filter` files)
 {-# NOINLINE testFiles #-}
 
