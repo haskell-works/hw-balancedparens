@@ -29,6 +29,7 @@ import qualified HaskellWorks.Data.BalancedParens.FindClose                     
 import qualified HaskellWorks.Data.BalancedParens.Gen                                             as G
 import qualified HaskellWorks.Data.BalancedParens.Internal.Broadword.FindClose.Vector64           as BWV64
 import qualified HaskellWorks.Data.BalancedParens.Internal.Broadword.FindUnmatchedCloseFar.Word64 as BW64
+import qualified HaskellWorks.Data.BalancedParens.Internal.IO                                     as IO
 import qualified HaskellWorks.Data.BalancedParens.Internal.Slow.FindUnmatchedCloseFar.Word64      as SW64
 import qualified HaskellWorks.Data.BalancedParens.ParensSeq                                       as PS
 import qualified HaskellWorks.Data.BalancedParens.RangeMin                                        as RM
@@ -37,7 +38,6 @@ import qualified HaskellWorks.Data.FromForeignRegion                            
 import qualified HaskellWorks.Data.Length                                                         as HW
 import qualified Hedgehog.Gen                                                                     as G
 import qualified Hedgehog.Range                                                                   as R
-import qualified System.Directory                                                                 as IO
 
 {- HLINT ignore "Monoid law, left identity" -}
 
@@ -171,7 +171,7 @@ mkEnvCorpusVector file = do
 
 mkBenchCorpusVector :: IO [Benchmark]
 mkBenchCorpusVector = do
-  entries <- IO.listDirectory "data/bench"
+  entries <- IO.safeListDirectory "data/bench"
   let files = L.sort (("data/bench/" ++) <$> (".ib.idx" `L.isSuffixOf`) `filter` entries)
   benchmarks <- forM files $ \file -> return
     [ env (mkEnvCorpusVector file) $ \e -> bgroup "Loading lazy byte string into Word64s" $ mempty
