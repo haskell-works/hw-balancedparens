@@ -12,7 +12,7 @@ maintainer:             newhoggy@gmail.com
 copyright:              2016-2021 John Ky
 license:                BSD-3-Clause
 license-file:           LICENSE
-tested-with:            GHC == 9.0.1, GHC == 8.10.7, GHC == 8.8.4, GHC == 8.6.5
+tested-with:            GHC == 9.2.2, GHC == 9.0.2, GHC == 8.10.7, GHC == 8.8.4, GHC == 8.6.5
 build-type:             Simple
 extra-source-files:     README.md
 
@@ -26,10 +26,10 @@ common bytestring                 { build-depends: bytestring                 >=
 common criterion                  { build-depends: criterion                  >= 1.2        && < 1.6    }
 common deepseq                    { build-depends: deepseq                    >= 1.4.2.0    && < 1.5    }
 common directory                  { build-depends: directory                  >= 1.2.2      && < 1.4    }
-common doctest                    { build-depends: doctest                    >= 0.16.2     && < 0.19   }
+common doctest                    { build-depends: doctest                    >= 0.16.2     && < 0.21   }
 common doctest-discover           { build-depends: doctest-discover           >= 0.2        && < 0.3    }
 common generic-lens               { build-depends: generic-lens               >= 1.2.0.0    && < 2.3    }
-common hedgehog                   { build-depends: hedgehog                   >= 1.0        && < 1.1    }
+common hedgehog                   { build-depends: hedgehog                   >= 1.0        && < 1.2    }
 common hspec                      { build-depends: hspec                      >= 2.2        && < 3.0    }
 common hw-hspec-hedgehog          { build-depends: hw-hspec-hedgehog          >= 0.1        && < 0.2    }
 common hw-bits                    { build-depends: hw-bits                    >= 0.7.2.1    && < 0.8    }
@@ -40,7 +40,7 @@ common hw-prim                    { build-depends: hw-prim                    >=
 common hw-rankselect-base         { build-depends: hw-rankselect-base         >= 0.3.2.1    && < 0.4    }
 common lens                       { build-depends: lens                       >= 4          && < 6      }
 common mmap                       { build-depends: mmap                       >= 0.5.9      && < 0.6    }
-common optparse-applicative       { build-depends: optparse-applicative       >= 0.14       && < 0.17   }
+common optparse-applicative       { build-depends: optparse-applicative       >= 0.14       && < 0.18   }
 common transformers               { build-depends: transformers               >= 0.5.6.2    && < 0.7    }
 common vector                     { build-depends: vector                     >= 0.12       && < 0.13   }
 
@@ -52,7 +52,9 @@ common hw-balancedparens-gen
 
 common config
   default-language:     Haskell2010
-  ghc-options:          -Wall -O2 -msse4.2
+  ghc-options:          -Wall -O2
+  if arch(x86_64)
+    ghc-options:        -msse4.2
 
 library
   import:               base, config
