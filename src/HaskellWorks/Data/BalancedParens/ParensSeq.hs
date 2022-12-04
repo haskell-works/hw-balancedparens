@@ -30,6 +30,7 @@ import Prelude                                             hiding (drop, max, mi
 
 import qualified Data.List                                           as L
 import qualified HaskellWorks.Data.BalancedParens.Internal.ParensSeq as PS
+  hiding ( Elem(size) )
 import qualified HaskellWorks.Data.BalancedParens.Internal.Word      as W
 import qualified HaskellWorks.Data.FingerTree                        as FT
 

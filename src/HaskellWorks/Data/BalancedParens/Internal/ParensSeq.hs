@@ -123,7 +123,7 @@ ftSplit p ft = case FT.viewl rt of
           else 0
 
 atSizeBelowZero :: Count -> Measure -> Bool
-atSizeBelowZero n m = n < size (m :: Measure)
+atSizeBelowZero n (Measure { size = sz }) = n < sz
 
 atMinZero :: Measure -> Bool
-atMinZero m = min (m :: Measure) <= 0
+atMinZero (Measure { min = m }) = m <= 0
