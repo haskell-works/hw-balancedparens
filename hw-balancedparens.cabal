@@ -9,7 +9,7 @@ homepage:               http://github.com/haskell-works/hw-balancedparens#readme
 bug-reports:            https://github.com/haskell-works/hw-balancedparens/issues
 author:                 John Ky
 maintainer:             newhoggy@gmail.com
-copyright:              2016-2022 John Ky
+copyright:              2016-2025 John Ky
 license:                BSD-3-Clause
 license-file:           LICENSE
 tested-with:            GHC == 9.12.2, GHC == 9.10.2, GHC == 9.8.4, GHC == 9.6.7
